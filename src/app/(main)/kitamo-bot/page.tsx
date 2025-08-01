@@ -32,7 +32,10 @@ export default function KitaMoBotPage() {
   useEffect(() => {
     // Scroll to the bottom when new messages are added
     if (scrollAreaRef.current) {
-        scrollAreaRef.current.scrollTo({ top: scrollAreaRef.current.scrollHeight, behavior: 'smooth' });
+        const viewport = scrollAreaRef.current.querySelector('div[data-radix-scroll-area-viewport]');
+        if (viewport) {
+            viewport.scrollTo({ top: viewport.scrollHeight, behavior: 'smooth' });
+        }
     }
   }, [messages]);
 
@@ -68,7 +71,7 @@ export default function KitaMoBotPage() {
 
   return (
     <div className="animate-in fade-in-0 duration-500 flex justify-center items-start h-full">
-      <Card className="w-full max-w-3xl h-[calc(100vh-10rem)] flex flex-col">
+      <Card className="w-full max-w-3xl h-[calc(100vh-12rem)] flex flex-col">
         <CardHeader className="text-center">
           <div className="flex justify-center items-center gap-2">
             <BrainCircuit className="h-8 w-8 text-primary" />

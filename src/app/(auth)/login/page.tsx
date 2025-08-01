@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -10,8 +10,6 @@ import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { Eye, EyeOff, Mail, Lock } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { auth } from "@/lib/firebase";
-import { signInWithEmailAndPassword } from "firebase/auth";
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -21,33 +19,26 @@ const Login = () => {
   const router = useRouter();
   const { toast } = useToast();
 
+  useEffect(() => {
+    // This is a temporary measure for UI development without a backend.
+    // In a real app, you'd handle actual authentication.
+    // We'll redirect to home to simulate a logged-in state.
+    router.push('/home');
+  }, [router]);
+  
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
 
-    try {
-      await signInWithEmailAndPassword(auth, email, password);
-      toast({
+    // Simulate API call
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    
+    toast({
         title: "Welcome back!",
         description: "You've successfully logged in to KitaMo.",
-      });
-      router.push("/home");
-    } catch (error: any) {
-      console.error("Login Error:", error);
-      let description = "Invalid credentials. Please try again.";
-      if (error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password') {
-        description = "Invalid email or password. Please check your credentials and try again.";
-      } else if (error.code === 'auth/too-many-requests') {
-        description = "Access to this account has been temporarily disabled due to many failed login attempts. You can immediately restore it by resetting your password or you can try again later."
-      }
-      toast({
-        title: "Login Failed",
-        description: description,
-        variant: "destructive",
-      });
-    } finally {
-      setIsLoading(false);
-    }
+    });
+    router.push("/home");
+    setIsLoading(false);
   };
 
   return (

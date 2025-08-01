@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -11,9 +11,6 @@ import { Separator } from "@/components/ui/separator";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Eye, EyeOff, Mail, Lock, User } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { auth } from "@/lib/firebase";
-import { createUserWithEmailAndPassword } from "firebase/auth";
-import { createUserProfile } from "@/services/userService";
 
 const Signup = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -29,6 +26,13 @@ const Signup = () => {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const { toast } = useToast();
+
+   useEffect(() => {
+    // This is a temporary measure for UI development without a backend.
+    // In a real app, you'd handle actual authentication.
+    // We'll redirect to home to simulate a logged-in state.
+    router.push('/home');
+  }, [router]);
 
   const handleInputChange = (field: string, value: string | boolean) => {
     setFormData(prev => ({ ...prev, [field]: value }));
@@ -65,38 +69,17 @@ const Signup = () => {
     }
 
     setIsLoading(true);
+
+    // Simulate API call
+    await new Promise(resolve => setTimeout(resolve, 1000));
     
-    try {
-      const userCredential = await createUserWithEmailAndPassword(auth, formData.email, formData.password);
-      const user = userCredential.user;
+    toast({
+      title: "Welcome to KitaMo!",
+      description: "Your account has been created successfully.",
+    });
+    router.push("/home");
 
-      // Create user profile in Firestore
-      await createUserProfile(user.uid, {
-        email: formData.email,
-        firstName: formData.firstName,
-        lastName: formData.lastName,
-      });
-
-      toast({
-        title: "Welcome to KitaMo!",
-        description: "Your account has been created successfully.",
-      });
-      router.push("/home");
-
-    } catch (error: any) {
-       console.error("Signup Error:", error);
-       let description = "Could not create your account. Please try again.";
-       if (error.code === 'auth/email-already-in-use') {
-           description = "This email is already in use. Please log in or use a different email.";
-       }
-       toast({
-        title: "Signup Failed",
-        description: description,
-        variant: "destructive"
-      });
-    } finally {
-        setIsLoading(false);
-    }
+    setIsLoading(false);
   };
 
   return (

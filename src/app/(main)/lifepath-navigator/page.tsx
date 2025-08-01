@@ -1,6 +1,6 @@
 "use client";
 
-import { BaggageClaim, Briefcase, GraduationCap, Heart, Home, Plus, AlertTriangle, Plane, Target } from "lucide-react";
+import { BaggageClaim, Briefcase, GraduationCap, Heart, Home, Plus, AlertTriangle, Plane, Target, Car } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";

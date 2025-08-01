@@ -1,9 +1,6 @@
 "use client";
 
 import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
-import { auth, db } from '@/lib/firebase';
-import { onAuthStateChanged, User } from 'firebase/auth';
-import { collection, getDocs, addDoc, doc, setDoc, deleteDoc } from 'firebase/firestore';
 
 // Types
 export interface Goal {
@@ -26,15 +23,28 @@ export interface Scenario {
 
 interface AppContextType {
   goals: Goal[];
-  addGoal: (goal: Omit<Goal, 'id' | 'current' | 'status'> & Partial<Goal>) => Promise<void>;
+  addGoal: (goal: Omit<Goal, 'id'>) => Promise<void>;
   updateGoal: (id: string, updatedGoal: Partial<Goal>) => Promise<void>;
   deleteGoal: (id: string) => Promise<void>;
   scenarios: Scenario[];
   saveScenario: (scenario: Omit<Scenario, 'id'>) => Promise<void>;
   deleteScenario: (id: string) => Promise<void>;
-  user: User | null;
+  user: { displayName: string } | null; // Simplified user object
   isLoading: boolean;
 }
+
+// Dummy Data for UI development
+const dummyGoals: Goal[] = [
+    { id: '1', title: 'Macbook Pro 14"', target: 150000, current: 88000, status: 'On Track' },
+    { id: '2', title: 'Japan Trip 2025', target: 100000, current: 35000, status: 'Nearly There' },
+    { id: '3', title: 'Emergency Fund', target: 250000, current: 245000, status: 'Needs Attention' },
+];
+
+const dummyScenarios: Scenario[] = [
+    { id: '1', name: 'House Down Payment Scenario', monthlyIncome: 80000, monthlyExpenses: 50000, savingsGoal: 1000000, timeframe: 60, goalType: 'house' },
+    { id: '2', name: 'New Car Scenario', monthlyIncome: 80000, monthlyExpenses: 50000, savingsGoal: 500000, timeframe: 36, goalType: 'car' },
+];
+
 
 // Context
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -43,80 +53,41 @@ const AppContext = createContext<AppContextType | undefined>(undefined);
 export const AppProvider = ({ children }: { children: ReactNode }) => {
   const [goals, setGoals] = useState<Goal[]>([]);
   const [scenarios, setScenarios] = useState<Scenario[]>([]);
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<{displayName: string} | null>({displayName: "Alex"});
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
-      setIsLoading(true);
-      setUser(currentUser);
-      if (currentUser) {
-        // Fetch goals from Firestore
-        try {
-            const goalsCollectionRef = collection(db, 'users', currentUser.uid, 'goals');
-            const goalsSnapshot = await getDocs(goalsCollectionRef);
-            const fetchedGoals = goalsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })) as Goal[];
-            setGoals(fetchedGoals);
-
-            // Fetch scenarios from Firestore
-            const scenariosCollectionRef = collection(db, 'users', currentUser.uid, 'scenarios');
-            const scenariosSnapshot = await getDocs(scenariosCollectionRef);
-            const fetchedScenarios = scenariosSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })) as Scenario[];
-            setScenarios(fetchedScenarios);
-        } catch (error) {
-            console.error("Error fetching user data:", error)
-        }
-
-      } else {
-        // Reset state when user logs out
-        setGoals([]);
-        setScenarios([]);
-      }
-      setIsLoading(false);
-    });
-
-    return () => unsubscribe();
+    // Simulate fetching data
+    setIsLoading(true);
+    setTimeout(() => {
+        setGoals(dummyGoals);
+        setScenarios(dummyScenarios);
+        setIsLoading(false);
+    }, 1000);
   }, []);
 
-  const addGoal = async (goal: Omit<Goal, 'id' | 'current' | 'status'> & Partial<Goal>) => {
-    if (!user) throw new Error("No user logged in to add a goal");
-
+  const addGoal = async (goal: Omit<Goal, 'id'>) => {
     const newGoal: Goal = {
-        current: 0,
-        status: 'On Track',
+        id: Date.now().toString(),
         ...goal
     };
-
-    const goalsCollectionRef = collection(db, 'users', user.uid, 'goals');
-    const docRef = await addDoc(goalsCollectionRef, newGoal);
-    setGoals(prev => [...prev, { id: docRef.id, ...newGoal }]);
+    setGoals(prev => [...prev, newGoal]);
   };
   
   const updateGoal = async (id: string, updatedGoal: Partial<Goal>) => {
-    if (!user) throw new Error("No user logged in to update a goal");
-    const goalDocRef = doc(db, 'users', user.uid, 'goals', id);
-    await setDoc(goalDocRef, updatedGoal, { merge: true });
     setGoals(prev => prev.map(g => g.id === id ? {...g, ...updatedGoal} : g));
   }
 
   const deleteGoal = async (id: string) => {
-    if (!user) throw new Error("No user logged in to delete a goal");
-    const goalDocRef = doc(db, 'users', user.uid, 'goals', id);
-    await deleteDoc(goalDocRef);
     setGoals(prev => prev.filter(g => g.id !== id));
   };
 
   const saveScenario = async (scenario: Omit<Scenario, 'id'>) => {
-    if (!user) throw new Error("No user logged in to save a scenario");
-    const scenariosCollectionRef = collection(db, 'users', user.uid, 'scenarios');
-    const docRef = await addDoc(scenariosCollectionRef, scenario);
-    setScenarios(prev => [...prev, { id: docRef.id, ...scenario }]);
+    const newScenario = { id: Date.now().toString(), ...scenario };
+    setScenarios(prev => [...prev, newScenario]);
   };
   
   const deleteScenario = async (id: string) => {
-    if (!user) throw new Error("No user logged in to delete a scenario");
-    const scenarioDocRef = doc(db, 'users', user.uid, 'scenarios', id);
-    await deleteDoc(scenarioDocRef);
     setScenarios(prev => prev.filter(s => s.id !== id));
   }
 

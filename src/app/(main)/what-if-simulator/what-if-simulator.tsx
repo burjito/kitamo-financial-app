@@ -50,7 +50,7 @@ export const WhatIfSimulator = () => {
   const projectedSavings = monthlySavings * timeframe;
   const savingsRate = monthlyIncome > 0 ? (monthlySavings / monthlyIncome) * 100 : 0;
   const goalProgress = savingsGoal > 0 ? (projectedSavings / savingsGoal) * 100 : 0;
-  const monthsToGoal = monthlySavings > 0 ? savingsGoal / monthlySavings : Infinity;
+  const monthsToGoal = monthlySavings > 0 ? Math.ceil(savingsGoal / monthlySavings) : Infinity;
 
   const goalInfo = goalTypes[goalType];
   const GoalIcon = goalInfo.icon;
@@ -231,7 +231,7 @@ export const WhatIfSimulator = () => {
                      {goalProgress < 100 && monthlySavings > 0 && (
                        <div className="flex items-start gap-2 p-2 mt-2 bg-blue-500/10 rounded-lg text-blue-700">
                          <TrendingUp className="h-4 w-4 mt-0.5 flex-shrink-0" />
-                         <p>You'll miss your goal by <strong>₱{shortfall.toLocaleString()}</strong>. You need about <strong>{monthsToGoal.toFixed(0)} months</strong> to reach it.</p>
+                         <p>You'll miss your goal by <strong>₱{shortfall.toLocaleString()}</strong>. You need about <strong>{monthsToGoal} months</strong> to reach it.</p>
                        </div>
                      )}
                      {goalProgress >= 100 && (
@@ -290,7 +290,7 @@ export const WhatIfSimulator = () => {
                        <Button 
                           variant="ghost" 
                           size="sm"
-                          onClick={() => deleteScenario(scenario.id!)}
+                          onClick={() => scenario.id && deleteScenario(scenario.id)}
                           className="h-6 w-6 p-0 text-muted-foreground hover:text-destructive"
                         >
                          <X className="h-4 w-4" />

@@ -23,21 +23,20 @@ export interface Scenario {
 
 interface AppContextType {
   goals: Goal[];
-  addGoal: (goal: Omit<Goal, 'id'>) => Promise<void>;
-  updateGoal: (id: string, updatedGoal: Partial<Goal>) => Promise<void>;
-  deleteGoal: (id: string) => Promise<void>;
+  addGoal: (goal: Goal) => void;
+  deleteGoal: (id: string) => void;
   scenarios: Scenario[];
-  saveScenario: (scenario: Omit<Scenario, 'id'>) => Promise<void>;
-  deleteScenario: (id: string) => Promise<void>;
-  user: { displayName: string } | null; // Simplified user object
+  saveScenario: (scenario: Scenario) => void;
+  deleteScenario: (id: string) => void;
+  user: { displayName: string } | null;
   isLoading: boolean;
 }
 
 // Dummy Data for UI development
 const dummyGoals: Goal[] = [
     { id: '1', title: 'Macbook Pro 14"', target: 150000, current: 88000, status: 'On Track' },
-    { id: '2', title: 'Japan Trip 2025', target: 100000, current: 35000, status: 'Nearly There' },
-    { id: '3', title: 'Emergency Fund', target: 250000, current: 245000, status: 'Needs Attention' },
+    { id: '2', title: 'Japan Trip 2025', target: 100000, current: 35000, status: 'Needs Attention' },
+    { id: '3', title: 'Emergency Fund', target: 250000, current: 245000, status: 'Nearly There' },
 ];
 
 const dummyScenarios: Scenario[] = [
@@ -57,7 +56,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Simulate fetching data
+    // Simulate loading data
     setIsLoading(true);
     setTimeout(() => {
         setGoals(dummyGoals);
@@ -66,33 +65,35 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     }, 1000);
   }, []);
 
-  const addGoal = async (goal: Omit<Goal, 'id'>) => {
-    const newGoal: Goal = {
-        id: Date.now().toString(),
-        ...goal
-    };
-    setGoals(prev => [...prev, newGoal]);
+  const addGoal = (goal: Goal) => {
+    setGoals(prev => [...prev, { ...goal, id: Date.now().toString() }]);
   };
   
-  const updateGoal = async (id: string, updatedGoal: Partial<Goal>) => {
-    setGoals(prev => prev.map(g => g.id === id ? {...g, ...updatedGoal} : g));
-  }
-
-  const deleteGoal = async (id: string) => {
+  const deleteGoal = (id: string) => {
     setGoals(prev => prev.filter(g => g.id !== id));
   };
 
-  const saveScenario = async (scenario: Omit<Scenario, 'id'>) => {
-    const newScenario = { id: Date.now().toString(), ...scenario };
-    setScenarios(prev => [...prev, newScenario]);
+  const saveScenario = (scenario: Scenario) => {
+    setScenarios(prev => [...prev, { ...scenario, id: Date.now().toString() }]);
   };
   
-  const deleteScenario = async (id: string) => {
+  const deleteScenario = (id: string) => {
     setScenarios(prev => prev.filter(s => s.id !== id));
   }
 
+  const value: AppContextType = {
+    user,
+    isLoading,
+    goals,
+    addGoal,
+    deleteGoal,
+    scenarios,
+    saveScenario,
+    deleteScenario
+  };
+
   return (
-    <AppContext.Provider value={{ user, isLoading, goals, addGoal, updateGoal, deleteGoal, scenarios, saveScenario, deleteScenario }}>
+    <AppContext.Provider value={value}>
       {children}
     </AppContext.Provider>
   );

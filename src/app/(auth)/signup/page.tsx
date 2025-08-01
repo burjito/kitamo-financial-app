@@ -45,6 +45,15 @@ const Signup = () => {
       });
       return;
     }
+    
+    if (formData.password.length < 6) {
+        toast({
+            title: "Weak Password",
+            description: "Password should be at least 6 characters long.",
+            variant: "destructive"
+        });
+        return;
+    }
 
     if (!formData.agreeToTerms) {
       toast({
@@ -58,18 +67,15 @@ const Signup = () => {
     setIsLoading(true);
     
     try {
-      // Firebase signup logic will be added in a future step
-      console.log("Attempting signup with:", formData);
-      await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate network request
-      // const userCredential = await createUserWithEmailAndPassword(auth, formData.email, formData.password);
-      // const user = userCredential.user;
+      const userCredential = await createUserWithEmailAndPassword(auth, formData.email, formData.password);
+      const user = userCredential.user;
 
-      // // Create user profile in Firestore
-      // await createUserProfile(user.uid, {
-      //   email: formData.email,
-      //   firstName: formData.firstName,
-      //   lastName: formData.lastName,
-      // });
+      // Create user profile in Firestore
+      await createUserProfile(user.uid, {
+        email: formData.email,
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+      });
 
       toast({
         title: "Welcome to KitaMo!",
@@ -79,9 +85,13 @@ const Signup = () => {
 
     } catch (error: any) {
        console.error("Signup Error:", error);
+       let description = "Could not create your account. Please try again.";
+       if (error.code === 'auth/email-already-in-use') {
+           description = "This email is already in use. Please log in or use a different email.";
+       }
        toast({
         title: "Signup Failed",
-        description: "Could not create your account. Please try again.",
+        description: description,
         variant: "destructive"
       });
     } finally {
@@ -172,7 +182,7 @@ const Signup = () => {
                 <Input
                   id="password"
                   type={showPassword ? "text" : "password"}
-                  placeholder="Create a strong password"
+                  placeholder="6+ characters required"
                   value={formData.password}
                   onChange={(e) => handleInputChange("password", e.target.value)}
                   className="pl-10 pr-10 app-input"

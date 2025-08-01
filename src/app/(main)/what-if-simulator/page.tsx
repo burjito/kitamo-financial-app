@@ -1,11 +1,9 @@
 "use client";
 
 import { WhatIfSimulator } from "./what-if-simulator";
-import { AppProvider } from "@/contexts/app-context";
 
 export default function WhatIfSimulatorPage() {
   return (
-    <AppProvider>
       <div className="animate-in fade-in-0 duration-500">
         <div className="space-y-2 mb-8">
           <h1 className="text-3xl font-bold tracking-tight text-foreground">
@@ -18,6 +16,5 @@ export default function WhatIfSimulatorPage() {
         </div>
         <WhatIfSimulator />
       </div>
-    </AppProvider>
   );
 }

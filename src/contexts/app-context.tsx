@@ -26,7 +26,7 @@ export interface Scenario {
 
 interface AppContextType {
   goals: Goal[];
-  addGoal: (goal: Omit<Goal, 'id'>) => Promise<void>;
+  addGoal: (goal: Omit<Goal, 'id' | 'current' | 'status'> & Partial<Goal>) => Promise<void>;
   updateGoal: (id: string, updatedGoal: Partial<Goal>) => Promise<void>;
   deleteGoal: (id: string) => Promise<void>;
   scenarios: Scenario[];
@@ -78,11 +78,18 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     return () => unsubscribe();
   }, []);
 
-  const addGoal = async (goal: Omit<Goal, 'id'>) => {
+  const addGoal = async (goal: Omit<Goal, 'id' | 'current' | 'status'> & Partial<Goal>) => {
     if (!user) throw new Error("No user logged in to add a goal");
+
+    const newGoal: Goal = {
+        current: 0,
+        status: 'On Track',
+        ...goal
+    };
+
     const goalsCollectionRef = collection(db, 'users', user.uid, 'goals');
-    const docRef = await addDoc(goalsCollectionRef, goal);
-    setGoals(prev => [...prev, { id: docRef.id, ...goal }]);
+    const docRef = await addDoc(goalsCollectionRef, newGoal);
+    setGoals(prev => [...prev, { id: docRef.id, ...newGoal }]);
   };
   
   const updateGoal = async (id: string, updatedGoal: Partial<Goal>) => {

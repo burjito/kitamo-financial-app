@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useRef, useEffect } from "react";
@@ -20,7 +21,7 @@ export default function KitaMoBotPage() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const scrollAreaRef = useRef<HTMLDivElement>(null);
+  const scrollViewportRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     // Greet the user on initial load
@@ -31,13 +32,10 @@ export default function KitaMoBotPage() {
 
   useEffect(() => {
     // Scroll to the bottom when new messages are added
-    if (scrollAreaRef.current) {
-        const viewport = scrollAreaRef.current.querySelector('div[data-radix-scroll-area-viewport]');
-        if (viewport) {
-            viewport.scrollTo({ top: viewport.scrollHeight, behavior: 'smooth' });
-        }
+    if (scrollViewportRef.current) {
+        scrollViewportRef.current.scrollTo({ top: scrollViewportRef.current.scrollHeight, behavior: 'smooth' });
     }
-  }, [messages]);
+  }, [messages, isLoading]);
 
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -71,7 +69,7 @@ export default function KitaMoBotPage() {
 
   return (
     <div className="animate-in fade-in-0 duration-500 flex justify-center items-start h-full">
-      <Card className="w-full max-w-3xl h-[calc(100vh-12rem)] flex flex-col">
+      <Card className="w-full max-w-4xl h-[calc(100vh-8rem)] flex flex-col">
         <CardHeader className="text-center">
           <div className="flex justify-center items-center gap-2">
             <BrainCircuit className="h-8 w-8 text-primary" />
@@ -79,8 +77,8 @@ export default function KitaMoBotPage() {
           </div>
           <CardDescription>Your AI financial assistant. Ask me in Taglish!</CardDescription>
         </CardHeader>
-        <CardContent className="flex-grow flex flex-col p-4">
-          <ScrollArea className="flex-grow mb-4 pr-4" ref={scrollAreaRef}>
+        <CardContent className="flex-grow flex flex-col p-4 overflow-hidden">
+          <ScrollArea className="flex-grow mb-4 pr-4" viewportRef={scrollViewportRef}>
             <div className="space-y-6">
               {messages.map((message) => (
                 <div key={message.id} className={`flex items-start gap-3 ${message.sender === 'user' ? 'justify-end' : ''}`}>
@@ -90,8 +88,8 @@ export default function KitaMoBotPage() {
                       <AvatarFallback><Bot /></AvatarFallback>
                     </Avatar>
                   )}
-                  <div className={`rounded-lg px-4 py-2 max-w-sm ${message.sender === 'user' ? 'bg-primary text-primary-foreground' : 'bg-muted'}`}>
-                    <p className="text-sm">{message.text}</p>
+                  <div className={`rounded-lg px-4 py-2 max-w-lg ${message.sender === 'user' ? 'bg-primary text-primary-foreground' : 'bg-muted'}`}>
+                    <p className="text-sm whitespace-pre-wrap">{message.text}</p>
                   </div>
                    {message.sender === 'user' && (
                     <Avatar className="h-8 w-8">

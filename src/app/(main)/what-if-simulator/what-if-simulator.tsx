@@ -21,6 +21,7 @@ import {
   Plane,
   X,
   Lightbulb,
+  Archive,
 } from "lucide-react";
 import { useAppContext } from '@/contexts/app-context';
 import { useToast } from '@/hooks/use-toast';
@@ -45,6 +46,7 @@ export const WhatIfSimulator = () => {
   const [timeframe, setTimeframe] = useState(24);
   const [goalType, setGoalType] = useState<keyof typeof goalTypes>("emergency");
   const [isRecommenderOpen, setIsRecommenderOpen] = useState(false);
+  const [showScenarios, setShowScenarios] = useState(false);
   
   const monthlySavings = Math.max(0, monthlyIncome - monthlyExpenses);
   const projectedSavings = monthlySavings * timeframe;
@@ -74,6 +76,7 @@ export const WhatIfSimulator = () => {
       title: "Scenario Saved",
       description: "Your financial scenario has been saved and added to your LifePath."
     });
+    setShowScenarios(true); // Automatically show the scenarios panel when a new one is saved
   };
 
   const handleSetAsGoal = () => {
@@ -106,17 +109,23 @@ export const WhatIfSimulator = () => {
             goalType
         }}
     />
-    <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
-       <div className="lg:col-span-2 space-y-8">
+    <div className={`grid grid-cols-1 ${showScenarios ? 'lg:grid-cols-4' : ''} gap-8 items-start`}>
+       <div className={`${showScenarios ? 'lg:col-span-3' : 'lg:col-span-4'} space-y-8 transition-all duration-300`}>
         <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Calculator className="h-5 w-5 text-primary" />
-              Financial Simulator
-            </CardTitle>
-            <CardDescription>
-              Adjust your financial parameters and see real-time projections for your goals.
-            </CardDescription>
+          <CardHeader className="flex-row items-start justify-between">
+            <div>
+              <CardTitle className="flex items-center gap-2">
+                <Calculator className="h-5 w-5 text-primary" />
+                Financial Simulator
+              </CardTitle>
+              <CardDescription>
+                Adjust your financial parameters and see real-time projections for your goals.
+              </CardDescription>
+            </div>
+             <Button variant="outline" onClick={() => setShowScenarios(!showScenarios)}>
+                <Archive className="mr-0 md:mr-2 h-4 w-4" />
+                <span className="hidden md:inline">Saved Scenarios</span>
+              </Button>
           </CardHeader>
           <CardContent className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -268,9 +277,9 @@ export const WhatIfSimulator = () => {
           </CardContent>
         </Card>
       </div>
-
-      <div className="lg:col-span-1 space-y-8">
-        {scenarios.length > 0 && (
+      
+      {showScenarios && (
+        <div className="lg:col-span-1 space-y-8 animate-in fade-in-0 slide-in-from-right-5 duration-500">
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
@@ -311,8 +320,8 @@ export const WhatIfSimulator = () => {
               </div>
             </CardContent>
           </Card>
-        )}
-      </div>
+        </div>
+      )}
     </div>
     </>
   );

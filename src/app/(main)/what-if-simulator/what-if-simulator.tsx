@@ -1,3 +1,4 @@
+
 "use client"
 
 import { useState } from "react";
@@ -24,6 +25,7 @@ import {
 import { useAppContext } from '@/contexts/app-context';
 import { useToast } from '@/hooks/use-toast';
 import { SliderInput } from "./slider-input";
+import { ProductRecommenderDialog } from "./product-recommender-dialog";
 
 
 const goalTypes = {
@@ -42,6 +44,7 @@ export const WhatIfSimulator = () => {
   const [savingsGoal, setSavingsGoal] = useState(500000);
   const [timeframe, setTimeframe] = useState(24);
   const [goalType, setGoalType] = useState<keyof typeof goalTypes>("emergency");
+  const [isRecommenderOpen, setIsRecommenderOpen] = useState(false);
   
   const monthlySavings = Math.max(0, monthlyIncome - monthlyExpenses);
   const projectedSavings = monthlySavings * timeframe;
@@ -91,6 +94,18 @@ export const WhatIfSimulator = () => {
   const shortfall = savingsGoal - projectedSavings;
 
   return (
+    <>
+    <ProductRecommenderDialog 
+        open={isRecommenderOpen}
+        onOpenChange={setIsRecommenderOpen}
+        scenario={{
+            monthlyIncome,
+            monthlyExpenses,
+            savingsGoal,
+            timeframe,
+            goalType
+        }}
+    />
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
        <div className="lg:col-span-2 space-y-8">
         <Card>
@@ -236,14 +251,18 @@ export const WhatIfSimulator = () => {
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4">
-              <Button variant="outline" className="w-full" onClick={handleSaveScenario}>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-4">
+              <Button className="w-full md:col-span-1" onClick={handleSetAsGoal}>
+                <PiggyBank className="mr-2 h-4 w-4" />
+                Set as Goal
+              </Button>
+               <Button variant="outline" className="w-full md:col-span-1" onClick={handleSaveScenario}>
                 <Target className="mr-2 h-4 w-4" />
                 Save Scenario
               </Button>
-              <Button className="w-full" onClick={handleSetAsGoal}>
-                <PiggyBank className="mr-2 h-4 w-4" />
-                Set as Goal
+              <Button className="w-full md:col-span-1" onClick={() => setIsRecommenderOpen(true)}>
+                <Lightbulb className="mr-2 h-4 w-4" />
+                Get AI Recommendations
               </Button>
             </div>
           </CardContent>
@@ -295,5 +314,6 @@ export const WhatIfSimulator = () => {
         )}
       </div>
     </div>
+    </>
   );
 };

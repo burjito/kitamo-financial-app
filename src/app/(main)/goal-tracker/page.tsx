@@ -6,7 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import { useAppContext, Goal } from "@/contexts/app-context";
+import { useAppContext } from "@/contexts/app-context";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
   AlertDialog,
@@ -33,9 +33,10 @@ export default function GoalTrackerPage() {
   const { goals, isLoading, deleteGoal } = useAppContext();
 
   const handleExport = () => {
+    if (goals.length === 0) return;
     const headers = "Title,Target,Current,Status,Progress (%)";
     const rows = goals.map(goal => {
-      const progress = (goal.current / goal.target) * 100;
+      const progress = goal.target > 0 ? (goal.current / goal.target) * 100 : 0;
       return `"${goal.title}",${goal.target},${goal.current},"${goal.status}",${progress.toFixed(2)}`;
     }).join('\n');
 
@@ -78,11 +79,25 @@ export default function GoalTrackerPage() {
             <Card key={i}>
               <CardHeader><Skeleton className="h-6 w-3/4" /></CardHeader>
               <CardContent className="space-y-4">
-                <Skeleton className="h-2 w-full" />
-                <Skeleton className="h-4 w-1/2" />
+                 <div className="space-y-2">
+                    <Skeleton className="h-2 w-full" />
+                    <div className="flex justify-between">
+                        <Skeleton className="h-4 w-1/4" />
+                        <Skeleton className="h-4 w-1/4" />
+                    </div>
+                </div>
+                 <div className="flex items-center justify-end gap-2 pt-4">
+                    <Skeleton className="h-8 w-8 rounded-md" />
+                    <Skeleton className="h-8 w-8 rounded-md" />
+                </div>
               </CardContent>
             </Card>
           ))}
+        </div>
+      ) : goals.length === 0 ? (
+        <div className="text-center py-20 border-2 border-dashed rounded-lg">
+            <h2 className="text-xl font-semibold text-muted-foreground">No goals yet!</h2>
+            <p className="text-muted-foreground mt-2">Create your first goal from the simulator or by clicking the button below.</p>
         </div>
       ) : (
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
@@ -127,7 +142,7 @@ export default function GoalTrackerPage() {
                                 </AlertDialogHeader>
                                 <AlertDialogFooter>
                                   <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                  <AlertDialogAction onClick={() => deleteGoal(goal.id!)}>Delete</AlertDialogAction>
+                                  <AlertDialogAction onClick={() => goal.id && deleteGoal(goal.id)}>Delete</AlertDialogAction>
                                 </AlertDialogFooter>
                               </AlertDialogContent>
                             </AlertDialog>
@@ -136,14 +151,16 @@ export default function GoalTrackerPage() {
                   </Card>
               )
           })}
-          <Card className="flex items-center justify-center border-dashed hover:border-primary hover:bg-secondary/50 transition-colors cursor-pointer">
-              <Button variant="ghost" className="flex flex-col h-auto gap-2 py-8">
+        </div>
+      )}
+      <div className="mt-6">
+         <Card className="flex items-center justify-center border-dashed hover:border-primary hover:bg-secondary/50 transition-colors cursor-pointer">
+              <Button variant="ghost" className="flex flex-col h-auto gap-2 py-8 w-full">
                   <Plus className="h-8 w-8 text-muted-foreground" />
                   <span className="text-muted-foreground">Add a New Goal</span>
               </Button>
           </Card>
-        </div>
-      )}
+      </div>
 
     </div>
   );

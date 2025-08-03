@@ -2,7 +2,7 @@
 "use client";
 
 import { useState } from "react";
-import { Plus, Settings, Shield, Clock, BadgeCheck, Target, TrendingUp, PiggyBank, Calendar } from "lucide-react";
+import { Plus, Settings, Shield, Clock, BadgeCheck, Target, TrendingUp, PiggyBank, Calendar, Lightbulb } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -14,6 +14,7 @@ import { GoalDialog } from "./goal-dialog";
 import { AddFundsDialog } from "./add-funds-dialog";
 import { Goal } from "@/contexts/app-context";
 import { cn } from "@/lib/utils";
+import { Label } from "@/components/ui/label";
 
 const getPriorityStyles = (priority: string) => {
     switch (priority.toLowerCase()) {
@@ -29,10 +30,22 @@ const getPriorityStyles = (priority: string) => {
 };
 
 const getStatusStyles = (status: string) => {
-    return "bg-transparent text-muted-foreground border border-border";
+    switch (status.toLowerCase()) {
+        case "active":
+             return "bg-green-100 text-green-800 border border-green-200";
+        case "paused":
+            return "bg-gray-100 text-gray-800 border border-gray-200";
+        default:
+            return "bg-muted text-muted-foreground";
+    }
 }
 
 const FinancialSummary = () => {
+    const { goals } = useAppContext();
+    const totalMonthlyTarget = goals.reduce((sum, goal) => sum + goal.monthlyTarget, 0);
+    const monthlyIncome = 50000; 
+    const surplus = monthlyIncome - totalMonthlyTarget;
+
   return (
     <Card>
       <CardHeader>
@@ -44,15 +57,25 @@ const FinancialSummary = () => {
       <CardContent className="space-y-4">
         <div className="flex justify-between items-center">
           <span className="text-muted-foreground">Total Monthly Savings</span>
-          <span className="font-bold text-lg">₱15,000</span>
+          <span className="font-bold text-lg">₱{monthlyIncome.toLocaleString()}</span>
         </div>
         <div className="flex justify-between items-center">
           <span className="text-muted-foreground">Goals Funded Monthly</span>
-          <span className="font-bold text-lg">₱10,000</span>
+          <span className="font-bold text-lg">₱{totalMonthlyTarget.toLocaleString()}</span>
         </div>
+        <Separator />
         <div className="flex justify-between items-center">
           <span className="text-muted-foreground">Surplus/Shortfall</span>
-          <span className="font-bold text-lg text-green-600">+₱5,000</span>
+          <span className={cn("font-bold text-lg", surplus >= 0 ? "text-green-600" : "text-red-600")}>
+            {surplus >= 0 ? `+₱${surplus.toLocaleString()}` : `-₱${Math.abs(surplus).toLocaleString()}`}
+          </span>
+        </div>
+        <div className="flex items-start gap-3 p-3 rounded-lg bg-secondary/10">
+            <Lightbulb className="h-5 w-5 mt-1 text-primary flex-shrink-0" />
+            <div>
+                <p className="font-medium text-sm text-primary">AI Insight</p>
+                <p className="text-sm text-muted-foreground">Your surplus is healthy. Consider allocating an extra ₱{Math.floor(surplus*0.5).toLocaleString()} to your 'High' priority goals to reach them faster.</p>
+            </div>
         </div>
         <Button variant="outline" className="w-full">
           View Full Report
@@ -68,7 +91,6 @@ const LifeTimeline = () => {
     const getTargetYear = (goal: Goal) => {
         const remaining = goal.target > goal.current ? goal.target - goal.current : 0;
         if (goal.monthlyTarget <= 0) {
-            // If there's no monthly target, we can't estimate a timeline.
             return new Date().getFullYear();
         }
         const timelineMonths = Math.ceil(remaining / goal.monthlyTarget);
@@ -109,7 +131,7 @@ const LifeTimeline = () => {
                         <div className="border-l-2 border-border pl-4 flex-1 space-y-4">
                             {goalsByYear[year].map((goal, index) => (
                                  <div key={goal.id} className="relative">
-                                    <div className="absolute -left-[9px] top-[7px] h-3 w-3 rounded-full bg-primary border-2 border-background"></div>
+                                    <div className="absolute -left-[2.1rem] top-1 h-3 w-3 rounded-full bg-primary border-2 border-background"></div>
                                     <div className="ml-2">
                                         <p className="font-semibold">{goal.title}</p>
                                         <p className="text-sm text-muted-foreground">Target: ₱{goal.target.toLocaleString()}</p>
@@ -127,11 +149,24 @@ const LifeTimeline = () => {
     )
 }
 
+const FilterButton = ({ label, value, currentFilter, setFilter }: { label: string, value: string, currentFilter: string, setFilter: (value: string) => void }) => (
+    <Button
+        variant={currentFilter === value ? "default" : "outline"}
+        size="sm"
+        onClick={() => setFilter(value)}
+        className="capitalize"
+    >
+        {label}
+    </Button>
+)
+
 export default function GoalTrackerPage() {
   const { goals, isLoading, addGoal, updateGoal, addFundsToGoal } = useAppContext();
   const [isGoalDialogOpen, setIsGoalDialogOpen] = useState(false);
   const [isAddFundsDialogOpen, setIsAddFundsDialogOpen] = useState(false);
   const [selectedGoal, setSelectedGoal] = useState<Goal | undefined>(undefined);
+  const [statusFilter, setStatusFilter] = useState("all");
+  const [priorityFilter, setPriorityFilter] = useState("all");
 
   const handleOpenDialog = (goal?: Goal) => {
     setSelectedGoal(goal);
@@ -143,27 +178,24 @@ export default function GoalTrackerPage() {
     setIsAddFundsDialogOpen(true);
   }
 
-  const handleSaveGoal = (goalData: Omit<Goal, 'id' | 'status' | 'current' | 'priority'>) => {
+  const handleSaveGoal = (goalData: Goal) => {
     if (selectedGoal?.id) {
-        const existingGoal = goals.find(g => g.id === selectedGoal.id);
-        if (existingGoal) {
-            updateGoal({
-                ...existingGoal,
-                title: goalData.title,
-                target: goalData.target,
-                monthlyTarget: goalData.monthlyTarget,
-            });
-        }
+       updateGoal(goalData);
     } else {
       addGoal({
         ...goalData,
         id: Date.now().toString(),
         current: 0,
         status: 'Active',
-        priority: 'Medium',
       });
     }
   };
+
+  const filteredGoals = goals.filter(goal => {
+      const statusMatch = statusFilter === 'all' || goal.status.toLowerCase() === statusFilter;
+      const priorityMatch = priorityFilter === 'all' || goal.priority.toLowerCase() === priorityFilter;
+      return statusMatch && priorityMatch;
+  });
 
   return (
     <>
@@ -197,7 +229,7 @@ export default function GoalTrackerPage() {
             </div>
           </div>
           <div className="mt-4 md:mt-0 flex items-center gap-2">
-            <Button variant="outline">View Full Report</Button>
+            <Button variant="outline">Export Report</Button>
             <Button onClick={() => handleOpenDialog()}>
               <Plus className="mr-2 h-4 w-4" />
               Add Goal
@@ -207,6 +239,28 @@ export default function GoalTrackerPage() {
         
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
             <div className="lg:col-span-2 space-y-6">
+                <Card>
+                    <CardContent className="p-4 flex flex-col md:flex-row gap-4">
+                        <div className="flex-1 space-y-2">
+                            <Label className="font-semibold text-sm">Status</Label>
+                            <div className="flex gap-2">
+                                <FilterButton label="All" value="all" currentFilter={statusFilter} setFilter={setStatusFilter} />
+                                <FilterButton label="Active" value="active" currentFilter={statusFilter} setFilter={setStatusFilter} />
+                                <FilterButton label="Paused" value="paused" currentFilter={statusFilter} setFilter={setStatusFilter} />
+                            </div>
+                        </div>
+                        <div className="flex-1 space-y-2">
+                            <Label className="font-semibold text-sm">Priority</Label>
+                            <div className="flex gap-2">
+                                <FilterButton label="All" value="all" currentFilter={priorityFilter} setFilter={setPriorityFilter} />
+                                <FilterButton label="High" value="high" currentFilter={priorityFilter} setFilter={setPriorityFilter} />
+                                <FilterButton label="Medium" value="medium" currentFilter={priorityFilter} setFilter={setPriorityFilter} />
+                                <FilterButton label="Low" value="low" currentFilter={priorityFilter} setFilter={setPriorityFilter} />
+                            </div>
+                        </div>
+                    </CardContent>
+                </Card>
+
                  {isLoading ? (
                     [...Array(2)].map((_, i) => (
                     <Card key={i}>
@@ -215,13 +269,13 @@ export default function GoalTrackerPage() {
                         </CardContent>
                     </Card>
                     ))
-                ) : goals.length === 0 ? (
+                ) : filteredGoals.length === 0 ? (
                     <div className="text-center py-20 border-2 border-dashed rounded-lg">
-                    <h2 className="text-xl font-semibold text-muted-foreground">No goals yet!</h2>
-                    <p className="text-muted-foreground mt-2">Click "Add Goal" to start your financial journey.</p>
+                    <h2 className="text-xl font-semibold text-muted-foreground">No matching goals found!</h2>
+                    <p className="text-muted-foreground mt-2">Try adjusting your filters or adding a new goal.</p>
                     </div>
                 ) : (
-                    goals.map((goal) => {
+                    filteredGoals.map((goal) => {
                         const progress = goal.target > 0 ? (goal.current / goal.target) * 100 : 0;
                         const remaining = goal.target - goal.current;
                         const timeline = goal.monthlyTarget > 0 ? Math.ceil(remaining / goal.monthlyTarget) : 0;
@@ -240,7 +294,7 @@ export default function GoalTrackerPage() {
                                                     <Badge className={cn("capitalize", getPriorityStyles(goal.priority))}>
                                                         {goal.priority} priority
                                                     </Badge>
-                                                    <Badge className={cn(getStatusStyles(goal.status))}>
+                                                    <Badge className={cn("capitalize", getStatusStyles(goal.status))}>
                                                         <BadgeCheck className="mr-1 h-3 w-3" />
                                                         {goal.status}
                                                     </Badge>

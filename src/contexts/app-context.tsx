@@ -10,6 +10,8 @@ export interface Goal {
   target: number;
   current: number;
   status: string;
+  priority: 'High' | 'Medium' | 'Low';
+  monthlyTarget: number;
 }
 
 export interface Scenario {
@@ -24,9 +26,10 @@ export interface Scenario {
 
 interface AppContextType {
   goals: Goal[];
-  addGoal: (goal: Goal) => void;
+  addGoal: (goal: Omit<Goal, 'id'>) => void;
   updateGoal: (goal: Goal) => void;
   deleteGoal: (id: string) => void;
+  addFundsToGoal: (id: string, amount: number) => void;
   scenarios: Scenario[];
   saveScenario: (scenario: Scenario) => void;
   deleteScenario: (id: string) => void;
@@ -36,9 +39,9 @@ interface AppContextType {
 
 // Dummy Data for UI development
 const dummyGoals: Goal[] = [
-    { id: '1', title: 'Macbook Pro 14"', target: 150000, current: 88000, status: 'On Track' },
-    { id: '2', title: 'Japan Trip 2025', target: 100000, current: 35000, status: 'Needs Attention' },
-    { id: '3', title: 'Emergency Fund', target: 250000, current: 245000, status: 'Nearly There' },
+    { id: '1', title: 'Emergency Fund', target: 300000, current: 75000, status: 'Active', priority: 'High', monthlyTarget: 45000 },
+    { id: '2', title: 'Japan Trip 2025', target: 100000, current: 35000, status: 'Active', priority: 'Medium', monthlyTarget: 10000 },
+    { id: '3', title: 'Macbook Pro 14"', target: 150000, current: 145000, status: 'Paused', priority: 'Low', monthlyTarget: 15000 },
 ];
 
 const dummyScenarios: Scenario[] = [
@@ -67,12 +70,16 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     }, 1000);
   }, []);
 
-  const addGoal = (goal: Goal) => {
+  const addGoal = (goal: Omit<Goal, 'id'>) => {
     setGoals(prev => [...prev, { ...goal, id: Date.now().toString() }]);
   };
   
   const updateGoal = (updatedGoal: Goal) => {
     setGoals(prev => prev.map(g => g.id === updatedGoal.id ? updatedGoal : g));
+  };
+  
+  const addFundsToGoal = (id: string, amount: number) => {
+    setGoals(prev => prev.map(g => g.id === id ? { ...g, current: g.current + amount } : g));
   };
 
   const deleteGoal = (id: string) => {
@@ -94,6 +101,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     addGoal,
     updateGoal,
     deleteGoal,
+    addFundsToGoal,
     scenarios,
     saveScenario,
     deleteScenario
@@ -114,3 +122,5 @@ export const useAppContext = () => {
   }
   return context;
 };
+
+    

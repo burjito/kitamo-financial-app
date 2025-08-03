@@ -25,6 +25,7 @@ import {
   X,
   Lightbulb,
   Archive,
+  RefreshCw, // Added icon
 } from "lucide-react";
 import { useAppContext } from '@/contexts/app-context';
 import { useToast } from '@/hooks/use-toast';
@@ -90,6 +91,19 @@ export const WhatIfSimulator = () => {
       description: "Your financial scenario has been saved and added to your LifePath."
     });
     setShowScenarios(true); // Automatically show the scenarios panel when a new one is saved
+  };
+  
+  const loadScenario = (scenario: typeof scenarios[0]) => {
+      setGoalName(scenario.name);
+      setGoalAmount(scenario.savingsGoal);
+      setMonthlyIncome(scenario.monthlyIncome);
+      setMonthlyExpenses(scenario.monthlyExpenses);
+      setTimeframeYears(Math.floor(scenario.timeframe / 12));
+      setTimeframeMonths(scenario.timeframe % 12);
+      toast({
+          title: "Scenario Loaded",
+          description: `"${scenario.name}" has been loaded into the simulator.`
+      });
   };
 
   const handleSetAsGoal = () => {
@@ -212,7 +226,7 @@ export const WhatIfSimulator = () => {
                 </div>
 
                 <div className="space-y-6 flex flex-col">
-                  <Card className="bg-primary/5">
+                  <Card>
                     <CardHeader className="pb-3">
                       <CardTitle className="text-lg flex items-center gap-2">
                         <Target className={`h-5 w-5 text-primary`} />
@@ -285,7 +299,7 @@ export const WhatIfSimulator = () => {
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-8">
-                <Button variant="outline" className="w-full" onClick={handleSaveScenario}>
+                 <Button variant="outline" className="w-full" onClick={handleSaveScenario}>
                   <Target className="mr-2 h-4 w-4" />
                   Save Scenario
                 </Button>
@@ -293,7 +307,7 @@ export const WhatIfSimulator = () => {
                   <PiggyBank className="mr-2 h-4 w-4" />
                   Set as Goal
                 </Button>
-                <Button variant="secondary" className="w-full" onClick={() => setIsRecommenderOpen(true)}>
+                 <Button variant="secondary" className="w-full" onClick={() => setIsRecommenderOpen(true)}>
                   <Lightbulb className="mr-2 h-4 w-4" />
                   Get AI Recommendations
                 </Button>
@@ -318,18 +332,28 @@ export const WhatIfSimulator = () => {
                 <div className="grid grid-cols-1 gap-4">
                   {scenarios.map((scenario) => (
                     <Card key={scenario.id} className="bg-secondary/30">
-                      <CardHeader className="pb-3 flex-row items-center justify-between">
+                      <CardHeader className="p-4 pb-2 flex-row items-center justify-between">
                         <CardTitle className="text-base">{scenario.name}</CardTitle>
-                        <Button 
-                            variant="ghost" 
-                            size="sm"
-                            onClick={() => scenario.id && deleteScenario(scenario.id)}
-                            className="h-6 w-6 p-0 text-muted-foreground hover:text-destructive"
-                          >
-                          <X className="h-4 w-4" />
+                        <div className="flex items-center gap-1">
+                          <Button 
+                              variant="ghost" 
+                              size="sm"
+                              onClick={() => loadScenario(scenario)}
+                              className="h-6 w-6 p-0 text-muted-foreground hover:text-primary"
+                            >
+                            <RefreshCw className="h-4 w-4" />
                           </Button>
+                          <Button 
+                              variant="ghost" 
+                              size="sm"
+                              onClick={() => scenario.id && deleteScenario(scenario.id)}
+                              className="h-6 w-6 p-0 text-muted-foreground hover:text-destructive"
+                            >
+                            <X className="h-4 w-4" />
+                            </Button>
+                        </div>
                       </CardHeader>
-                      <CardContent className="space-y-1 text-sm">
+                      <CardContent className="px-4 pb-3 space-y-1 text-sm">
                         <div className="flex justify-between">
                           <span className="text-muted-foreground">Goal:</span>
                           <span>₱{scenario.savingsGoal.toLocaleString()}</span>

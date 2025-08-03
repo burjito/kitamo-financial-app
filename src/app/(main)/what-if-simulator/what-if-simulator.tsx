@@ -261,15 +261,15 @@ export const WhatIfSimulator = () => {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-4">
-              <Button className="w-full md:col-span-1" onClick={handleSetAsGoal}>
-                <PiggyBank className="mr-2 h-4 w-4" />
-                Set as Goal
-              </Button>
-               <Button variant="outline" className="w-full md:col-span-1" onClick={handleSaveScenario}>
+              <Button variant="outline" className="w-full md:col-span-1" onClick={handleSaveScenario}>
                 <Target className="mr-2 h-4 w-4" />
                 Save Scenario
               </Button>
-              <Button className="w-full md:col-span-1" onClick={() => setIsRecommenderOpen(true)}>
+               <Button className="w-full md:col-span-1" onClick={handleSetAsGoal}>
+                <PiggyBank className="mr-2 h-4 w-4" />
+                Set as Goal
+              </Button>
+              <Button variant="secondary" className="w-full md:col-span-1" onClick={() => setIsRecommenderOpen(true)}>
                 <Lightbulb className="mr-2 h-4 w-4" />
                 Get AI Recommendations
               </Button>

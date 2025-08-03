@@ -27,7 +27,7 @@ const ProductRecommendationSchema = z.object({
   productType: z.enum(["Loan", "Investment", "Savings", "Credit Card", "Insurance"]).describe("The category of the product."),
   recommendationReason: z.string().describe('A clear, concise reason why this product is being recommended for the user\'s specific scenario.'),
   clarification: z.string().describe("A short sentence clarifying what the product is, e.g., 'A personal loan is a type of credit you can use for various purposes.'"),
-  url: z.string().url().describe('A link to the official BPI product page.'),
+  url: z.string().describe('A link to the official BPI product page.'),
 });
 export type ProductRecommendation = z.infer<typeof ProductRecommendationSchema>;
 

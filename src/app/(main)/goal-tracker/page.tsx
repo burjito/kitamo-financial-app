@@ -1,6 +1,7 @@
+
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Plus, Download, Trash2, Edit, Target, Car, Home, Briefcase, Plane, AlertTriangle } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -9,6 +10,8 @@ import { Progress } from "@/components/ui/progress";
 import { useAppContext } from "@/contexts/app-context";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Separator } from "@/components/ui/separator";
+import { GoalDialog } from "./goal-dialog";
+import { Goal } from "@/contexts/app-context";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -45,7 +48,10 @@ const getIconForGoalType = (type: string): React.ElementType => {
 };
 
 export default function GoalTrackerPage() {
-  const { goals, scenarios, isLoading, deleteGoal } = useAppContext();
+  const { goals, scenarios, isLoading, deleteGoal, addGoal, updateGoal } = useAppContext();
+  const [isGoalDialogOpen, setIsGoalDialogOpen] = useState(false);
+  const [selectedGoal, setSelectedGoal] = useState<Goal | undefined>(undefined);
+
 
   const handleExport = () => {
     if (goals.length === 0) return;
@@ -64,6 +70,33 @@ export default function GoalTrackerPage() {
     link.click();
     document.body.removeChild(link);
   }
+  
+  const handleOpenDialog = (goal?: Goal) => {
+    setSelectedGoal(goal);
+    setIsGoalDialogOpen(true);
+  };
+  
+  const handleSaveGoal = (goalData: Omit<Goal, 'id' | 'status' | 'current'>) => {
+    if (selectedGoal?.id) {
+        // Find the existing goal to preserve its 'current' amount and 'status'
+        const existingGoal = goals.find(g => g.id === selectedGoal.id);
+        if (existingGoal) {
+            updateGoal({
+                ...existingGoal,
+                title: goalData.title,
+                target: goalData.target,
+            });
+        }
+    } else {
+      addGoal({
+        ...goalData,
+        id: Date.now().toString(),
+        current: 0,
+        status: 'On Track',
+      });
+    }
+  };
+
 
   const timelineEvents = scenarios
     .map(scenario => {
@@ -79,6 +112,13 @@ export default function GoalTrackerPage() {
     .sort((a, b) => a.year - b.year);
 
   return (
+    <>
+    <GoalDialog 
+        open={isGoalDialogOpen}
+        onOpenChange={setIsGoalDialogOpen}
+        onSave={handleSaveGoal}
+        goal={selectedGoal}
+    />
     <div className="animate-in fade-in-0 duration-500 space-y-8">
       <div className="flex flex-col md:flex-row md:items-center md:justify-between">
         <div className="space-y-2 mb-4 md:mb-0">
@@ -94,7 +134,7 @@ export default function GoalTrackerPage() {
                 <Download className="mr-2 h-4 w-4" />
                 Export Report
             </Button>
-            <Button>
+            <Button onClick={() => handleOpenDialog()}>
               <Plus className="mr-2 h-4 w-4" />
               Create New Goal
             </Button>
@@ -160,7 +200,7 @@ export default function GoalTrackerPage() {
                                         </div>
                                       </div>
                                        <div className="flex items-center justify-end gap-2 pt-4">
-                                        <Button variant="ghost" size="icon" className="h-8 w-8">
+                                        <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => handleOpenDialog(goal)}>
                                             <Edit className="h-4 w-4" />
                                         </Button>
                                         <AlertDialog>
@@ -191,8 +231,48 @@ export default function GoalTrackerPage() {
                   )}
                 </CardContent>
             </Card>
+        </div>
 
-            <Card>
+        <div className="md:col-span-1 space-y-8">
+          <Card className="sticky top-20">
+            <CardHeader>
+              <CardTitle>Financial Summary</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              {isLoading ? (
+                <div className="space-y-4">
+                    <Skeleton className="h-6 w-full" />
+                    <Skeleton className="h-6 w-full" />
+                    <Skeleton className="h-6 w-full" />
+                    <Skeleton className="h-12 w-full" />
+                </div>
+              ) : (
+                <>
+                  <div className="flex justify-between items-center">
+                    <span className="text-muted-foreground">Total Monthly Savings</span>
+                    <span className="font-bold text-lg">₱18,500</span>
+                  </div>
+                  <Separator />
+                   <div className="flex justify-between items-center">
+                    <span className="text-muted-foreground">Total Goals Value</span>
+                    <span className="font-bold text-lg">₱2,800,000</span>
+                  </div>
+                  <Separator />
+                   <div className="flex justify-between items-center">
+                    <span className="text-muted-foreground">Est. Completion Year</span>
+                    <span className="font-bold text-lg">2036</span>
+                  </div>
+                  <Separator />
+                  <div className="p-3 bg-yellow-400/20 rounded-lg">
+                    <p className="text-sm font-medium text-yellow-800">Feasibility Check</p>
+                    <p className="text-xs text-yellow-700">Your plan is ambitious but achievable. Watch for tight cash flow around 2028.</p>
+                  </div>
+                </>
+              )}
+            </CardContent>
+          </Card>
+          
+           <Card>
                 <CardHeader>
                     <CardTitle>Your Life Timeline</CardTitle>
                     <CardDescription>A visual map of your saved scenarios and future milestones.</CardDescription>
@@ -237,48 +317,8 @@ export default function GoalTrackerPage() {
                 </CardContent>
             </Card>
         </div>
-
-        <div className="md:col-span-1">
-          <Card className="sticky top-20">
-            <CardHeader>
-              <CardTitle>Financial Summary</CardTitle>
-              <CardDescription>Your projected financial snapshot based on your current path.</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              {isLoading ? (
-                <div className="space-y-4">
-                    <Skeleton className="h-6 w-full" />
-                    <Skeleton className="h-6 w-full" />
-                    <Skeleton className="h-6 w-full" />
-                    <Skeleton className="h-12 w-full" />
-                </div>
-              ) : (
-                <>
-                  <div className="flex justify-between items-center">
-                    <span className="text-muted-foreground">Total Monthly Savings</span>
-                    <span className="font-bold text-lg">₱18,500</span>
-                  </div>
-                  <Separator />
-                   <div className="flex justify-between items-center">
-                    <span className="text-muted-foreground">Total Goals Value</span>
-                    <span className="font-bold text-lg">₱2,800,000</span>
-                  </div>
-                  <Separator />
-                   <div className="flex justify-between items-center">
-                    <span className="text-muted-foreground">Est. Completion Year</span>
-                    <span className="font-bold text-lg">2036</span>
-                  </div>
-                  <Separator />
-                  <div className="p-3 bg-secondary/10 rounded-lg">
-                    <p className="text-sm font-medium text-secondary-foreground">Feasibility Check</p>
-                    <p className="text-xs text-muted-foreground">Your plan is ambitious but achievable. Watch for tight cash flow around 2028.</p>
-                  </div>
-                </>
-              )}
-            </CardContent>
-          </Card>
-        </div>
       </div>
     </div>
+    </>
   );
 }

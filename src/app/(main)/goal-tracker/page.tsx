@@ -237,11 +237,19 @@ export default function GoalTrackerPage() {
     }
   };
 
-  const filteredGoals = goals.filter(goal => {
-      const statusMatch = statusFilter === 'all' || goal.status.toLowerCase() === statusFilter;
-      const priorityMatch = priorityFilter === 'all' || goal.priority.toLowerCase() === priorityFilter;
-      return statusMatch && priorityMatch;
-  });
+  const priorityOrder: { [key in Goal['priority']]: number } = {
+    'High': 1,
+    'Medium': 2,
+    'Low': 3,
+  };
+
+  const filteredGoals = goals
+    .sort((a, b) => priorityOrder[a.priority] - priorityOrder[b.priority])
+    .filter(goal => {
+        const statusMatch = statusFilter === 'all' || goal.status.toLowerCase() === statusFilter;
+        const priorityMatch = priorityFilter === 'all' || goal.priority.toLowerCase() === priorityFilter;
+        return statusMatch && priorityMatch;
+    });
 
   return (
     <>

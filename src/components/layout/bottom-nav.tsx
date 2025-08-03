@@ -6,8 +6,8 @@ import { usePathname } from "next/navigation";
 import {
   Home,
   FlaskConical,
-  Milestone,
   Target,
+  User,
   BrainCircuit,
   type LucideIcon,
 } from "lucide-react";
@@ -31,8 +31,8 @@ const navItems: NavItem[] = [
   { href: "/home", label: "Home", icon: Home },
   { href: "/what-if-simulator", label: "Simulator", icon: FlaskConical },
   { href: "/kitamo-bot", label: "AI Bot", icon: BrainCircuit, isCenter: true },
-  { href: "/lifepath-navigator", label: "LifePath", icon: Milestone },
   { href: "/goal-tracker", label: "Goals", icon: Target },
+  { href: "/profile", label: "Profile", icon: User },
 ];
 
 export default function BottomNav() {

@@ -283,7 +283,6 @@ export default function GoalTrackerPage() {
             </div>
           </div>
           <div className="mt-4 md:mt-0 flex items-center gap-2">
-            <Button variant="outline">Export Report</Button>
             <Button onClick={() => handleOpenDialog()}>
               <Plus className="mr-2 h-4 w-4" />
               Add Goal

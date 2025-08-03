@@ -1,8 +1,9 @@
 
 "use client";
 
-import { useState } from "react";
-import { Plus, Settings, Shield, Clock, BadgeCheck, Target, TrendingUp, PiggyBank, Calendar, Lightbulb } from "lucide-react";
+import { useState, useEffect } from "react";
+import Link from "next/link";
+import { Plus, Settings, Shield, Clock, BadgeCheck, Target, PiggyBank, Calendar, Lightbulb } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -12,7 +13,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Separator } from "@/components/ui/separator";
 import { GoalDialog } from "./goal-dialog";
 import { AddFundsDialog } from "./add-funds-dialog";
-import { Goal } from "@/contexts/app-context";
+import { Goal, Scenario } from "@/contexts/app-context";
 import { cn } from "@/lib/utils";
 import { Label } from "@/components/ui/label";
 import {
@@ -22,6 +23,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { generateGoalInsights, GenerateGoalInsightsOutput } from "@/ai/flows/generate-goal-insights";
 
 
 const getPriorityStyles = (priority: string) => {
@@ -48,11 +50,16 @@ const getStatusStyles = (status: string) => {
     }
 }
 
-const FinancialSummary = () => {
-    const { goals } = useAppContext();
+const FinancialSummary = ({ insight, feasibilityScore, isLoadingInsight }: { insight: string; feasibilityScore: number; isLoadingInsight: boolean }) => {
+    const { goals, monthlyIncome } = useAppContext();
     const totalMonthlyTarget = goals.reduce((sum, goal) => sum + goal.monthlyTarget, 0);
-    const monthlyIncome = 50000; 
     const surplus = monthlyIncome - totalMonthlyTarget;
+
+    const getFeasibilityStyles = (score: number) => {
+      if (score >= 75) return "text-green-600 bg-green-500/10";
+      if (score >= 50) return "text-yellow-600 bg-yellow-500/10";
+      return "text-red-600 bg-red-500/10";
+    }
 
   return (
     <Card>
@@ -78,15 +85,32 @@ const FinancialSummary = () => {
             {surplus >= 0 ? `+₱${surplus.toLocaleString()}` : `-₱${Math.abs(surplus).toLocaleString()}`}
           </span>
         </div>
+        
+        <div className={cn("flex justify-between items-center p-3 rounded-lg", isLoadingInsight ? "" : getFeasibilityStyles(feasibilityScore))}>
+            <span className="font-semibold text-sm">Feasibility Score</span>
+            {isLoadingInsight ? (
+              <Skeleton className="h-5 w-10" />
+            ) : (
+              <span className="font-bold text-lg">{feasibilityScore}/100</span>
+            )}
+        </div>
+
         <div className="flex items-start gap-3 p-3 rounded-lg bg-secondary/10">
             <Lightbulb className="h-5 w-5 mt-1 text-primary flex-shrink-0" />
             <div>
                 <p className="font-medium text-sm text-primary">AI Insight</p>
-                <p className="text-sm text-muted-foreground">Your surplus is healthy. Consider allocating an extra ₱{Math.floor(surplus*0.5).toLocaleString()} to your 'High' priority goals to reach them faster.</p>
+                {isLoadingInsight ? (
+                  <div className="space-y-2 mt-1">
+                    <Skeleton className="h-3 w-full" />
+                    <Skeleton className="h-3 w-4/5" />
+                  </div>
+                ) : (
+                  <p className="text-sm text-muted-foreground">{insight}</p>
+                )}
             </div>
         </div>
-        <Button variant="outline" className="w-full">
-          View Full Report
+        <Button asChild variant="outline" className="w-full">
+            <Link href="/financial-report">View Full Report</Link>
         </Button>
       </CardContent>
     </Card>
@@ -158,12 +182,37 @@ const LifeTimeline = () => {
 }
 
 export default function GoalTrackerPage() {
-  const { goals, isLoading, addGoal, updateGoal, addFundsToGoal } = useAppContext();
+  const { goals, isLoading, addGoal, updateGoal, addFundsToGoal, monthlyIncome } = useAppContext();
   const [isGoalDialogOpen, setIsGoalDialogOpen] = useState(false);
   const [isAddFundsDialogOpen, setIsAddFundsDialogOpen] = useState(false);
   const [selectedGoal, setSelectedGoal] = useState<Goal | undefined>(undefined);
   const [statusFilter, setStatusFilter] = useState("all");
   const [priorityFilter, setPriorityFilter] = useState("all");
+
+  const [aiInsight, setAiInsight] = useState<GenerateGoalInsightsOutput>({ insight: "", feasibilityScore: 0 });
+  const [isLoadingInsight, setIsLoadingInsight] = useState(true);
+
+  useEffect(() => {
+    const fetchInsight = async () => {
+      if (!isLoading) {
+        setIsLoadingInsight(true);
+        try {
+          const result = await generateGoalInsights({
+            monthlyIncome,
+            goals,
+          });
+          setAiInsight(result);
+        } catch (error) {
+          console.error("Failed to fetch AI insight:", error);
+          setAiInsight({ insight: "Could not load insights at this time.", feasibilityScore: 0 });
+        } finally {
+          setIsLoadingInsight(false);
+        }
+      }
+    };
+    fetchInsight();
+  }, [isLoading, goals, monthlyIncome]);
+
 
   const handleOpenDialog = (goal?: Goal) => {
     setSelectedGoal(goal);
@@ -360,7 +409,11 @@ export default function GoalTrackerPage() {
                 )}
             </div>
             <div className="lg:col-span-1 space-y-8">
-                <FinancialSummary />
+                <FinancialSummary 
+                  insight={aiInsight.insight}
+                  feasibilityScore={aiInsight.feasibilityScore}
+                  isLoadingInsight={isLoadingInsight}
+                />
                 <LifeTimeline />
             </div>
         </div>

@@ -26,7 +26,7 @@ export interface Scenario {
 
 interface AppContextType {
   goals: Goal[];
-  addGoal: (goal: Omit<Goal, 'id'>) => void;
+  addGoal: (goal: Goal) => void;
   updateGoal: (goal: Goal) => void;
   deleteGoal: (id: string) => void;
   addFundsToGoal: (id: string, amount: number) => void;
@@ -35,13 +35,16 @@ interface AppContextType {
   deleteScenario: (id: string) => void;
   user: { displayName: string } | null;
   isLoading: boolean;
+  monthlyIncome: number;
 }
 
 // Dummy Data for UI development
+const DUMMY_MONTHLY_INCOME = 50000;
+
 const dummyGoals: Goal[] = [
-    { id: '1', title: 'Emergency Fund', target: 300000, current: 75000, status: 'Active', priority: 'High', monthlyTarget: 45000 },
+    { id: '1', title: 'Emergency Fund', target: 300000, current: 75000, status: 'Active', priority: 'High', monthlyTarget: 15000 },
     { id: '2', title: 'Japan Trip 2025', target: 100000, current: 35000, status: 'Active', priority: 'Medium', monthlyTarget: 10000 },
-    { id: '3', title: 'Macbook Pro 14"', target: 150000, current: 145000, status: 'Paused', priority: 'Low', monthlyTarget: 15000 },
+    { id: '3', title: 'Macbook Pro 14"', target: 150000, current: 145000, status: 'Paused', priority: 'Low', monthlyTarget: 5000 },
 ];
 
 const dummyScenarios: Scenario[] = [
@@ -59,6 +62,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
   const [scenarios, setScenarios] = useState<Scenario[]>([]);
   const [user, setUser] = useState<{displayName: string} | null>({displayName: "Alex"});
   const [isLoading, setIsLoading] = useState(true);
+  const [monthlyIncome, setMonthlyIncome] = useState(DUMMY_MONTHLY_INCOME);
 
   useEffect(() => {
     // Simulate loading data
@@ -70,7 +74,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     }, 1000);
   }, []);
 
-  const addGoal = (goal: Omit<Goal, 'id'>) => {
+  const addGoal = (goal: Goal) => {
     setGoals(prev => [...prev, { ...goal, id: Date.now().toString() }]);
   };
   
@@ -97,6 +101,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
   const value: AppContextType = {
     user,
     isLoading,
+    monthlyIncome,
     goals,
     addGoal,
     updateGoal,
@@ -122,5 +127,3 @@ export const useAppContext = () => {
   }
   return context;
 };
-
-    

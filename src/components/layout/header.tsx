@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Bell, User } from "lucide-react";
+import { User } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { MainNav } from "@/components/layout/main-nav";
@@ -30,10 +30,6 @@ export default function Header() {
         </Link>
         <div className="ml-auto flex items-center space-x-2">
           <MainNav />
-          <Button variant="ghost" size="icon">
-            <Bell className="h-6 w-6 text-primary/80" />
-            <span className="sr-only">Notifications</span>
-          </Button>
           <Button asChild variant="ghost" size="icon" className="hidden md:inline-flex">
             <Link href="/profile">
                 <User className="h-6 w-6 text-primary/80" />

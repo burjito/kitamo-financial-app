@@ -12,10 +12,11 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/hooks/use-toast";
-import { Shield, User, LogOut } from "lucide-react";
+import { Shield, User, LogOut, DollarSign } from "lucide-react";
 import { useAppContext } from "@/contexts/app-context";
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
+
 
 const accountSchema = z.object({
   firstName: z.string().min(1, "First name is required"),
@@ -60,6 +61,17 @@ const SettingsNav = ({ activeTab, setActiveTab }: { activeTab: string, setActive
       >
         <User className="mr-2 h-4 w-4" />
         Account
+      </Button>
+       <Button
+        variant="ghost"
+        className={cn(
+          "justify-start",
+          activeTab === 'financials' && 'bg-accent text-accent-foreground'
+        )}
+        onClick={() => setActiveTab('financials')}
+      >
+        <DollarSign className="mr-2 h-4 w-4" />
+        Financials
       </Button>
       <Button
         variant="ghost"
@@ -142,6 +154,48 @@ const AccountSettings = () => {
     );
 };
 
+const FinancialSettings = () => {
+    const { monthlyIncome, setMonthlyIncome, monthlyExpenses, setMonthlyExpenses } = useAppContext();
+    const { toast } = useToast();
+
+    const handleSave = () => {
+         toast({
+            title: "Settings Saved",
+            description: "Your financial settings have been updated.",
+        });
+    }
+    
+    return (
+        <div className="space-y-8">
+            <Card>
+                <CardHeader>
+                    <CardTitle>Financial Settings</CardTitle>
+                    <CardDescription>Manage your core financial information to personalize your app experience.</CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-6">
+                    <div className="space-y-2">
+                        <Label htmlFor="monthlyIncome">Default Monthly Income (PHP)</Label>
+                        <Input id="monthlyIncome" type="number" value={monthlyIncome} onChange={(e) => setMonthlyIncome(Number(e.target.value))} />
+                         <p className="text-sm text-muted-foreground">
+                            Used as the starting income for calculations in the simulator and goal tracking.
+                        </p>
+                    </div>
+                    <div className="space-y-2">
+                        <Label htmlFor="monthlyExpenses">Default Monthly Expenses (PHP)</Label>
+                        <Input id="monthlyExpenses" type="number" value={monthlyExpenses} onChange={(e) => setMonthlyExpenses(Number(e.target.value))} />
+                         <p className="text-sm text-muted-foreground">
+                           Set your typical monthly spending to get a more accurate starting point in simulations.
+                        </p>
+                    </div>
+                     <div className="flex justify-end">
+                        <Button onClick={handleSave}>Save Financial Settings</Button>
+                    </div>
+                </CardContent>
+            </Card>
+        </div>
+    )
+}
+
 const SecuritySettings = () => {
     const { toast } = useToast();
     const { register, handleSubmit, formState: { errors }, reset } = useForm<PasswordFormValues>({
@@ -211,6 +265,7 @@ export default function ProfilePage() {
                 </div>
                 <div className="md:col-span-3">
                     {activeTab === 'account' && <AccountSettings />}
+                    {activeTab === 'financials' && <FinancialSettings />}
                     {activeTab === 'security' && <SecuritySettings />}
                 </div>
             </div>

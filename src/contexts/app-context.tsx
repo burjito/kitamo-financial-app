@@ -1,4 +1,3 @@
-
 "use client";
 
 import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
@@ -36,10 +35,14 @@ interface AppContextType {
   user: { displayName: string } | null;
   isLoading: boolean;
   monthlyIncome: number;
+  setMonthlyIncome: React.Dispatch<React.SetStateAction<number>>;
+  monthlyExpenses: number;
+  setMonthlyExpenses: React.Dispatch<React.SetStateAction<number>>;
 }
 
 // Dummy Data for UI development
 const DUMMY_MONTHLY_INCOME = 50000;
+const DUMMY_MONTHLY_EXPENSES = 35000;
 
 const dummyGoals: Goal[] = [
     { id: '1', title: 'Emergency Fund', target: 300000, current: 75000, status: 'Active', priority: 'High', monthlyTarget: 15000 },
@@ -63,6 +66,8 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<{displayName: string} | null>({displayName: "Alex"});
   const [isLoading, setIsLoading] = useState(true);
   const [monthlyIncome, setMonthlyIncome] = useState(DUMMY_MONTHLY_INCOME);
+  const [monthlyExpenses, setMonthlyExpenses] = useState(DUMMY_MONTHLY_EXPENSES);
+
 
   useEffect(() => {
     // Simulate loading data
@@ -102,6 +107,9 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     user,
     isLoading,
     monthlyIncome,
+    setMonthlyIncome,
+    monthlyExpenses,
+    setMonthlyExpenses,
     goals,
     addGoal,
     updateGoal,

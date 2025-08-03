@@ -15,6 +15,14 @@ import { AddFundsDialog } from "./add-funds-dialog";
 import { Goal } from "@/contexts/app-context";
 import { cn } from "@/lib/utils";
 import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+
 
 const getPriorityStyles = (priority: string) => {
     switch (priority.toLowerCase()) {
@@ -149,17 +157,6 @@ const LifeTimeline = () => {
     )
 }
 
-const FilterButton = ({ label, value, currentFilter, setFilter }: { label: string, value: string, currentFilter: string, setFilter: (value: string) => void }) => (
-    <Button
-        variant={currentFilter === value ? "default" : "outline"}
-        size="sm"
-        onClick={() => setFilter(value)}
-        className="capitalize"
-    >
-        {label}
-    </Button>
-)
-
 export default function GoalTrackerPage() {
   const { goals, isLoading, addGoal, updateGoal, addFundsToGoal } = useAppContext();
   const [isGoalDialogOpen, setIsGoalDialogOpen] = useState(false);
@@ -241,23 +238,33 @@ export default function GoalTrackerPage() {
             <div className="lg:col-span-2 space-y-6">
                 <Card>
                     <CardContent className="p-4 flex flex-col md:flex-row gap-4">
-                        <div className="flex-1 space-y-2">
-                            <Label className="font-semibold text-sm">Status</Label>
-                            <div className="flex gap-2">
-                                <FilterButton label="All" value="all" currentFilter={statusFilter} setFilter={setStatusFilter} />
-                                <FilterButton label="Active" value="active" currentFilter={statusFilter} setFilter={setStatusFilter} />
-                                <FilterButton label="Paused" value="paused" currentFilter={statusFilter} setFilter={setStatusFilter} />
-                            </div>
-                        </div>
-                        <div className="flex-1 space-y-2">
-                            <Label className="font-semibold text-sm">Priority</Label>
-                            <div className="flex gap-2">
-                                <FilterButton label="All" value="all" currentFilter={priorityFilter} setFilter={setPriorityFilter} />
-                                <FilterButton label="High" value="high" currentFilter={priorityFilter} setFilter={setPriorityFilter} />
-                                <FilterButton label="Medium" value="medium" currentFilter={priorityFilter} setFilter={setPriorityFilter} />
-                                <FilterButton label="Low" value="low" currentFilter={priorityFilter} setFilter={setPriorityFilter} />
-                            </div>
-                        </div>
+                       <div className="flex-1 space-y-2">
+                           <Label className="font-semibold text-sm">Status</Label>
+                           <Select value={statusFilter} onValueChange={setStatusFilter}>
+                             <SelectTrigger>
+                               <SelectValue placeholder="Filter by status" />
+                             </SelectTrigger>
+                             <SelectContent>
+                               <SelectItem value="all">All Statuses</SelectItem>
+                               <SelectItem value="active">Active</SelectItem>
+                               <SelectItem value="paused">Paused</SelectItem>
+                             </SelectContent>
+                           </Select>
+                       </div>
+                       <div className="flex-1 space-y-2">
+                           <Label className="font-semibold text-sm">Priority</Label>
+                           <Select value={priorityFilter} onValueChange={setPriorityFilter}>
+                             <SelectTrigger>
+                               <SelectValue placeholder="Filter by priority" />
+                             </SelectTrigger>
+                             <SelectContent>
+                               <SelectItem value="all">All Priorities</SelectItem>
+                               <SelectItem value="high">High</SelectItem>
+                               <SelectItem value="medium">Medium</SelectItem>
+                               <SelectItem value="low">Low</SelectItem>
+                             </SelectContent>
+                           </Select>
+                       </div>
                     </CardContent>
                 </Card>
 

@@ -10,7 +10,6 @@ const navItems = [
   { href: "/home", label: "Home" },
   { href: "/kitamo-bot", label: "AI Bot" },
   { href: "/what-if-simulator", label: "Simulator" },
-  { href: "/lifepath-navigator", label: "LifePath" },
   { href: "/goal-tracker", label: "Goals" },
 ];
 

@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { Progress } from "@/components/ui/progress";
+import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "@/components/ui/tooltip";
 import { 
   Calculator, 
   TrendingUp, 
@@ -124,7 +125,7 @@ export const WhatIfSimulator = () => {
   const shortfall = goalAmount - projectedSavings;
 
   return (
-    <>
+    <TooltipProvider>
       <ProductRecommenderDialog 
           open={isRecommenderOpen}
           onOpenChange={setIsRecommenderOpen}
@@ -335,22 +336,36 @@ export const WhatIfSimulator = () => {
                       <CardHeader className="p-4 pb-2 flex-row items-center justify-between">
                         <CardTitle className="text-base">{scenario.name}</CardTitle>
                         <div className="flex items-center gap-1">
-                          <Button 
-                              variant="ghost" 
-                              size="sm"
-                              onClick={() => loadScenario(scenario)}
-                              className="h-6 w-6 p-0 text-muted-foreground hover:text-primary"
-                            >
-                            <RefreshCw className="h-4 w-4" />
-                          </Button>
-                          <Button 
-                              variant="ghost" 
-                              size="sm"
-                              onClick={() => scenario.id && deleteScenario(scenario.id)}
-                              className="h-6 w-6 p-0 text-muted-foreground hover:text-destructive"
-                            >
-                            <X className="h-4 w-4" />
-                            </Button>
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <Button 
+                                  variant="ghost" 
+                                  size="sm"
+                                  onClick={() => loadScenario(scenario)}
+                                  className="h-6 w-6 p-0 text-muted-foreground hover:text-primary"
+                                >
+                                <RefreshCw className="h-4 w-4" />
+                              </Button>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                              <p>Load Scenario</p>
+                            </TooltipContent>
+                          </Tooltip>
+                          <Tooltip>
+                             <TooltipTrigger asChild>
+                                <Button 
+                                    variant="ghost" 
+                                    size="sm"
+                                    onClick={() => scenario.id && deleteScenario(scenario.id)}
+                                    className="h-6 w-6 p-0 text-muted-foreground hover:text-destructive"
+                                  >
+                                  <X className="h-4 w-4" />
+                                </Button>
+                              </TooltipTrigger>
+                              <TooltipContent>
+                                <p>Delete Scenario</p>
+                              </TooltipContent>
+                          </Tooltip>
                         </div>
                       </CardHeader>
                       <CardContent className="px-4 pb-3 space-y-1 text-sm">
@@ -371,6 +386,6 @@ export const WhatIfSimulator = () => {
           </div>
         )}
       </div>
-    </>
+    </TooltipProvider>
   );
 };

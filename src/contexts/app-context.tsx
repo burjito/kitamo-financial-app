@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
@@ -24,6 +25,7 @@ export interface Scenario {
 interface AppContextType {
   goals: Goal[];
   addGoal: (goal: Goal) => void;
+  updateGoal: (goal: Goal) => void;
   deleteGoal: (id: string) => void;
   scenarios: Scenario[];
   saveScenario: (scenario: Scenario) => void;
@@ -69,6 +71,10 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     setGoals(prev => [...prev, { ...goal, id: Date.now().toString() }]);
   };
   
+  const updateGoal = (updatedGoal: Goal) => {
+    setGoals(prev => prev.map(g => g.id === updatedGoal.id ? updatedGoal : g));
+  };
+
   const deleteGoal = (id: string) => {
     setGoals(prev => prev.filter(g => g.id !== id));
   };
@@ -86,6 +92,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     isLoading,
     goals,
     addGoal,
+    updateGoal,
     deleteGoal,
     scenarios,
     saveScenario,

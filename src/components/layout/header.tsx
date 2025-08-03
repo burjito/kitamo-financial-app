@@ -3,6 +3,7 @@ import { Bell, User } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { MainNav } from "@/components/layout/main-nav";
+import { cn } from "@/lib/utils";
 
 const Logo = () => (
     <svg viewBox="0 0 64 64" fill="none" className="w-8 h-8">
@@ -33,7 +34,7 @@ export default function Header() {
             <Bell className="h-6 w-6 text-primary/80" />
             <span className="sr-only">Notifications</span>
           </Button>
-          <Button asChild variant="ghost" size="icon">
+          <Button asChild variant="ghost" size="icon" className="hidden md:inline-flex">
             <Link href="/profile">
                 <User className="h-6 w-6 text-primary/80" />
                 <span className="sr-only">Profile</span>

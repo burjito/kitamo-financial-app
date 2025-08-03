@@ -66,16 +66,19 @@ const LifeTimeline = () => {
     const { goals } = useAppContext();
 
     const getTargetYear = (goal: Goal) => {
-        const remaining = goal.target - goal.current;
-        const timelineMonths = goal.monthlyTarget > 0 ? Math.ceil(remaining / goal.monthlyTarget) : 0;
-        const now = new Date();
-        const targetDate = new Date(now.setMonth(now.getMonth() + timelineMonths));
+        const remaining = goal.target > goal.current ? goal.target - goal.current : 0;
+        if (goal.monthlyTarget <= 0) {
+            // If there's no monthly target, we can't estimate a timeline.
+            return new Date().getFullYear();
+        }
+        const timelineMonths = Math.ceil(remaining / goal.monthlyTarget);
+        const targetDate = new Date();
+        targetDate.setMonth(targetDate.getMonth() + timelineMonths);
         return targetDate.getFullYear();
     };
     
     const goalsByYear = goals.reduce((acc, goal) => {
         const year = getTargetYear(goal);
-
         if (!acc[year]) {
             acc[year] = [];
         }
@@ -84,7 +87,6 @@ const LifeTimeline = () => {
     }, {} as Record<number, Goal[]>);
 
     const sortedYears = Object.keys(goalsByYear).map(Number).sort((a, b) => a - b);
-
 
     return (
         <Card>
@@ -98,18 +100,20 @@ const LifeTimeline = () => {
                 </CardDescription>
             </CardHeader>
             <CardContent>
-                <div className="relative pl-6 border-l-2 border-border space-y-8">
+                <div className="space-y-8">
                    {sortedYears.length > 0 ? sortedYears.map(year => (
-                     <div key={year} className="relative">
-                        <div className="absolute -left-[35px] top-1">
-                            <span className="bg-background px-2 font-semibold text-primary">{year}</span>
+                     <div key={year} className="relative flex">
+                        <div className="flex flex-col items-center mr-4">
+                            <div className="bg-background pr-2 font-semibold text-primary">{year}</div>
                         </div>
-                        <div className="space-y-4 pt-2">
-                             {goalsByYear[year].map(goal => (
+                        <div className="border-l-2 border-border pl-4 flex-1 space-y-4">
+                            {goalsByYear[year].map((goal, index) => (
                                  <div key={goal.id} className="relative">
-                                    <div className="absolute -left-[30px] top-[7px] h-3 w-3 rounded-full bg-primary border-2 border-background"></div>
-                                    <p className="font-semibold">{goal.title}</p>
-                                    <p className="text-sm text-muted-foreground">Target: ₱{goal.target.toLocaleString()}</p>
+                                    <div className="absolute -left-[9px] top-[7px] h-3 w-3 rounded-full bg-primary border-2 border-background"></div>
+                                    <div className="ml-2">
+                                        <p className="font-semibold">{goal.title}</p>
+                                        <p className="text-sm text-muted-foreground">Target: ₱{goal.target.toLocaleString()}</p>
+                                    </div>
                                 </div>
                              ))}
                         </div>
@@ -303,5 +307,3 @@ export default function GoalTrackerPage() {
     </>
   );
 }
-
-    

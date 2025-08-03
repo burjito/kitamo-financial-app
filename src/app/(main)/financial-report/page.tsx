@@ -109,12 +109,14 @@ export default function FinancialReportPage() {
                                 <TableHead>Progress</TableHead>
                                 <TableHead className="text-right">Target</TableHead>
                                 <TableHead className="text-right">Saved</TableHead>
+                                <TableHead className="text-right">Remaining</TableHead>
                                 <TableHead className="text-right">Monthly</TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>
                             {goals.map((goal) => {
                                 const progress = goal.target > 0 ? (goal.current / goal.target) * 100 : 0;
+                                const remaining = goal.target - goal.current;
                                 return (
                                     <TableRow key={goal.id}>
                                         <TableCell className="font-medium">{goal.title}</TableCell>
@@ -131,6 +133,7 @@ export default function FinancialReportPage() {
                                         </TableCell>
                                         <TableCell className="text-right">₱{goal.target.toLocaleString()}</TableCell>
                                         <TableCell className="text-right">₱{goal.current.toLocaleString()}</TableCell>
+                                        <TableCell className="text-right">₱{remaining.toLocaleString()}</TableCell>
                                         <TableCell className="text-right">₱{goal.monthlyTarget.toLocaleString()}</TableCell>
                                     </TableRow>
                                 )

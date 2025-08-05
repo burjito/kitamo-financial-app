@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useEffect } from "react";
@@ -9,7 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Eye, EyeOff, Mail, Lock, User } from "lucide-react";
+import { Eye, EyeOff, Mail, Lock, User, ArrowLeft } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 const Signup = () => {
@@ -263,11 +264,22 @@ const Signup = () => {
             </Button>
           </div>
 
-          <div className="text-center text-sm">
-            Already have an account?{" "}
-            <Link href="/login" passHref className="text-primary hover:underline font-medium">
-              Sign in
-            </Link>
+          <Separator />
+
+           <div className="space-y-3 text-center">
+            <div className="text-sm">
+                Already have an account?{" "}
+                <Link href="/login" passHref className="text-primary hover:underline font-medium">
+                Sign in
+                </Link>
+            </div>
+
+            <Button asChild variant="ghost" className="text-muted-foreground">
+                <Link href="/">
+                    <ArrowLeft className="mr-2 h-4 w-4" />
+                    Back to Home
+                </Link>
+            </Button>
           </div>
         </CardContent>
       </Card>

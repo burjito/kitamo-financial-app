@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useEffect } from "react";
@@ -8,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
-import { Eye, EyeOff, Mail, Lock } from "lucide-react";
+import { Eye, EyeOff, Mail, Lock, ArrowLeft } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 const Login = () => {
@@ -150,12 +151,23 @@ const Login = () => {
               Facebook
             </Button>
           </div>
+          
+          <Separator />
 
-          <div className="text-center text-sm">
-            Don't have an account?{" "}
-            <Link href="/signup" passHref className="text-primary hover:underline font-medium">
-              Sign up
-            </Link>
+          <div className="space-y-3 text-center">
+            <div className="text-sm">
+                Don't have an account?{" "}
+                <Link href="/signup" passHref className="text-primary hover:underline font-medium">
+                Sign up
+                </Link>
+            </div>
+
+            <Button asChild variant="ghost" className="text-muted-foreground">
+                <Link href="/">
+                    <ArrowLeft className="mr-2 h-4 w-4" />
+                    Back to Home
+                </Link>
+            </Button>
           </div>
         </CardContent>
       </Card>

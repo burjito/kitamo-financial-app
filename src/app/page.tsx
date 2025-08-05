@@ -60,7 +60,7 @@ export default function LandingPage() {
                                     </Link>
                                 </Button>
 
-                                <div className="grid sm:grid-cols-3 gap-4 pt-6 text-left">
+                                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-6 text-left">
                                      <StatCard icon={<CheckCircle className="w-6 h-6" />} value="10k+" label="Scenarios Simulated" />
                                      <StatCard icon={<TrendingUp className="w-6 h-6" />} value="50M+" label="Goals Achieved" />
                                      <StatCard icon={<Smile className="w-6 h-6" />} value="95%" label="Satisfaction Rate" />

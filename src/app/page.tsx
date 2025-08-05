@@ -57,11 +57,12 @@ export default function LandingPage() {
                                      <StatCard icon={<Smile className="w-8 h-8" />} value="95%" label="Satisfaction Rate" />
                                 </div>
                            </div>
-                           <div className="relative h-64 md:h-auto">
+                           <div className="relative mt-12 md:mt-0">
                                 <Image
                                     src="/final_cover.png"
                                     alt="KitaMo Financial Simulator Illustration"
-                                    fill
+                                    width={1200}
+                                    height={800}
                                     className="object-contain"
                                     priority
                                 />

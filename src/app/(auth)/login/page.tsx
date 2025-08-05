@@ -18,13 +18,6 @@ const Login = () => {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const { toast } = useToast();
-
-  useEffect(() => {
-    // This is a temporary measure for UI development without a backend.
-    // In a real app, you'd handle actual authentication.
-    // We'll redirect to home to simulate a logged-in state.
-    router.push('/home');
-  }, [router]);
   
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();

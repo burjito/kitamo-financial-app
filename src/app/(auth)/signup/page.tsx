@@ -27,13 +27,6 @@ const Signup = () => {
   const router = useRouter();
   const { toast } = useToast();
 
-   useEffect(() => {
-    // This is a temporary measure for UI development without a backend.
-    // In a real app, you'd handle actual authentication.
-    // We'll redirect to home to simulate a logged-in state.
-    router.push('/home');
-  }, [router]);
-
   const handleInputChange = (field: string, value: string | boolean) => {
     setFormData(prev => ({ ...prev, [field]: value }));
   };

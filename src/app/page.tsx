@@ -1,3 +1,4 @@
+
 import LandingHeader from "@/components/layout/landing-header";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Bot, FlaskConical, Target, TrendingUp, Smile, CheckCircle } from "lucide-react";
@@ -58,7 +59,7 @@ export default function LandingPage() {
                            </div>
                            <div className="relative h-64 md:h-auto">
                                 <Image
-                                    src="/hero-illustration.png"
+                                    src="/final_cover.png"
                                     alt="KitaMo Financial Simulator Illustration"
                                     fill
                                     className="object-contain"

@@ -274,7 +274,7 @@ const Signup = () => {
                 </Link>
             </div>
 
-            <Button asChild variant="ghost" className="text-muted-foreground">
+            <Button asChild variant="ghost" className="text-muted-foreground hover:bg-transparent hover:text-primary">
                 <Link href="/">
                     <ArrowLeft className="mr-2 h-4 w-4" />
                     Back to Home

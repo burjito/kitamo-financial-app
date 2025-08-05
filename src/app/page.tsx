@@ -34,7 +34,7 @@ export default function LandingPage() {
             <LandingHeader />
             <main className="flex-1">
                 {/* Hero Section */}
-                <section className="relative w-full h-[600px] md:h-[700px] flex items-center">
+                <section className="relative w-full h-screen flex items-center">
                     <div className="absolute inset-0">
                         <Image
                             src="/final_cover.png"
@@ -102,7 +102,7 @@ export default function LandingPage() {
 
             <footer className="py-8 border-t bg-background">
                 <div className="container max-w-6xl mx-auto text-center text-muted-foreground">
-                    <p>&copy; {new Date().getFullYear()} KitaMo by BPI. All rights reserved.</p>
+                    <p>&copy; {new Date().getFullYear()} KitaMo by Techtonix. All rights reserved.</p>
                 </div>
             </footer>
         </div>

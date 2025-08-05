@@ -1,8 +1,9 @@
 import LandingHeader from "@/components/layout/landing-header";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Bot, FlaskConical, Target } from "lucide-react";
+import { ArrowRight, Bot, FlaskConical, Target, TrendingUp, Smile, CheckCircle } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { cn } from "@/lib/utils";
 
 const FeatureCard = ({ icon, title, description }: { icon: React.ReactNode, title: string, description: string }) => (
     <div className="bg-card/80 backdrop-blur-sm border border-border/20 rounded-xl p-6 shadow-lg transition-transform hover:-translate-y-2 hover:shadow-2xl">
@@ -14,6 +15,17 @@ const FeatureCard = ({ icon, title, description }: { icon: React.ReactNode, titl
     </div>
 );
 
+const StatCard = ({ icon, value, label }: { icon: React.ReactNode, value: string, label: string }) => (
+    <div className="bg-primary/90 backdrop-blur-sm text-primary-foreground p-4 rounded-lg flex items-center gap-4">
+        <div className="text-secondary">
+            {icon}
+        </div>
+        <div>
+            <div className="text-2xl font-bold">{value}</div>
+            <div className="text-sm opacity-80">{label}</div>
+        </div>
+    </div>
+);
 
 export default function LandingPage() {
     return (
@@ -21,35 +33,44 @@ export default function LandingPage() {
             <LandingHeader />
             <main className="flex-1">
                 {/* Hero Section */}
-                <section className="relative h-[85vh] flex items-center justify-center text-center text-white overflow-hidden">
-                    <div className="absolute inset-0 z-0">
-                        <Image
-                            src="/hero-image.png"
-                            alt="KitaMo Hero Image"
-                            fill
-                            className="object-cover"
-                            priority
-                        />
-                        <div className="absolute inset-0 bg-black/50"></div>
-                    </div>
-                    <div className="relative z-10 p-4 space-y-6">
-                        <h1 className="text-4xl md:text-6xl font-extrabold tracking-tighter leading-tight">
-                            Basta may <span className="text-secondary">kita</span>, may <span className="text-secondary">matatamo</span>.
-                        </h1>
-                        <p className="max-w-2xl mx-auto text-lg md:text-xl text-white/80">
-                           Your AI-powered planning tool to explore life’s biggest financial “what-ifs” with clarity, confidence, and control.
-                        </p>
-                        <Button asChild size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground shadow-xl transition-transform hover:scale-105">
-                            <Link href="/login">
-                                Start Your Financial Journey
-                                <ArrowRight className="ml-2 h-5 w-5" />
-                            </Link>
-                        </Button>
+                <section className="relative bg-gradient-to-b from-background to-red-50/50 overflow-hidden">
+                    <div className="container max-w-7xl mx-auto px-4 py-20 md:py-28">
+                       <div className="grid md:grid-cols-2 gap-8 items-center">
+                           <div className="space-y-6 text-center md:text-left">
+                                <h1 className="text-4xl md:text-6xl font-extrabold tracking-tighter leading-tight">
+                                    Basta may <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">kita</span>, may <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">matatamo</span>.
+                                </h1>
+                                <p className="max-w-lg mx-auto md:mx-0 text-lg md:text-xl text-muted-foreground">
+                                   Make smarter money decisions with AI-powered what-if scenarios.
+                                </p>
+                                <Button asChild size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground shadow-xl transition-transform hover:scale-105">
+                                    <Link href="/login">
+                                        Start Your Financial Journey
+                                        <ArrowRight className="ml-2 h-5 w-5" />
+                                    </Link>
+                                </Button>
+
+                                <div className="grid sm:grid-cols-3 gap-4 pt-6 text-left">
+                                     <StatCard icon={<CheckCircle className="w-8 h-8" />} value="10k+" label="Scenarios Simulated" />
+                                     <StatCard icon={<TrendingUp className="w-8 h-8" />} value="50M+" label="Goals Achieved" />
+                                     <StatCard icon={<Smile className="w-8 h-8" />} value="95%" label="Satisfaction Rate" />
+                                </div>
+                           </div>
+                           <div className="relative h-64 md:h-auto">
+                                <Image
+                                    src="/hero-illustration.png"
+                                    alt="KitaMo Financial Simulator Illustration"
+                                    fill
+                                    className="object-contain"
+                                    priority
+                                />
+                           </div>
+                       </div>
                     </div>
                 </section>
 
                 {/* Features Section */}
-                <section id="features" className="py-20 md:py-32">
+                <section id="features" className="py-20 md:py-32 bg-background">
                     <div className="container max-w-6xl mx-auto px-4">
                         <div className="text-center mb-16">
                             <h2 className="text-3xl md:text-4xl font-bold text-foreground">A Future You Can See</h2>
@@ -78,7 +99,7 @@ export default function LandingPage() {
                 </section>
             </main>
 
-            <footer className="py-8 border-t">
+            <footer className="py-8 border-t bg-background">
                 <div className="container max-w-6xl mx-auto text-center text-muted-foreground">
                     <p>&copy; {new Date().getFullYear()} KitaMo by BPI. All rights reserved.</p>
                 </div>

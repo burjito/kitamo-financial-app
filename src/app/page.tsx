@@ -48,7 +48,7 @@ export default function LandingPage() {
                        <div className="max-w-xl text-center md:text-left">
                            <div className="space-y-6">
                                 <h1 className="text-4xl md:text-6xl font-extrabold tracking-tighter leading-tight text-foreground">
-                                    Basta may <span className="bg-gradient-to-r from-yellow-400 to-amber-500 bg-clip-text text-transparent">kita</span>, may <span className="bg-gradient-to-r from-red-700 to-red-500 bg-clip-text text-transparent">matatamo</span>.
+                                    Basta may <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">kita</span>, may <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">matatamo.</span>
                                 </h1>
                                 <p className="max-w-lg mx-auto md:mx-0 text-lg md:text-xl text-muted-foreground">
                                    Make smarter money decisions with AI-powered what-if scenarios.

@@ -48,12 +48,12 @@ export default function LandingPage() {
                        <div className="max-w-xl text-center md:text-left">
                            <div className="space-y-6">
                                 <h1 className="text-4xl md:text-6xl font-extrabold tracking-tighter leading-tight text-foreground">
-                                    Basta may <span className="text-secondary">kita</span>, may <span className="text-primary">matatamo</span>.
+                                    Basta may <span className="bg-gradient-to-r from-yellow-400 to-amber-500 bg-clip-text text-transparent">kita</span>, may <span className="bg-gradient-to-r from-red-700 to-red-500 bg-clip-text text-transparent">matatamo</span>.
                                 </h1>
                                 <p className="max-w-lg mx-auto md:mx-0 text-lg md:text-xl text-muted-foreground">
                                    Make smarter money decisions with AI-powered what-if scenarios.
                                 </p>
-                                <Button asChild size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground shadow-xl transition-transform hover:scale-105">
+                                <Button asChild size="lg" className="bg-gradient-to-r from-primary to-yellow-400 text-primary-foreground shadow-xl transition-transform hover:scale-105">
                                     <Link href="/login">
                                         Start Your Financial Journey
                                         <ArrowRight className="ml-2 h-5 w-5" />

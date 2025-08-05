@@ -17,12 +17,12 @@ const FeatureCard = ({ icon, title, description }: { icon: React.ReactNode, titl
 );
 
 const StatCard = ({ icon, value, label }: { icon: React.ReactNode, value: string, label: string }) => (
-    <div className="bg-primary/90 backdrop-blur-sm text-primary-foreground p-4 rounded-lg flex items-center gap-4">
+    <div className="bg-primary/90 backdrop-blur-sm text-primary-foreground p-4 rounded-lg flex items-center gap-4 shadow-lg">
         <div className="text-secondary">
             {icon}
         </div>
         <div>
-            <div className="text-2xl font-bold">{value}</div>
+            <div className="text-xl font-bold">{value}</div>
             <div className="text-sm opacity-80">{label}</div>
         </div>
     </div>
@@ -34,12 +34,21 @@ export default function LandingPage() {
             <LandingHeader />
             <main className="flex-1">
                 {/* Hero Section */}
-                <section className="relative bg-gradient-to-b from-background to-red-50/50 overflow-hidden">
-                    <div className="container max-w-7xl mx-auto px-4 py-20 md:py-28">
-                       <div className="grid md:grid-cols-2 gap-8 items-center">
-                           <div className="space-y-6 text-center md:text-left">
-                                <h1 className="text-4xl md:text-6xl font-extrabold tracking-tighter leading-tight">
-                                    Basta may <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">kita</span>, may <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">matatamo</span>.
+                <section className="relative w-full h-[600px] md:h-[700px] flex items-center">
+                    <div className="absolute inset-0">
+                        <Image
+                            src="/final_cover.png"
+                            alt="KitaMo Financial Simulator background"
+                            fill
+                            className="object-cover object-center"
+                            priority
+                        />
+                    </div>
+                    <div className="relative container max-w-7xl mx-auto px-4 z-10">
+                       <div className="max-w-xl text-center md:text-left">
+                           <div className="space-y-6">
+                                <h1 className="text-4xl md:text-6xl font-extrabold tracking-tighter leading-tight text-foreground">
+                                    Basta may <span className="text-secondary">kita</span>, may <span className="text-primary">matatamo</span>.
                                 </h1>
                                 <p className="max-w-lg mx-auto md:mx-0 text-lg md:text-xl text-muted-foreground">
                                    Make smarter money decisions with AI-powered what-if scenarios.
@@ -52,20 +61,10 @@ export default function LandingPage() {
                                 </Button>
 
                                 <div className="grid sm:grid-cols-3 gap-4 pt-6 text-left">
-                                     <StatCard icon={<CheckCircle className="w-8 h-8" />} value="10k+" label="Scenarios Simulated" />
-                                     <StatCard icon={<TrendingUp className="w-8 h-8" />} value="50M+" label="Goals Achieved" />
-                                     <StatCard icon={<Smile className="w-8 h-8" />} value="95%" label="Satisfaction Rate" />
+                                     <StatCard icon={<CheckCircle className="w-6 h-6" />} value="10k+" label="Scenarios Simulated" />
+                                     <StatCard icon={<TrendingUp className="w-6 h-6" />} value="50M+" label="Goals Achieved" />
+                                     <StatCard icon={<Smile className="w-6 h-6" />} value="95%" label="Satisfaction Rate" />
                                 </div>
-                           </div>
-                           <div className="relative mt-12 md:mt-0 h-80 md:h-auto">
-                                <Image
-                                    src="/final_cover.png"
-                                    alt="KitaMo Financial Simulator Illustration"
-                                    width={1200}
-                                    height={800}
-                                    className="object-contain w-full h-full"
-                                    priority
-                                />
                            </div>
                        </div>
                     </div>

@@ -9,7 +9,7 @@ All colors MUST be HSL.
 @layer base {
   :root {
     /* KitaMo - Professional Banking Colors */
-    --background: 245 50% 98%;
+    --background: 0 0% 100%;
     --foreground: 210 30% 8%;
 
     --card: 0 0% 100%;

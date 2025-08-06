@@ -127,14 +127,14 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
         
         const { data: goalsData, error: goalsError } = await supabase
             .from('goals')
-            .select('id, user_id, title, target, current, status, priority, monthlyTarget:monthly_target')
+            .select('id, user_id, title, target, current, status, priority, monthlyTarget:monthlyTarget')
             .eq('user_id', user.id);
         if (goalsError) throw goalsError;
         setGoals(goalsData || []);
 
         const { data: scenariosData, error: scenariosError } = await supabase
             .from('scenarios')
-            .select('id, user_id, name, monthlyIncome:monthly_income, monthlyExpenses:monthly_expenses, savingsGoal:savings_goal, timeframe, goalType:goal_type')
+            .select('id, user_id, name, monthlyIncome:monthlyIncome, monthlyExpenses:monthlyExpenses, savingsGoal:savingsGoal, timeframe, goalType:goalType')
             .eq('user_id', user.id);
         if (scenariosError) throw scenariosError;
         setScenarios(scenariosData || []);
@@ -167,7 +167,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     const goalToAdd = { 
         title: goal.title,
         target: goal.target,
-        monthly_target: goal.monthlyTarget,
+        monthlyTarget: goal.monthlyTarget,
         priority: goal.priority,
         user_id: user.id, 
         current: 0, 
@@ -176,7 +176,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     const { data, error } = await supabase
         .from('goals')
         .insert([goalToAdd])
-        .select('id, user_id, title, target, current, status, priority, monthlyTarget:monthly_target')
+        .select('id, user_id, title, target, current, status, priority, monthlyTarget:monthlyTarget')
         .single();
 
     if (error) {
@@ -192,7 +192,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     const goalToUpdate = {
         title: rest.title,
         target: rest.target,
-        monthly_target: rest.monthlyTarget,
+        monthlyTarget: rest.monthlyTarget,
         priority: rest.priority,
         status: rest.status,
         current: rest.current,
@@ -202,7 +202,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
         .from('goals')
         .update(goalToUpdate)
         .eq('id', id!)
-        .select('id, user_id, title, target, current, status, priority, monthlyTarget:monthly_target')
+        .select('id, user_id, title, target, current, status, priority, monthlyTarget:monthlyTarget')
         .single();
     if (error) {
         console.error('Error updating goal:', error);
@@ -221,7 +221,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
         .from('goals')
         .update({ current: newCurrentAmount })
         .eq('id', id)
-        .select('id, user_id, title, target, current, status, priority, monthlyTarget:monthly_target')
+        .select('id, user_id, title, target, current, status, priority, monthlyTarget:monthlyTarget')
         .single();
     
     if (error) {
@@ -248,17 +248,17 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     if (!user || !supabase) return;
      const scenarioToSave = {
       name: scenario.name,
-      monthly_income: scenario.monthlyIncome,
-      monthly_expenses: scenario.monthlyExpenses,
-      savings_goal: scenario.savingsGoal,
+      monthlyIncome: scenario.monthlyIncome,
+      monthlyExpenses: scenario.monthlyExpenses,
+      savingsGoal: scenario.savingsGoal,
       timeframe: scenario.timeframe,
-      goal_type: scenario.goalType,
+      goalType: scenario.goalType,
       user_id: user.id
     };
     const { data, error } = await supabase
         .from('scenarios')
         .insert([scenarioToSave])
-        .select('id, user_id, name, monthlyIncome:monthly_income, monthlyExpenses:monthly_expenses, savingsGoal:savings_goal, timeframe, goalType:goal_type')
+        .select('id, user_id, name, monthlyIncome:monthlyIncome, monthlyExpenses:monthlyExpenses, savingsGoal:savingsGoal, timeframe, goalType:goalType')
         .single();
     if (error) {
         console.error('Error saving scenario:', error);
@@ -311,3 +311,5 @@ export const useAppContext = () => {
   }
   return context;
 };
+
+    

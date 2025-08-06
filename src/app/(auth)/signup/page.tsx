@@ -12,6 +12,7 @@ import { Separator } from "@/components/ui/separator";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Eye, EyeOff, Mail, Lock, User, ArrowLeft } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { signUp } from "@/lib/auth";
 
 const Signup = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -64,16 +65,38 @@ const Signup = () => {
 
     setIsLoading(true);
 
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    
-    toast({
-      title: "Welcome to KitaMo!",
-      description: "Your account has been created successfully.",
-    });
-    router.push("/home");
+    try {
+      const { data, error } = await signUp({
+        email: formData.email,
+        password: formData.password,
+        firstName: formData.firstName,
+        lastName: formData.lastName
+      });
 
-    setIsLoading(false);
+      if (error) {
+        toast({
+          title: "Signup Failed",
+          description: error.message,
+          variant: "destructive"
+        });
+        return;
+      }
+
+      toast({
+        title: "Welcome to KitaMo!",
+        description: "Please check your email to confirm your account.",
+      });
+      
+      router.push("/login");
+    } catch (error) {
+      toast({
+        title: "Signup Failed",
+        description: "An unexpected error occurred. Please try again.",
+        variant: "destructive"
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (

@@ -10,6 +10,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { kitaMoBot, KitaMoBotInput } from "@/ai/flows/kita-mo-bot-flow";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useAppContext } from "@/contexts/app-context";
 
 interface Message {
   id: string;
@@ -22,6 +23,8 @@ export default function KitaMoBotPage() {
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const scrollViewportRef = useRef<HTMLDivElement>(null);
+  const { profile, goals, monthlyIncome, monthlyExpenses } = useAppContext();
+
 
   useEffect(() => {
     // Greet the user on initial load
@@ -47,7 +50,18 @@ export default function KitaMoBotPage() {
     setIsLoading(true);
 
     try {
-        const botResponse = await kitaMoBot({ query: input });
+        const userContext = JSON.stringify({
+            profile,
+            goals,
+            monthlyIncome,
+            monthlyExpenses,
+        }, null, 2);
+
+        const botResponse = await kitaMoBot({ 
+            query: input,
+            userContext: userContext
+        });
+
         const botMessage: Message = {
             id: (Date.now() + 1).toString(),
             text: botResponse.response,
@@ -69,7 +83,7 @@ export default function KitaMoBotPage() {
 
   return (
     <div className="animate-in fade-in-0 duration-500 flex justify-center items-start h-full">
-      <Card className="w-full max-w-4xl h-[calc(100vh-8rem)] flex flex-col">
+      <Card className="w-full max-w-4xl h-[calc(100vh-10rem)] flex flex-col">
         <CardHeader className="text-center">
           <div className="flex justify-center items-center gap-2">
             <BrainCircuit className="h-8 w-8 text-primary" />

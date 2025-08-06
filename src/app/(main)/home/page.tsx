@@ -2,7 +2,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { ArrowUpRight, Lightbulb, PiggyBank, Target, BrainCircuit, Rocket, Shield } from "lucide-react";
+import { ArrowUpRight, Lightbulb, PiggyBank, Target, BrainCircuit, Rocket, Shield, ShieldQuestion } from "lucide-react";
 import Link from "next/link";
 import {
   Card,
@@ -15,87 +15,45 @@ import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { useAppContext } from "@/contexts/app-context";
 import { FinancialSetupModal } from "./financial-setup-modal";
-import { generateAiInsights } from "@/ai/flows/generate-ai-insights";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useRouter } from "next/navigation";
 import { Badge } from "@/components/ui/badge";
 
-interface InitialInsight {
-    insight: string;
-    surplus: number;
-}
-
 export default function HomePage() {
-  const { user, profile, goals, isLoading: isAppLoading, riskProfile } = useAppContext();
+  const { profile, goals, isLoading: isAppLoading, monthlyIncome, monthlyExpenses } = useAppContext();
   const [isSetupModalOpen, setIsSetupModalOpen] = useState(false);
-  const [initialInsight, setInitialInsight] = useState<InitialInsight | null>(null);
-  const [isLoadingInsight, setIsLoadingInsight] = useState(false);
   const router = useRouter();
   
   // Effect to check if the setup modal should be shown
   useEffect(() => {
-    if (!isAppLoading && profile && !profile.monthly_income) {
+    if (!isAppLoading && profile && profile.monthly_income === null) {
       setIsSetupModalOpen(true);
     }
   }, [profile, isAppLoading]);
   
-  const handleSetupComplete = async (income: number, expenses: number) => {
-    setIsSetupModalOpen(false);
-    setIsLoadingInsight(true);
-    try {
-        const surplus = income - expenses;
-        const result = await generateAiInsights({
-            scenarioDescription: "A new user has just set their initial monthly income and expenses.",
-            projectedSurplusOrShortfall: surplus,
-            monthlySavings: surplus > 0 ? surplus : 0,
-            timelineMonths: 1
-        });
-        setInitialInsight({ insight: result.insights, surplus: surplus});
-        router.push('/risk-profile-assessment');
-    } catch (error) {
-        console.error("Failed to generate initial insight:", error);
-        setInitialInsight({ insight: "There was an issue generating an insight, but you're all set to start exploring!", surplus: income - expenses });
-        router.push('/risk-profile-assessment');
-    } finally {
-        setIsLoadingInsight(false);
-    }
-  }
-
   const welcomeName = profile?.first_name || "there";
-  const isNewUser = !riskProfile;
-  const { monthlyIncome, monthlyExpenses } = useAppContext();
-
-  const renderNewUserDashboard = () => (
+  
+  const renderLockedDashboard = () => (
     <div className="space-y-8">
        <Card className="bg-gradient-to-br from-primary/90 to-primary text-primary-foreground text-center shadow-xl">
           <CardHeader>
-            <CardTitle className="text-3xl">You're All Set, {welcomeName}!</CardTitle>
+            <div className="flex justify-center items-center pb-2">
+              <div className="bg-primary-foreground/20 p-3 rounded-full">
+                <ShieldQuestion className="h-8 w-8 text-primary-foreground" />
+              </div>
+            </div>
+            <CardTitle className="text-3xl">One Last Step, {welcomeName}!</CardTitle>
             <CardDescription className="text-primary-foreground/80 text-lg">
-                Let's see what's possible with your finances.
+                Complete your risk assessment to unlock your personalized dashboard.
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
-             {isLoadingInsight ? (
-                 <div className="flex flex-col items-center justify-center p-4 bg-black/10 rounded-lg">
-                    <Skeleton className="h-5 w-3/4 bg-white/20" />
-                    <Skeleton className="h-5 w-1/2 mt-2 bg-white/20" />
-                 </div>
-            ) : initialInsight ? (
-                 <div className="flex items-start gap-4 p-4 text-left rounded-lg bg-black/20">
-                    <Lightbulb className="h-8 w-8 mt-1 text-secondary flex-shrink-0" />
-                    <div>
-                        <p className="font-bold">Here's a Quick Insight</p>
-                        <p className="text-primary-foreground/90">{initialInsight.insight}</p>
-                    </div>
-                </div>
-            ) : null}
-
-            <p className="text-lg">Your next step? Explore a financial scenario.</p>
+            <p className="text-lg">This helps us tailor financial insights just for you.</p>
 
             <Button asChild size="lg" variant="secondary" className="bg-primary-foreground text-primary hover:bg-primary-foreground/90 animate-pulse">
-                <Link href="/what-if-simulator">
+                <Link href="/risk-profile-assessment">
                     <Rocket className="mr-2 h-5 w-5" />
-                    Go to the What-If Simulator
+                    Take Your Risk Assessment
                 </Link>
             </Button>
           </CardContent>
@@ -140,7 +98,7 @@ export default function HomePage() {
                     <Shield className="h-4 w-4 text-muted-foreground" />
                 </CardHeader>
                 <CardContent>
-                    <Badge variant={riskProfile === "Aggressive" ? "destructive" : "secondary"}>{riskProfile || 'N/A'}</Badge>
+                    <Badge variant={profile?.risk_profile === "Aggressive" ? "destructive" : "secondary"}>{profile?.risk_profile || 'N/A'}</Badge>
                     <p className="text-xs text-muted-foreground mt-2">Based on your assessment</p>
                 </CardContent>
             </Card>
@@ -205,7 +163,7 @@ export default function HomePage() {
             <CardHeader>
                 <CardTitle>Personalized Insights</CardTitle>
                 <CardDescription>
-                AI-powered suggestions based on your {riskProfile} profile.
+                AI-powered suggestions based on your {profile?.risk_profile} profile.
                 </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
@@ -230,14 +188,13 @@ export default function HomePage() {
     );
   }
 
-  const shouldShowNewUserDashboard = isNewUser || (profile && !profile.risk_profile);
+  const shouldShowLockedDashboard = !isAppLoading && profile && !profile.risk_profile;
   
   return (
     <>
     <FinancialSetupModal 
       isOpen={isSetupModalOpen}
       onClose={() => setIsSetupModalOpen(false)}
-      onSave={handleSetupComplete}
     />
     <div className="space-y-8 animate-in fade-in-0 duration-500">
       <div className="space-y-2">
@@ -245,16 +202,16 @@ export default function HomePage() {
           Welcome back, {welcomeName}!
         </h1>
         <p className="text-muted-foreground">
-          {shouldShowNewUserDashboard && !initialInsight
-            ? "Let's get your financial journey started."
+          {shouldShowLockedDashboard
+            ? "Let's complete your profile to unlock your financial dashboard."
             : "Here's your financial snapshot. Let's make today count."}
         </p>
       </div>
       
       {isAppLoading ? (
         <Skeleton className="h-64 w-full" />
-      ) : shouldShowNewUserDashboard && initialInsight ? (
-        renderNewUserDashboard()
+      ) : shouldShowLockedDashboard ? (
+        renderLockedDashboard()
       ) : (
         renderExistingUserDashboard()
       )}

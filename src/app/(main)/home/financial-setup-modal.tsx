@@ -21,10 +21,9 @@ import { useRouter } from "next/navigation";
 interface FinancialSetupModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSave: (income: number, expenses: number) => void;
 }
 
-export const FinancialSetupModal = ({ isOpen, onClose, onSave }: FinancialSetupModalProps) => {
+export const FinancialSetupModal = ({ isOpen, onClose }: FinancialSetupModalProps) => {
   const { updateProfile } = useAppContext();
   const { toast } = useToast();
   const [income, setIncome] = useState("");
@@ -55,7 +54,8 @@ export const FinancialSetupModal = ({ isOpen, onClose, onSave }: FinancialSetupM
           description: "Next, let's figure out your investment style.",
         });
         
-        onSave(incomeNum, expensesNum);
+        onClose();
+        router.push('/risk-profile-assessment');
 
     } catch (e) {
         toast({ title: "Error", description: "Could not save your details. Please try again.", variant: "destructive"});

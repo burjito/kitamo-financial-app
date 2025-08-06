@@ -30,12 +30,12 @@ export interface Scenario {
 
 type RiskProfile = "Conservative" | "Moderately Conservative" | "Moderate" | "Aggressive";
 
-interface Profile {
+export interface Profile {
     id: string;
     first_name: string;
     last_name: string;
-    monthly_income: number;
-    monthly_expenses: number;
+    monthly_income: number | null;
+    monthly_expenses: number | null;
     risk_profile: RiskProfile | null;
 }
 
@@ -52,22 +52,15 @@ interface AppContextType {
   profile: Profile | null;
   isLoading: boolean;
   monthlyIncome: number;
-  setMonthlyIncome: (income: number) => void;
   monthlyExpenses: number;
-  setMonthlyExpenses: (expenses: number) => void;
-  riskProfile: RiskProfile | null;
-  setRiskProfile: (profile: RiskProfile | null) => void;
   updateProfile: (data: Partial<Omit<Profile, 'id'>>) => Promise<void>;
 }
 
-// Default values, can be overridden by user settings later
 const DEFAULT_MONTHLY_INCOME = 50000;
 const DEFAULT_MONTHLY_EXPENSES = 35000;
 
-// Context
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
-// Provider
 export const AppProvider = ({ children }: { children: ReactNode }) => {
   const [goals, setGoals] = useState<Goal[]>([]);
   const [scenarios, setScenarios] = useState<Scenario[]>([]);
@@ -75,10 +68,8 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
   const [profile, setProfile] = useState<Profile | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  // These are now derived from the profile state
   const monthlyIncome = profile?.monthly_income ?? DEFAULT_MONTHLY_INCOME;
   const monthlyExpenses = profile?.monthly_expenses ?? DEFAULT_MONTHLY_EXPENSES;
-  const riskProfile = profile?.risk_profile ?? null;
   
   useEffect(() => {
     if (!supabase) {
@@ -170,19 +161,6 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
       }
       if(updatedProfile) setProfile(updatedProfile);
   };
-  
-  const setMonthlyIncome = (income: number) => {
-      updateProfile({ monthly_income: income });
-  };
-  
-  const setMonthlyExpenses = (expenses: number) => {
-      updateProfile({ monthly_expenses: expenses });
-  };
-  
-  const setRiskProfile = (profile: RiskProfile | null) => {
-      updateProfile({ risk_profile: profile });
-  };
-
 
   const addGoal = async (goal: Omit<Goal, 'id' | 'user_id' | 'current' | 'status'>) => {
     if (!user || !supabase) return;
@@ -281,11 +259,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     profile,
     isLoading,
     monthlyIncome,
-    setMonthlyIncome,
     monthlyExpenses,
-    setMonthlyExpenses,
-    riskProfile,
-    setRiskProfile,
     goals,
     addGoal,
     updateGoal,
@@ -304,7 +278,6 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
   );
 };
 
-// Hook
 export const useAppContext = () => {
   const context = useContext(AppContext);
   if (context === undefined) {

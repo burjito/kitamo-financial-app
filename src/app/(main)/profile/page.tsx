@@ -2,6 +2,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Link from 'next/link';
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -12,11 +13,12 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/hooks/use-toast";
-import { Shield, User, LogOut, DollarSign } from "lucide-react";
+import { Shield, User, LogOut, DollarSign, ShieldQuestion } from "lucide-react";
 import { useAppContext } from "@/contexts/app-context";
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import supabase from "@/lib/supabase-client";
+import { Badge } from "@/components/ui/badge";
 
 
 const accountSchema = z.object({
@@ -172,34 +174,57 @@ const AccountSettings = () => {
 };
 
 const FinancialSettings = () => {
-    const { monthlyIncome, setMonthlyIncome, monthlyExpenses, setMonthlyExpenses } = useAppContext();
+    const { profile, updateProfile } = useAppContext();
     const { toast } = useToast();
+    const router = useRouter();
+    
+    const [income, setIncome] = useState(profile?.monthly_income || 0);
+    const [expenses, setExpenses] = useState(profile?.monthly_expenses || 0);
 
-    const handleSave = () => {
-         toast({
-            title: "Settings Saved",
-            description: "Your financial settings have been updated.",
-        });
+    useEffect(() => {
+        if(profile) {
+            setIncome(profile.monthly_income || 0);
+            setExpenses(profile.monthly_expenses || 0);
+        }
+    }, [profile]);
+
+    const handleSave = async () => {
+        try {
+            await updateProfile({
+                monthly_income: income,
+                monthly_expenses: expenses,
+            });
+            toast({
+                title: "Settings Saved",
+                description: "Your financial settings have been updated.",
+            });
+        } catch(e) {
+             toast({
+                title: "Error",
+                description: "Could not update settings. Please try again.",
+                variant: "destructive"
+            });
+        }
     }
     
     return (
         <div className="space-y-8">
             <Card>
                 <CardHeader>
-                    <CardTitle>Financial Settings</CardTitle>
+                    <CardTitle>Financial Information</CardTitle>
                     <CardDescription>Manage your core financial information to personalize your app experience.</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-6">
                     <div className="space-y-2">
                         <Label htmlFor="monthlyIncome">Default Monthly Income (PHP)</Label>
-                        <Input id="monthlyIncome" type="number" value={monthlyIncome} onChange={(e) => setMonthlyIncome(Number(e.target.value))} />
+                        <Input id="monthlyIncome" type="number" value={income} onChange={(e) => setIncome(Number(e.target.value))} />
                          <p className="text-sm text-muted-foreground">
                             Used as the starting income for calculations in the simulator and goal tracking.
                         </p>
                     </div>
                     <div className="space-y-2">
                         <Label htmlFor="monthlyExpenses">Default Monthly Expenses (PHP)</Label>
-                        <Input id="monthlyExpenses" type="number" value={monthlyExpenses} onChange={(e) => setMonthlyExpenses(Number(e.target.value))} />
+                        <Input id="monthlyExpenses" type="number" value={expenses} onChange={(e) => setExpenses(Number(e.target.value))} />
                          <p className="text-sm text-muted-foreground">
                            Set your typical monthly spending to get a more accurate starting point in simulations.
                         </p>
@@ -207,6 +232,39 @@ const FinancialSettings = () => {
                      <div className="flex justify-end">
                         <Button onClick={handleSave}>Save Financial Settings</Button>
                     </div>
+                </CardContent>
+            </Card>
+
+            <Card>
+                <CardHeader>
+                    <CardTitle>Risk Profile</CardTitle>
+                    <CardDescription>Your risk profile helps us tailor financial advice for you.</CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                   {profile?.risk_profile ? (
+                     <div className="flex items-center justify-between p-4 rounded-lg bg-secondary/20">
+                        <div>
+                            <p className="text-sm text-muted-foreground">Your current profile is</p>
+                            <Badge variant={profile.risk_profile === "Aggressive" ? "destructive" : "secondary"} className="text-lg mt-1">{profile.risk_profile}</Badge>
+                        </div>
+                        <Button asChild variant="link">
+                            <Link href="/risk-profile-assessment">Retake Assessment</Link>
+                        </Button>
+                     </div>
+                   ) : (
+                     <div className="flex items-center justify-between p-4 rounded-lg border border-dashed">
+                        <div className="flex items-center gap-3">
+                            <ShieldQuestion className="h-8 w-8 text-primary" />
+                            <div>
+                                <h3 className="font-semibold">Assessment Incomplete</h3>
+                                <p className="text-sm text-muted-foreground">Complete the assessment to unlock personalized insights.</p>
+                            </div>
+                        </div>
+                        <Button asChild>
+                            <Link href="/risk-profile-assessment">Take Assessment</Link>
+                        </Button>
+                     </div>
+                   )}
                 </CardContent>
             </Card>
         </div>

@@ -11,7 +11,8 @@ import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/hooks/use-toast";
 import { useAppContext } from "@/contexts/app-context";
 import { cn } from "@/lib/utils";
-import { ShieldQuestion } from "lucide-react";
+import { ShieldQuestion, ArrowLeft } from "lucide-react";
+import Link from "next/link";
 
 const assessmentQuestions = [
     {
@@ -117,7 +118,7 @@ export default function RiskProfileAssessmentPage() {
     const [answers, setAnswers] = useState<Record<string, number>>({});
     const router = useRouter();
     const { toast } = useToast();
-    const { setRiskProfile } = useAppContext();
+    const { updateProfile } = useAppContext();
 
     const allQuestions = assessmentQuestions.flatMap(s => s.questions);
     const questionsAnswered = Object.keys(answers).length;
@@ -127,7 +128,7 @@ export default function RiskProfileAssessmentPage() {
         setAnswers(prev => ({ ...prev, [questionId]: parseInt(value) }));
     };
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         if (!isComplete) {
             toast({
                 title: "Incomplete Assessment",
@@ -139,38 +140,54 @@ export default function RiskProfileAssessmentPage() {
 
         const totalScore = Object.values(answers).reduce((sum, score) => sum + score, 0);
         
-        let profile: RiskProfile = "Conservative";
-        if (totalScore > 130) {
+        let profile: RiskProfile;
+        if (totalScore >= 135) {
             profile = "Aggressive";
-        } else if (totalScore > 100) {
+        } else if (totalScore >= 95) {
             profile = "Moderate";
-        } else if (totalScore > 60) {
+        } else if (totalScore >= 65) {
             profile = "Moderately Conservative";
+        } else {
+            profile = "Conservative";
         }
 
-        setRiskProfile(profile);
-        
-        toast({
-            title: "Assessment Complete!",
-            description: `Your investor profile is: ${profile}. Let's check out your new dashboard.`,
-        });
-
-        router.push("/home");
+        try {
+            await updateProfile({ risk_profile: profile });
+            toast({
+                title: "Assessment Complete!",
+                description: `Your investor profile is: ${profile}. Let's check out your new dashboard.`,
+            });
+            router.push("/home");
+        } catch(e) {
+             toast({
+                title: "Error",
+                description: "Could not save your risk profile. Please try again.",
+                variant: "destructive"
+            });
+        }
     };
 
     return (
         <div className="animate-in fade-in-0 duration-500 max-w-4xl mx-auto space-y-8 py-8">
              <Card>
                 <CardHeader className="text-center">
-                  <div className="flex justify-center items-center pb-2">
-                    <div className="bg-primary/10 p-3 rounded-full">
-                        <ShieldQuestion className="h-8 w-8 text-primary" />
-                    </div>
-                  </div>
-                  <CardTitle className="text-3xl">Risk Profile Assessment</CardTitle>
-                  <CardDescription>
-                    Just one more step! Answer these questions to help us understand your investment style.
-                  </CardDescription>
+                   <div className="flex justify-between items-center">
+                        <Button asChild variant="ghost">
+                            <Link href="/profile"><ArrowLeft className="mr-2 h-4 w-4" /> Back to Profile</Link>
+                        </Button>
+                        <div className="flex-grow">
+                             <div className="flex justify-center items-center pb-2">
+                                <div className="bg-primary/10 p-3 rounded-full">
+                                    <ShieldQuestion className="h-8 w-8 text-primary" />
+                                </div>
+                            </div>
+                            <CardTitle className="text-3xl">Risk Profile Assessment</CardTitle>
+                            <CardDescription>
+                                Answer these questions to help us understand your investment style.
+                            </CardDescription>
+                        </div>
+                        <div className="w-32"></div>
+                   </div>
                 </CardHeader>
              </Card>
             

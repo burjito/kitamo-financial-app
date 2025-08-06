@@ -269,29 +269,27 @@ export default function GoalTrackerPage() {
       )}
       <div className="animate-in fade-in-0 duration-500">
         <Card>
-            <CardHeader>
-                <div className="flex flex-col md:flex-row md:items-center md:justify-between space-y-4 md:space-y-0">
-                    <div>
-                        <CardTitle className="text-3xl font-bold tracking-tight text-foreground flex items-center gap-2">
-                            <Target className="h-6 w-6 text-primary" />
-                            Your Financial Goals
-                        </CardTitle>
-                        <CardDescription>
-                            Track progress toward your financial milestones and stay motivated.
-                        </CardDescription>
-                    </div>
-                    <Button onClick={() => handleOpenDialog()}>
-                        <Plus className="mr-2 h-4 w-4" />
-                        Add Goal
-                    </Button>
+            <CardHeader className="flex-row items-start justify-between">
+                <div>
+                    <CardTitle className="flex items-center gap-2">
+                        <Target className="h-6 w-6 text-primary" />
+                        Your Financial Goals
+                    </CardTitle>
+                    <CardDescription>
+                        Track progress toward your financial milestones and stay motivated.
+                    </CardDescription>
                 </div>
+                <Button onClick={() => handleOpenDialog()}>
+                    <Plus className="mr-2 h-4 w-4" />
+                    Add Goal
+                </Button>
             </CardHeader>
             <CardContent>
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
                     <div className="lg:col-span-2 space-y-6">
                         <Card>
                             <CardHeader>
-                               <CardTitle className="flex items-center gap-2">
+                               <CardTitle className="flex items-center gap-2 text-lg">
                                   <Filter className="h-5 w-5 text-primary" />
                                    Filter Goals
                                </CardTitle>

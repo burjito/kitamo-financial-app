@@ -323,7 +323,7 @@ export const WhatIfSimulator = () => {
           <div className="lg:col-span-1 space-y-8 animate-in fade-in-0 slide-in-from-right-5 duration-500">
             <Card>
               <CardHeader>
-                <CardTitle className="flex items-center gap-2">
+                <CardTitle className="flex items-center gap-2 text-lg">
                   <Target className="h-5 w-5 text-primary" />
                   Saved Scenarios
                 </CardTitle>

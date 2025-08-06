@@ -75,8 +75,8 @@ export default function LandingPage() {
                     <div className="container max-w-6xl mx-auto px-4">
                         <div className="text-center mb-16">
                             <h2 className="text-3xl md:text-4xl font-bold text-foreground">A Future You Can See</h2>
-                            <p className="max-w-3xl mx-auto text-lg text-muted-foreground mt-4">
-                                KitaMo is more than just a financial app. It's your personal flight simulator for life's most important financial decisions.
+                            <p className="max-w-2xl mx-auto text-lg text-muted-foreground mt-4">
+                                KitaMo is more than just a financial app. It's your personal planning partner for life's most important financial decisions.
                             </p>
                         </div>
                         <div className="grid md:grid-cols-3 gap-8">

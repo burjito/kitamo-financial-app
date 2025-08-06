@@ -39,23 +39,23 @@ const Login = () => {
     <div className="w-full max-w-md space-y-6">
       <div className="text-center space-y-4">
         <Link href="/" className="inline-block">
-            <div className="flex items-center justify-center">
-               <svg viewBox="0 0 64 64" fill="none" className="w-16 h-16">
-                  <defs>
+          <div className="flex flex-col items-center space-y-1">
+            <div className="flex items-center space-x-2">
+                <svg viewBox="0 0 64 64" fill="none" className="w-12 h-12">
+                <defs>
                     <linearGradient id="eyeGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                      <stop offset="0%" stopColor="hsl(var(--primary))" />
-                      <stop offset="100%" stopColor="hsl(var(--secondary))" />
+                    <stop offset="0%" stopColor="hsl(var(--primary))" />
+                    <stop offset="100%" stopColor="hsl(var(--secondary))" />
                     </linearGradient>
-                  </defs>
-                  <path d="M2 32 C2 32 10 12 32 12 C54 12 62 32 62 32 C62 32 54 52 32 52 C10 52 2 32 2 32 Z" stroke="url(#eyeGradient)" strokeWidth="4" fill="none"/>
-                  <circle cx="32" cy="32" r="8" stroke="url(#eyeGradient)" strokeWidth="2" fill="url(#eyeGradient)"/>
+                </defs>
+                <path d="M2 32 C2 32 10 12 32 12 C54 12 62 32 62 32 C62 32 54 52 32 52 C10 52 2 32 2 32 Z" stroke="url(#eyeGradient)" strokeWidth="4" fill="none"/>
+                <circle cx="32" cy="32" r="8" stroke="url(#eyeGradient)" strokeWidth="2" fill="url(#eyeGradient)"/>
                 </svg>
+                <h1 className="text-3xl font-bold bg-gradient-to-br from-primary to-[hsl(var(--primary-glow))] bg-clip-text text-transparent">KitaMo</h1>
             </div>
+            <p className="text-muted-foreground">Your Financial Flight Simulator</p>
+          </div>
         </Link>
-        <div>
-          <h1 className="text-4xl font-bold bg-gradient-to-br from-primary to-[hsl(var(--primary-glow))] bg-clip-text text-transparent">KitaMo</h1>
-          <p className="text-muted-foreground">See it. Plan it. Achieve it.</p>
-        </div>
       </div>
 
       <Card>
@@ -162,7 +162,7 @@ const Login = () => {
                 </Link>
             </div>
 
-            <Button asChild variant="ghost" className="text-muted-foreground hover:bg-transparent hover:text-primary">
+            <Button asChild variant="ghost" className="text-muted-foreground hover:text-primary hover:bg-transparent">
                 <Link href="/">
                     <ArrowLeft className="mr-2 h-4 w-4" />
                     Back to Home

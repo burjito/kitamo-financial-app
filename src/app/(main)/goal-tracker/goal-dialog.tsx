@@ -64,23 +64,24 @@ export const GoalDialog = ({ open, onOpenChange, onSave, goal }: GoalDialogProps
 
   useEffect(() => {
     if (open) {
-      if (goal) {
-        form.reset({
-          title: goal.title,
-          target: goal.target,
-          monthlyTarget: goal.monthlyTarget,
-          priority: goal.priority,
-        });
-      } else {
-        form.reset({
-          title: "",
-          target: 0,
-          monthlyTarget: 0,
-          priority: 'Medium',
-        });
-      }
+      form.reset(
+        goal
+          ? {
+              title: goal.title,
+              target: goal.target,
+              monthlyTarget: goal.monthlyTarget,
+              priority: goal.priority,
+            }
+          : {
+              title: "",
+              target: 0,
+              monthlyTarget: 0,
+              priority: "Medium",
+            }
+      );
     }
   }, [open, goal, form]);
+
 
   const onSubmit = (data: GoalFormValues) => {
     if (goal?.id) {

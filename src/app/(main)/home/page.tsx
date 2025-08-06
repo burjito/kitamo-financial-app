@@ -63,7 +63,7 @@ export default function HomePage() {
 
   const renderExistingUserDashboard = () => {
     const totalCurrent = goals.reduce((sum, goal) => sum + goal.current, 0);
-    const monthlySavings = monthlyIncome - monthlyExpenses;
+    const monthlySavings = (monthlyIncome || 0) - (monthlyExpenses || 0);
 
     return (
         <div className="space-y-8">

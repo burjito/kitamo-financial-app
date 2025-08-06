@@ -127,14 +127,14 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
         
         const { data: goalsData, error: goalsError } = await supabase
             .from('goals')
-            .select('*')
+            .select('id, user_id, title, target, current, status, priority, monthlyTarget:monthly_target')
             .eq('user_id', user.id);
         if (goalsError) throw goalsError;
         setGoals(goalsData || []);
 
         const { data: scenariosData, error: scenariosError } = await supabase
             .from('scenarios')
-            .select('*')
+            .select('id, user_id, name, monthlyIncome:monthly_income, monthlyExpenses:monthly_expenses, savingsGoal:savings_goal, timeframe, goalType:goal_type')
             .eq('user_id', user.id);
         if (scenariosError) throw scenariosError;
         setScenarios(scenariosData || []);
@@ -167,7 +167,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     const goalToAdd = { 
         title: goal.title,
         target: goal.target,
-        monthlyTarget: goal.monthlyTarget,
+        monthly_target: goal.monthlyTarget,
         priority: goal.priority,
         user_id: user.id, 
         current: 0, 
@@ -176,7 +176,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     const { data, error } = await supabase
         .from('goals')
         .insert([goalToAdd])
-        .select()
+        .select('id, user_id, title, target, current, status, priority, monthlyTarget:monthly_target')
         .single();
 
     if (error) {
@@ -189,11 +189,20 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
   const updateGoal = async (updatedGoal: Goal) => {
     if (!user || !supabase) return;
     const { id, ...rest } = updatedGoal;
+    const goalToUpdate = {
+        title: rest.title,
+        target: rest.target,
+        monthly_target: rest.monthlyTarget,
+        priority: rest.priority,
+        status: rest.status,
+        current: rest.current,
+        user_id: user.id
+    }
     const { data, error } = await supabase
         .from('goals')
-        .update({ ...rest, user_id: user.id })
+        .update(goalToUpdate)
         .eq('id', id!)
-        .select()
+        .select('id, user_id, title, target, current, status, priority, monthlyTarget:monthly_target')
         .single();
     if (error) {
         console.error('Error updating goal:', error);
@@ -212,7 +221,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
         .from('goals')
         .update({ current: newCurrentAmount })
         .eq('id', id)
-        .select()
+        .select('id, user_id, title, target, current, status, priority, monthlyTarget:monthly_target')
         .single();
     
     if (error) {
@@ -237,10 +246,19 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
 
   const saveScenario = async (scenario: Omit<Scenario, 'id' | 'user_id'>) => {
     if (!user || !supabase) return;
+     const scenarioToSave = {
+      name: scenario.name,
+      monthly_income: scenario.monthlyIncome,
+      monthly_expenses: scenario.monthlyExpenses,
+      savings_goal: scenario.savingsGoal,
+      timeframe: scenario.timeframe,
+      goal_type: scenario.goalType,
+      user_id: user.id
+    };
     const { data, error } = await supabase
         .from('scenarios')
-        .insert([{ ...scenario, user_id: user.id }])
-        .select()
+        .insert([scenarioToSave])
+        .select('id, user_id, name, monthlyIncome:monthly_income, monthlyExpenses:monthly_expenses, savingsGoal:savings_goal, timeframe, goalType:goal_type')
         .single();
     if (error) {
         console.error('Error saving scenario:', error);

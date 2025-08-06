@@ -170,12 +170,12 @@ export default function RiskProfileAssessmentPage() {
     return (
         <div className="animate-in fade-in-0 duration-500 max-w-4xl mx-auto space-y-8 py-8">
              <Card>
-                <CardHeader className="text-center">
-                   <div className="flex justify-between items-center">
-                        <Button asChild variant="ghost">
-                            <Link href="/profile"><ArrowLeft className="mr-2 h-4 w-4" /> Back to Profile</Link>
+                <CardHeader>
+                   <div className="flex justify-between items-center w-full">
+                        <Button asChild variant="ghost" className="-ml-4">
+                            <Link href="/home"><ArrowLeft className="mr-2 h-4 w-4" /> Back to Home</Link>
                         </Button>
-                        <div className="flex-grow">
+                        <div className="flex-grow text-center">
                              <div className="flex justify-center items-center pb-2">
                                 <div className="bg-primary/10 p-3 rounded-full">
                                     <ShieldQuestion className="h-8 w-8 text-primary" />

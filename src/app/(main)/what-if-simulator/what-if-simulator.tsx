@@ -79,7 +79,7 @@ export const WhatIfSimulator = () => {
   }
 
   const handleSaveScenario = () => {
-    const scenarioToSave: Omit<Scenario, 'id' | 'user_id'> = {
+    const scenarioToSave = {
       name: goalName,
       monthlyIncome,
       monthlyExpenses,

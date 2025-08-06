@@ -30,6 +30,15 @@ export interface Scenario {
 
 type RiskProfile = "Conservative" | "Moderately Conservative" | "Moderate" | "Aggressive";
 
+interface Profile {
+    id: string;
+    first_name: string;
+    last_name: string;
+    monthly_income: number;
+    monthly_expenses: number;
+    risk_profile: RiskProfile | null;
+}
+
 interface AppContextType {
   goals: Goal[];
   addGoal: (goal: Omit<Goal, 'id' | 'user_id' | 'current' | 'status'>) => Promise<void>;
@@ -40,13 +49,15 @@ interface AppContextType {
   saveScenario: (scenario: Omit<Scenario, 'id' | 'user_id'>) => Promise<void>;
   deleteScenario: (id: string) => Promise<void>;
   user: User | null;
+  profile: Profile | null;
   isLoading: boolean;
   monthlyIncome: number;
-  setMonthlyIncome: React.Dispatch<React.SetStateAction<number>>;
+  setMonthlyIncome: (income: number) => void;
   monthlyExpenses: number;
-  setMonthlyExpenses: React.Dispatch<React.SetStateAction<number>>;
+  setMonthlyExpenses: (expenses: number) => void;
   riskProfile: RiskProfile | null;
-  setRiskProfile: (profile: RiskProfile) => void;
+  setRiskProfile: (profile: RiskProfile | null) => void;
+  updateProfile: (data: Partial<Omit<Profile, 'id'>>) => Promise<void>;
 }
 
 // Default values, can be overridden by user settings later
@@ -61,17 +72,13 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
   const [goals, setGoals] = useState<Goal[]>([]);
   const [scenarios, setScenarios] = useState<Scenario[]>([]);
   const [user, setUser] = useState<User | null>(null);
+  const [profile, setProfile] = useState<Profile | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [monthlyIncome, setMonthlyIncome] = useState(DEFAULT_MONTHLY_INCOME);
-  const [monthlyExpenses, setMonthlyExpenses] = useState(DEFAULT_MONTHLY_EXPENSES);
-  const [riskProfile, setRiskProfileState] = useState<RiskProfile | null>(null);
 
-  const setRiskProfile = (profile: RiskProfile) => {
-    setRiskProfileState(profile);
-    // In a real app, you'd save this to the database
-    // For now, we'll use localStorage to persist it across sessions
-    localStorage.setItem('riskProfile', profile);
-  };
+  // These are now derived from the profile state
+  const monthlyIncome = profile?.monthly_income ?? DEFAULT_MONTHLY_INCOME;
+  const monthlyExpenses = profile?.monthly_expenses ?? DEFAULT_MONTHLY_EXPENSES;
+  const riskProfile = profile?.risk_profile ?? null;
   
   useEffect(() => {
     if (!supabase) {
@@ -84,7 +91,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
         const { data: { session } } = await supabase.auth.getSession();
         if (session) {
             setUser(session.user);
-            fetchData(session.user.id);
+            await fetchData(session.user);
         } else {
             setIsLoading(false);
         }
@@ -92,19 +99,16 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     
     getInitialSession();
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, session) => {
       const currentUser = session?.user || null;
       setUser(currentUser);
       
       if (currentUser) {
-        fetchData(currentUser.id);
+        await fetchData(currentUser);
       } else {
         setGoals([]);
         setScenarios([]);
-        setMonthlyIncome(DEFAULT_MONTHLY_INCOME);
-        setMonthlyExpenses(DEFAULT_MONTHLY_EXPENSES);
-        setRiskProfileState(null);
-        localStorage.removeItem('riskProfile');
+        setProfile(null);
         setIsLoading(false);
       }
     });
@@ -114,37 +118,71 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     };
   }, []);
 
-  const fetchData = async (userId: string) => {
+  const fetchData = async (user: User) => {
     if (!supabase) return;
     setIsLoading(true);
     try {
+        const { data: profileData, error: profileError } = await supabase
+            .from('profiles')
+            .select('*')
+            .eq('id', user.id)
+            .single();
+        
+        if (profileError && profileError.code !== 'PGRST116') { // PGRST116: no rows returned
+            console.error("Error fetching profile:", profileError);
+            throw profileError;
+        }
+        setProfile(profileData);
+        
         const { data: goalsData, error: goalsError } = await supabase
             .from('goals')
             .select('*')
-            .eq('user_id', userId);
+            .eq('user_id', user.id);
         if (goalsError) throw goalsError;
         setGoals(goalsData || []);
 
         const { data: scenariosData, error: scenariosError } = await supabase
             .from('scenarios')
             .select('*')
-            .eq('user_id', userId);
+            .eq('user_id', user.id);
         if (scenariosError) throw scenariosError;
         setScenarios(scenariosData || []);
         
-        // Fetch user preferences for income/expenses/risk profile here from DB.
-        // For now, we'll use local state and localStorage for persistence.
-        const storedProfile = localStorage.getItem('riskProfile') as RiskProfile | null;
-        if (storedProfile) {
-            setRiskProfileState(storedProfile);
-        }
-
     } catch (error) {
         console.error("Error fetching data:", error);
     } finally {
         setIsLoading(false);
     }
   };
+
+  const updateProfile = async (data: Partial<Omit<Profile, 'id'>>) => {
+      if (!user || !supabase) return;
+      const { data: updatedProfile, error } = await supabase
+        .from('profiles')
+        .update(data)
+        .eq('id', user.id)
+        .select()
+        .single();
+      
+      if (error) {
+          console.error("Error updating profile:", error);
+          throw error;
+      }
+      if(updatedProfile) setProfile(updatedProfile);
+  };
+  
+  const setMonthlyIncome = (income: number) => {
+      updateProfile({ monthly_income: income });
+  };
+  
+  const setMonthlyExpenses = (expenses: number) => {
+      updateProfile({ monthly_expenses: expenses });
+  };
+  
+  const setRiskProfile = (profile: RiskProfile | null) => {
+      updateProfile({ risk_profile: profile });
+  };
+
 
   const addGoal = async (goal: Omit<Goal, 'id' | 'user_id' | 'current' | 'status'>) => {
     if (!user || !supabase) return;
@@ -240,6 +278,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
 
   const value: AppContextType = {
     user,
+    profile,
     isLoading,
     monthlyIncome,
     setMonthlyIncome,
@@ -254,7 +293,8 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     addFundsToGoal,
     scenarios,
     saveScenario,
-    deleteScenario
+    deleteScenario,
+    updateProfile,
   };
 
   return (

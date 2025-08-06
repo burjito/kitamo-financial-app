@@ -111,6 +111,8 @@ const assessmentQuestions = [
     },
 ];
 
+type RiskProfile = "Conservative" | "Moderately Conservative" | "Moderate" | "Aggressive";
+
 export default function RiskProfileAssessmentPage() {
     const [answers, setAnswers] = useState<Record<string, number>>({});
     const router = useRouter();
@@ -137,7 +139,7 @@ export default function RiskProfileAssessmentPage() {
 
         const totalScore = Object.values(answers).reduce((sum, score) => sum + score, 0);
         
-        let profile = "Conservative";
+        let profile: RiskProfile = "Conservative";
         if (totalScore > 130) {
             profile = "Aggressive";
         } else if (totalScore > 100) {

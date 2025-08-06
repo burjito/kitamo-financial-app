@@ -26,7 +26,7 @@ interface InitialInsight {
 }
 
 export default function HomePage() {
-  const { user, monthlyIncome, monthlyExpenses, goals, isLoading: isAppLoading, riskProfile } = useAppContext();
+  const { user, profile, goals, isLoading: isAppLoading, riskProfile } = useAppContext();
   const [isSetupModalOpen, setIsSetupModalOpen] = useState(false);
   const [initialInsight, setInitialInsight] = useState<InitialInsight | null>(null);
   const [isLoadingInsight, setIsLoadingInsight] = useState(false);
@@ -34,10 +34,10 @@ export default function HomePage() {
   
   // Effect to check if the setup modal should be shown
   useEffect(() => {
-    if (user && monthlyIncome === 50000 && monthlyExpenses === 35000 && goals.length === 0 && !riskProfile) {
+    if (!isAppLoading && profile && !profile.monthly_income) {
       setIsSetupModalOpen(true);
     }
-  }, [user, monthlyIncome, monthlyExpenses, goals, riskProfile]);
+  }, [profile, isAppLoading]);
   
   const handleSetupComplete = async (income: number, expenses: number) => {
     setIsSetupModalOpen(false);
@@ -61,8 +61,9 @@ export default function HomePage() {
     }
   }
 
-  const welcomeName = user?.user_metadata.first_name || "there";
-  const isNewUser = (!goals || goals.length === 0) && !riskProfile;
+  const welcomeName = profile?.first_name || "there";
+  const isNewUser = !riskProfile;
+  const { monthlyIncome, monthlyExpenses } = useAppContext();
 
   const renderNewUserDashboard = () => (
     <div className="space-y-8">
@@ -139,7 +140,7 @@ export default function HomePage() {
                     <Shield className="h-4 w-4 text-muted-foreground" />
                 </CardHeader>
                 <CardContent>
-                    <Badge variant={riskProfile === "Aggressive" ? "destructive" : "secondary"}>{riskProfile}</Badge>
+                    <Badge variant={riskProfile === "Aggressive" ? "destructive" : "secondary"}>{riskProfile || 'N/A'}</Badge>
                     <p className="text-xs text-muted-foreground mt-2">Based on your assessment</p>
                 </CardContent>
             </Card>
@@ -229,6 +230,8 @@ export default function HomePage() {
     );
   }
 
+  const shouldShowNewUserDashboard = isNewUser || (profile && !profile.risk_profile);
+  
   return (
     <>
     <FinancialSetupModal 
@@ -242,7 +245,7 @@ export default function HomePage() {
           Welcome back, {welcomeName}!
         </h1>
         <p className="text-muted-foreground">
-          {isNewUser && !initialInsight
+          {shouldShowNewUserDashboard && !initialInsight
             ? "Let's get your financial journey started."
             : "Here's your financial snapshot. Let's make today count."}
         </p>
@@ -250,7 +253,7 @@ export default function HomePage() {
       
       {isAppLoading ? (
         <Skeleton className="h-64 w-full" />
-      ) : isNewUser && initialInsight ? (
+      ) : shouldShowNewUserDashboard && initialInsight ? (
         renderNewUserDashboard()
       ) : (
         renderExistingUserDashboard()

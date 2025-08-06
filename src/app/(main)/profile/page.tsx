@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -20,9 +20,8 @@ import supabase from "@/lib/supabase-client";
 
 
 const accountSchema = z.object({
-  firstName: z.string().min(1, "First name is required"),
-  lastName: z.string().min(1, "Last name is required"),
-  email: z.string().email("Invalid email address"),
+  first_name: z.string().min(1, "First name is required"),
+  last_name: z.string().min(1, "Last name is required"),
 });
 
 const passwordSchema = z.object({
@@ -42,6 +41,7 @@ const SettingsNav = ({ activeTab, setActiveTab }: { activeTab: string, setActive
   const { toast } = useToast();
 
   const handleLogout = async () => {
+    if (!supabase) return;
     await supabase.auth.signOut();
     toast({
       title: "Logged Out",
@@ -94,23 +94,40 @@ const SettingsNav = ({ activeTab, setActiveTab }: { activeTab: string, setActive
 }
 
 const AccountSettings = () => {
-    const { user } = useAppContext();
+    const { user, profile, updateProfile } = useAppContext();
     const { toast } = useToast();
 
-    const { register, handleSubmit, formState: { errors } } = useForm<AccountFormValues>({
+    const { register, handleSubmit, formState: { errors, isSubmitting }, reset } = useForm<AccountFormValues>({
         resolver: zodResolver(accountSchema),
         defaultValues: {
-            firstName: user?.user_metadata.first_name || "Alex",
-            lastName: user?.user_metadata.last_name || "Doe",
-            email: user?.email || "alex.doe@email.com"
+            first_name: "",
+            last_name: ""
         }
     });
 
-    const onSubmit: SubmitHandler<AccountFormValues> = (data) => {
-        toast({
-            title: "Account Updated",
-            description: "Your personal information has been saved.",
-        });
+    useEffect(() => {
+        if(profile) {
+            reset({
+                first_name: profile.first_name,
+                last_name: profile.last_name,
+            });
+        }
+    }, [profile, reset]);
+
+    const onSubmit: SubmitHandler<AccountFormValues> = async (data) => {
+        try {
+            await updateProfile(data);
+            toast({
+                title: "Account Updated",
+                description: "Your personal information has been saved.",
+            });
+        } catch {
+             toast({
+                title: "Error",
+                description: "Could not update your account. Please try again.",
+                variant: "destructive"
+            });
+        }
     };
 
     return (
@@ -132,22 +149,21 @@ const AccountSettings = () => {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div className="space-y-2">
                             <Label htmlFor="firstName">First Name</Label>
-                            <Input id="firstName" {...register("firstName")} />
-                            {errors.firstName && <p className="text-sm text-destructive">{errors.firstName.message}</p>}
+                            <Input id="firstName" {...register("first_name")} />
+                            {errors.first_name && <p className="text-sm text-destructive">{errors.first_name.message}</p>}
                         </div>
                         <div className="space-y-2">
                             <Label htmlFor="lastName">Last Name</Label>
-                            <Input id="lastName" {...register("lastName")} />
-                             {errors.lastName && <p className="text-sm text-destructive">{errors.lastName.message}</p>}
+                            <Input id="lastName" {...register("last_name")} />
+                             {errors.last_name && <p className="text-sm text-destructive">{errors.last_name.message}</p>}
                         </div>
                     </div>
                      <div className="space-y-2">
                         <Label htmlFor="email">Email Address</Label>
-                        <Input id="email" type="email" {...register("email")} readOnly disabled />
-                         {errors.email && <p className="text-sm text-destructive">{errors.email.message}</p>}
+                        <Input id="email" type="email" value={user?.email || ''} readOnly disabled />
                     </div>
                     <div className="flex justify-end">
-                        <Button type="submit">Save Changes</Button>
+                        <Button type="submit" disabled={isSubmitting}>{isSubmitting ? 'Saving...' : 'Save Changes'}</Button>
                     </div>
                 </CardContent>
             </form>

@@ -25,13 +25,13 @@ interface FinancialSetupModalProps {
 }
 
 export const FinancialSetupModal = ({ isOpen, onClose, onSave }: FinancialSetupModalProps) => {
-  const { setMonthlyIncome, setMonthlyExpenses } = useAppContext();
+  const { updateProfile } = useAppContext();
   const { toast } = useToast();
   const [income, setIncome] = useState("");
   const [expenses, setExpenses] = useState("");
   const router = useRouter();
 
-  const handleSave = () => {
+  const handleSave = async () => {
     const incomeNum = parseFloat(income);
     const expensesNum = parseFloat(expenses);
 
@@ -43,16 +43,24 @@ export const FinancialSetupModal = ({ isOpen, onClose, onSave }: FinancialSetupM
       toast({ title: "Invalid Input", description: "Please enter a valid monthly expense.", variant: "destructive" });
       return;
     }
-
-    setMonthlyIncome(incomeNum);
-    setMonthlyExpenses(expensesNum);
-
-    toast({
-      title: "Details Saved!",
-      description: "Next, let's figure out your investment style.",
-    });
     
-    onSave(incomeNum, expensesNum);
+    try {
+        await updateProfile({
+            monthly_income: incomeNum,
+            monthly_expenses: expensesNum,
+        });
+
+        toast({
+          title: "Details Saved!",
+          description: "Next, let's figure out your investment style.",
+        });
+        
+        onSave(incomeNum, expensesNum);
+
+    } catch (e) {
+        toast({ title: "Error", description: "Could not save your details. Please try again.", variant: "destructive"});
+    }
+
   };
 
   return (

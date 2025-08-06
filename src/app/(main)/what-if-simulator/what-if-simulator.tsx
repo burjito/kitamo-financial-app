@@ -27,6 +27,7 @@ import {
   Archive,
   RefreshCw, // Added icon
   Calculator,
+  Rocket,
 } from "lucide-react";
 import { useAppContext } from '@/contexts/app-context';
 import { useToast } from '@/hooks/use-toast';
@@ -145,7 +146,7 @@ export const WhatIfSimulator = () => {
           <Card>
             <CardHeader className="flex-row items-start justify-between">
               <div>
-                <CardTitle className="flex items-center gap-2">
+                <CardTitle className="text-2xl font-bold tracking-tight text-foreground flex items-center gap-2">
                   <Calculator className="h-6 w-6 text-primary" />
                   Financial Simulator
                 </CardTitle>
@@ -158,18 +159,29 @@ export const WhatIfSimulator = () => {
                 <span className="hidden md:inline">Saved Scenarios</span>
               </Button>
             </CardHeader>
-            <CardContent>
-              <div className="mb-6 space-y-2">
-                <Label>Try a Common Scenario</Label>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                  {Object.entries(presetScenarios).map(([key, {name, icon: Icon}]) => (
-                      <Button key={key} variant="outline" className="flex flex-col h-20" onClick={() => loadPreset(key as keyof typeof presetScenarios)}>
-                          <Icon className="h-6 w-6 mb-1 text-primary" />
-                          <span className="text-center text-xs text-wrap">{name}</span>
-                      </Button>
-                  ))}
-                </div>
-              </div>
+            <CardContent className="space-y-6">
+               <Card>
+                <CardHeader>
+                  <CardTitle className="text-lg flex items-center gap-2">
+                    <Rocket className="h-5 w-5 text-primary" />
+                    Try a Common Scenario
+                  </CardTitle>
+                  <CardDescription>
+                    Get a head start by loading a preset goal.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    {Object.entries(presetScenarios).map(([key, {name, icon: Icon}]) => (
+                        <Button key={key} variant="outline" className="flex flex-col h-20" onClick={() => loadPreset(key as keyof typeof presetScenarios)}>
+                            <Icon className="h-6 w-6 mb-1 text-primary" />
+                            <span className="text-center text-xs text-wrap">{name}</span>
+                        </Button>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
                 <div className="space-y-6">

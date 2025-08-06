@@ -164,7 +164,15 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
 
   const addGoal = async (goal: Omit<Goal, 'id' | 'user_id' | 'current' | 'status'>) => {
     if (!user || !supabase) return;
-    const goalToAdd = { ...goal, user_id: user.id, current: 0, status: 'Active' };
+    const goalToAdd = { 
+        title: goal.title,
+        target: goal.target,
+        monthlyTarget: goal.monthlyTarget,
+        priority: goal.priority,
+        user_id: user.id, 
+        current: 0, 
+        status: 'Active' 
+    };
     const { data, error } = await supabase
         .from('goals')
         .insert([goalToAdd])

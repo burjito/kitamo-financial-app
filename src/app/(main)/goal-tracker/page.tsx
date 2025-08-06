@@ -3,7 +3,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { Plus, Settings, Shield, Clock, BadgeCheck, Target, PiggyBank, Calendar, Lightbulb, Filter } from "lucide-react";
+import { Plus, Settings, Shield, Clock, BadgeCheck, Target, PiggyBank, Calendar, Lightbulb, Filter, Trash2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -23,7 +23,19 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
 import { generateGoalInsights, GenerateGoalInsightsOutput } from "@/ai/flows/generate-goal-insights";
+import { useToast } from "@/hooks/use-toast";
 
 
 const getPriorityStyles = (priority: string) => {
@@ -182,19 +194,20 @@ const LifeTimeline = () => {
 }
 
 export default function GoalTrackerPage() {
-  const { goals, isLoading, addGoal, updateGoal, addFundsToGoal, monthlyIncome } = useAppContext();
+  const { goals, isLoading, addGoal, updateGoal, deleteGoal, addFundsToGoal, monthlyIncome } = useAppContext();
   const [isGoalDialogOpen, setIsGoalDialogOpen] = useState(false);
   const [isAddFundsDialogOpen, setIsAddFundsDialogOpen] = useState(false);
   const [selectedGoal, setSelectedGoal] = useState<Goal | undefined>(undefined);
   const [statusFilter, setStatusFilter] = useState("all");
   const [priorityFilter, setPriorityFilter] = useState("all");
+  const { toast } = useToast();
 
   const [aiInsight, setAiInsight] = useState<GenerateGoalInsightsOutput>({ insight: "", feasibilityScore: 0 });
   const [isLoadingInsight, setIsLoadingInsight] = useState(true);
 
   useEffect(() => {
     const fetchInsight = async () => {
-      if (!isLoading) {
+      if (!isLoading && goals.length > 0) {
         setIsLoadingInsight(true);
         try {
           const result = await generateGoalInsights({
@@ -208,6 +221,9 @@ export default function GoalTrackerPage() {
         } finally {
           setIsLoadingInsight(false);
         }
+      } else if (goals.length === 0) {
+         setAiInsight({ insight: "You haven't added any goals yet. Add one to get started!", feasibilityScore: 0 });
+         setIsLoadingInsight(false);
       }
     };
     fetchInsight();
@@ -224,18 +240,28 @@ export default function GoalTrackerPage() {
     setIsAddFundsDialogOpen(true);
   }
 
-  const handleSaveGoal = (goalData: Goal) => {
-    if (selectedGoal?.id) {
-       updateGoal(goalData);
-    } else {
-      addGoal({
-        ...goalData,
-        id: Date.now().toString(),
-        current: 0,
-        status: 'Active',
-      });
+  const handleSaveGoal = async (goalData: Omit<Goal, 'id' | 'current' | 'status'> | Goal) => {
+    try {
+        if ('id' in goalData && goalData.id) {
+           await updateGoal(goalData as Goal);
+            toast({ title: "Goal Updated!", description: `"${goalData.title}" has been successfully updated.` });
+        } else {
+            await addGoal(goalData as Omit<Goal, 'id' | 'current' | 'status'>);
+            toast({ title: "Goal Created!", description: `"${goalData.title}" has been added to your goals.` });
+        }
+    } catch(e) {
+        toast({ title: "Error", description: "Could not save the goal. Please try again.", variant: "destructive" });
     }
   };
+
+  const handleDeleteGoal = async (id: string) => {
+    try {
+        await deleteGoal(id);
+        toast({ title: "Goal Deleted", description: "The goal has been removed." });
+    } catch(e) {
+        toast({ title: "Error", description: "Could not delete the goal. Please try again.", variant: "destructive" });
+    }
+  }
 
   const priorityOrder: { [key in Goal['priority']]: number } = {
     'High': 1,
@@ -269,9 +295,9 @@ export default function GoalTrackerPage() {
       )}
       <div className="animate-in fade-in-0 duration-500">
         <Card>
-            <CardHeader className="flex-row items-start justify-between">
+            <CardHeader className="flex-row items-center justify-between">
                 <div>
-                    <CardTitle className="flex items-center gap-2">
+                     <CardTitle className="text-2xl font-bold tracking-tight text-foreground flex items-center gap-2">
                         <Target className="h-6 w-6 text-primary" />
                         Your Financial Goals
                     </CardTitle>
@@ -331,8 +357,10 @@ export default function GoalTrackerPage() {
                          {isLoading ? (
                             [...Array(2)].map((_, i) => (
                             <Card key={i}>
-                                <CardContent className="p-6">
-                                <Skeleton className="h-32 w-full" />
+                                <CardHeader><Skeleton className="h-5 w-2/5" /></CardHeader>
+                                <CardContent className="p-6 space-y-4">
+                                <Skeleton className="h-4 w-full" />
+                                <Skeleton className="h-4 w-4/5" />
                                 </CardContent>
                             </Card>
                             ))
@@ -368,9 +396,31 @@ export default function GoalTrackerPage() {
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <Button variant="ghost" size="icon" onClick={() => handleOpenDialog(goal)}>
-                                                    <Settings className="h-5 w-5 text-muted-foreground" />
-                                                </Button>
+                                                <div className="flex items-center">
+                                                    <Button variant="ghost" size="icon" onClick={() => handleOpenDialog(goal)}>
+                                                        <Settings className="h-5 w-5 text-muted-foreground" />
+                                                    </Button>
+                                                    <AlertDialog>
+                                                        <AlertDialogTrigger asChild>
+                                                            <Button variant="ghost" size="icon">
+                                                                <Trash2 className="h-5 w-5 text-destructive/70" />
+                                                            </Button>
+                                                        </AlertDialogTrigger>
+                                                        <AlertDialogContent>
+                                                            <AlertDialogHeader>
+                                                            <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                                                            <AlertDialogDescription>
+                                                                This action cannot be undone. This will permanently delete your
+                                                                goal "{goal.title}".
+                                                            </AlertDialogDescription>
+                                                            </AlertDialogHeader>
+                                                            <AlertDialogFooter>
+                                                            <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                                            <AlertDialogAction onClick={() => handleDeleteGoal(goal.id!)}>Delete</AlertDialogAction>
+                                                            </AlertDialogFooter>
+                                                        </AlertDialogContent>
+                                                    </AlertDialog>
+                                                </div>
                                             </div>
 
                                             <div className="space-y-2">

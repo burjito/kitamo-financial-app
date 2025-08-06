@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -12,7 +12,7 @@ import { Separator } from "@/components/ui/separator";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Eye, EyeOff, Mail, Lock, User, ArrowLeft } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { signUp } from "@/lib/auth";
+import supabase from "@/lib/supabase-client";
 
 const Signup = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -65,37 +65,31 @@ const Signup = () => {
 
     setIsLoading(true);
 
-    try {
-      const { data, error } = await signUp({
-        email: formData.email,
-        password: formData.password,
-        firstName: formData.firstName,
-        lastName: formData.lastName
-      });
+    const { error } = await supabase.auth.signUp({
+      email: formData.email,
+      password: formData.password,
+      options: {
+        data: {
+          first_name: formData.firstName,
+          last_name: formData.lastName,
+        },
+      },
+    });
 
-      if (error) {
-        toast({
-          title: "Signup Failed",
-          description: error.message,
-          variant: "destructive"
-        });
-        return;
-      }
+    setIsLoading(false);
 
-      toast({
-        title: "Welcome to KitaMo!",
-        description: "Please check your email to confirm your account.",
-      });
-      
-      router.push("/login");
-    } catch (error) {
-      toast({
+    if (error) {
+       toast({
         title: "Signup Failed",
-        description: "An unexpected error occurred. Please try again.",
+        description: error.message,
         variant: "destructive"
       });
-    } finally {
-      setIsLoading(false);
+    } else {
+      toast({
+        title: "Welcome to KitaMo!",
+        description: "Your account has been created. Please check your email to verify your account.",
+      });
+       router.push("/login");
     }
   };
 

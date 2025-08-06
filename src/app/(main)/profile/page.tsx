@@ -16,6 +16,7 @@ import { Shield, User, LogOut, DollarSign } from "lucide-react";
 import { useAppContext } from "@/contexts/app-context";
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
+import supabase from "@/lib/supabase-client";
 
 
 const accountSchema = z.object({
@@ -41,7 +42,7 @@ const SettingsNav = ({ activeTab, setActiveTab }: { activeTab: string, setActive
   const { toast } = useToast();
 
   const handleLogout = async () => {
-    await new Promise(resolve => setTimeout(resolve, 500));
+    await supabase.auth.signOut();
     toast({
       title: "Logged Out",
       description: "You have been successfully logged out.",
@@ -99,9 +100,9 @@ const AccountSettings = () => {
     const { register, handleSubmit, formState: { errors } } = useForm<AccountFormValues>({
         resolver: zodResolver(accountSchema),
         defaultValues: {
-            firstName: user?.displayName?.split(' ')[0] || "Alex",
-            lastName: user?.displayName?.split(' ')[1] || "Doe",
-            email: "alex.doe@email.com"
+            firstName: user?.user_metadata.first_name || "Alex",
+            lastName: user?.user_metadata.last_name || "Doe",
+            email: user?.email || "alex.doe@email.com"
         }
     });
 
@@ -142,7 +143,7 @@ const AccountSettings = () => {
                     </div>
                      <div className="space-y-2">
                         <Label htmlFor="email">Email Address</Label>
-                        <Input id="email" type="email" {...register("email")} />
+                        <Input id="email" type="email" {...register("email")} readOnly disabled />
                          {errors.email && <p className="text-sm text-destructive">{errors.email.message}</p>}
                     </div>
                     <div className="flex justify-end">

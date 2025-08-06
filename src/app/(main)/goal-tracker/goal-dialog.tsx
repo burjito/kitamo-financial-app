@@ -16,7 +16,6 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Goal } from "@/contexts/app-context";
 import {
   Form,
@@ -26,11 +25,20 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 
 const goalSchema = z.object({
   title: z.string().min(3, { message: "Goal title must be at least 3 characters." }),
   target: z.coerce.number().min(1, { message: "Target amount must be greater than 0." }),
+  monthlyTarget: z.coerce.number().min(1, { message: "Monthly target must be greater than 0." }),
+  priority: z.enum(['High', 'Medium', 'Low']),
 });
 
 type GoalFormValues = z.infer<typeof goalSchema>;
@@ -38,7 +46,7 @@ type GoalFormValues = z.infer<typeof goalSchema>;
 interface GoalDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onSave: (goal: Omit<Goal, 'id' | 'current' | 'status'>) => void;
+  onSave: (goal: Omit<Goal, 'id' | 'current' | 'status'> | Goal) => void;
   goal?: Goal;
 }
 
@@ -49,6 +57,8 @@ export const GoalDialog = ({ open, onOpenChange, onSave, goal }: GoalDialogProps
     defaultValues: {
       title: "",
       target: 0,
+      monthlyTarget: 0,
+      priority: 'Medium',
     },
   });
 
@@ -57,12 +67,18 @@ export const GoalDialog = ({ open, onOpenChange, onSave, goal }: GoalDialogProps
         form.reset({
             title: goal?.title ?? "",
             target: goal?.target ?? 0,
+            monthlyTarget: goal?.monthlyTarget ?? 0,
+            priority: goal?.priority ?? 'Medium'
         });
     }
   }, [open, goal, form]);
 
   const onSubmit = (data: GoalFormValues) => {
-    onSave(data);
+    if (goal?.id) {
+        onSave({ ...goal, ...data });
+    } else {
+        onSave(data);
+    }
     onOpenChange(false);
   };
 
@@ -103,6 +119,41 @@ export const GoalDialog = ({ open, onOpenChange, onSave, goal }: GoalDialogProps
                         </FormItem>
                     )}
                 />
+                 <FormField
+                    control={form.control}
+                    name="monthlyTarget"
+                    render={({ field }) => (
+                        <FormItem>
+                        <FormLabel>Monthly Target (₱)</FormLabel>
+                        <FormControl>
+                            <Input type="number" placeholder="e.g., 5000" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                        </FormItem>
+                    )}
+                />
+                <FormField
+                    control={form.control}
+                    name="priority"
+                    render={({ field }) => (
+                        <FormItem>
+                        <FormLabel>Priority</FormLabel>
+                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                            <FormControl>
+                            <SelectTrigger>
+                                <SelectValue placeholder="Select a priority" />
+                            </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                            <SelectItem value="High">High</SelectItem>
+                            <SelectItem value="Medium">Medium</SelectItem>
+                            <SelectItem value="Low">Low</SelectItem>
+                            </SelectContent>
+                        </Select>
+                        <FormMessage />
+                        </FormItem>
+                    )}
+                    />
                 <DialogFooter>
                     <DialogClose asChild>
                         <Button type="button" variant="outline">Cancel</Button>

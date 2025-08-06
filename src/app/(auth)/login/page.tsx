@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -11,7 +11,7 @@ import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { Eye, EyeOff, Mail, Lock, ArrowLeft } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { signIn } from "@/lib/auth";
+import supabase from "@/lib/supabase-client";
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -25,34 +25,26 @@ const Login = () => {
     e.preventDefault();
     setIsLoading(true);
 
-    try {
-      const { data, error } = await signIn({
-        email,
-        password
+    const { error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+
+    setIsLoading(false);
+
+    if (error) {
+      toast({
+        title: "Login Failed",
+        description: error.message,
+        variant: "destructive",
       });
-
-      if (error) {
-        toast({
-          title: "Login Failed",
-          description: error.message,
-          variant: "destructive"
-        });
-        return;
-      }
-
+    } else {
       toast({
         title: "Welcome back!",
         description: "You've successfully logged in to KitaMo.",
-    });
-      router.push("/home");
-    } catch (error) {
-      toast({
-        title: "Login Failed",
-        description: "An unexpected error occurred. Please try again.",
-        variant: "destructive"
       });
-    } finally {
-      setIsLoading(false);
+      router.push("/home");
+    }
   };
 
   return (
@@ -72,7 +64,7 @@ const Login = () => {
                 </svg>
                 <h1 className="text-3xl font-bold bg-gradient-to-br from-primary to-[hsl(var(--primary-glow))] bg-clip-text text-transparent">KitaMo</h1>
             </div>
-            <p className="text-muted-foreground mt-1">See it. Plan it. Achieve it.</p>
+            <p className="text-muted-foreground mt-1">Your Financial Flight Simulator</p>
           </div>
       </div>
 

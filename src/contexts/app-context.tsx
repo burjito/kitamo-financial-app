@@ -28,6 +28,8 @@ export interface Scenario {
   goalType: string;
 }
 
+type RiskProfile = "Conservative" | "Moderately Conservative" | "Moderate" | "Aggressive";
+
 interface AppContextType {
   goals: Goal[];
   addGoal: (goal: Omit<Goal, 'id' | 'user_id' | 'current' | 'status'>) => Promise<void>;
@@ -43,11 +45,13 @@ interface AppContextType {
   setMonthlyIncome: React.Dispatch<React.SetStateAction<number>>;
   monthlyExpenses: number;
   setMonthlyExpenses: React.Dispatch<React.SetStateAction<number>>;
+  riskProfile: RiskProfile | null;
+  setRiskProfile: (profile: RiskProfile) => void;
 }
 
 // Default values, can be overridden by user settings later
-const DUMMY_MONTHLY_INCOME = 50000;
-const DUMMY_MONTHLY_EXPENSES = 35000;
+const DEFAULT_MONTHLY_INCOME = 50000;
+const DEFAULT_MONTHLY_EXPENSES = 35000;
 
 // Context
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -58,8 +62,16 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
   const [scenarios, setScenarios] = useState<Scenario[]>([]);
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [monthlyIncome, setMonthlyIncome] = useState(DUMMY_MONTHLY_INCOME);
-  const [monthlyExpenses, setMonthlyExpenses] = useState(DUMMY_MONTHLY_EXPENSES);
+  const [monthlyIncome, setMonthlyIncome] = useState(DEFAULT_MONTHLY_INCOME);
+  const [monthlyExpenses, setMonthlyExpenses] = useState(DEFAULT_MONTHLY_EXPENSES);
+  const [riskProfile, setRiskProfileState] = useState<RiskProfile | null>(null);
+
+  const setRiskProfile = (profile: RiskProfile) => {
+    setRiskProfileState(profile);
+    // In a real app, you'd save this to the database
+    // For now, we'll use localStorage to persist it across sessions
+    localStorage.setItem('riskProfile', profile);
+  };
   
   useEffect(() => {
     if (!supabase) {
@@ -89,6 +101,10 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
       } else {
         setGoals([]);
         setScenarios([]);
+        setMonthlyIncome(DEFAULT_MONTHLY_INCOME);
+        setMonthlyExpenses(DEFAULT_MONTHLY_EXPENSES);
+        setRiskProfileState(null);
+        localStorage.removeItem('riskProfile');
         setIsLoading(false);
       }
     });
@@ -115,6 +131,13 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
             .eq('user_id', userId);
         if (scenariosError) throw scenariosError;
         setScenarios(scenariosData || []);
+        
+        // Fetch user preferences for income/expenses/risk profile here from DB.
+        // For now, we'll use local state and localStorage for persistence.
+        const storedProfile = localStorage.getItem('riskProfile') as RiskProfile | null;
+        if (storedProfile) {
+            setRiskProfileState(storedProfile);
+        }
 
     } catch (error) {
         console.error("Error fetching data:", error);
@@ -222,6 +245,8 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     setMonthlyIncome,
     monthlyExpenses,
     setMonthlyExpenses,
+    riskProfile,
+    setRiskProfile,
     goals,
     addGoal,
     updateGoal,

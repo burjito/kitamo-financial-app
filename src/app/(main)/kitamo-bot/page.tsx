@@ -5,18 +5,26 @@ import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Bot, Send, User, BrainCircuit } from "lucide-react";
+import { Bot, Send, User, BrainCircuit, Sparkles } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { kitaMoBot, KitaMoBotInput } from "@/ai/flows/kita-mo-bot-flow";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useAppContext } from "@/contexts/app-context";
+import { cn } from "@/lib/utils";
 
 interface Message {
   id: string;
   text: string;
   sender: "user" | "bot";
 }
+
+const suggestionPrompts = [
+    "Ano ang kaya kong ma-achieve with my current savings?",
+    "Based sa risk profile ko, saan maganda mag-invest?",
+    "Help me create a budget for my monthly income.",
+    "Is it okay to pause one goal to focus on another?",
+]
 
 export default function KitaMoBotPage() {
   const [messages, setMessages] = useState<Message[]>([]);
@@ -29,7 +37,7 @@ export default function KitaMoBotPage() {
   useEffect(() => {
     // Greet the user on initial load
     setMessages([
-        { id: 'start', text: "Hey! I'm KitaMo Bot, your financial buddy. Ask me anything about your money goals. Go on, try asking, 'Kaya ko bang bumili ng bagong phone by December?'", sender: 'bot' }
+        { id: 'start', text: "Hey! I'm KitaMo Bot, your financial buddy. Ask me anything about your money goals, or try one of the suggestions below.", sender: 'bot' }
     ]);
   }, []);
 
@@ -40,11 +48,13 @@ export default function KitaMoBotPage() {
     }
   }, [messages, isLoading]);
 
-  const handleSendMessage = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!input.trim() || isLoading) return;
+  const handleSendMessage = async (e: React.FormEvent | null, messageText?: string) => {
+    if (e) e.preventDefault();
+    const query = messageText || input;
 
-    const userMessage: Message = { id: Date.now().toString(), text: input, sender: "user" };
+    if (!query.trim() || isLoading) return;
+
+    const userMessage: Message = { id: Date.now().toString(), text: query, sender: "user" };
     setMessages(prev => [...prev, userMessage]);
     setInput("");
     setIsLoading(true);
@@ -58,7 +68,7 @@ export default function KitaMoBotPage() {
         }, null, 2);
 
         const botResponse = await kitaMoBot({ 
-            query: input,
+            query: query,
             userContext: userContext
         });
 
@@ -80,6 +90,8 @@ export default function KitaMoBotPage() {
         setIsLoading(false);
     }
   };
+  
+  const showSuggestions = messages.filter(m => m.sender === 'user').length === 0;
 
   return (
     <div className="animate-in fade-in-0 duration-500 flex justify-center items-start h-full">
@@ -127,18 +139,36 @@ export default function KitaMoBotPage() {
               )}
             </div>
           </ScrollArea>
-          <form onSubmit={handleSendMessage} className="flex items-center gap-2 border-t pt-4">
-            <Input
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              placeholder="e.g., 'Magkano dapat ipon ko monthly for a trip?'"
-              className="flex-grow"
-              disabled={isLoading}
-            />
-            <Button type="submit" size="icon" disabled={isLoading || !input.trim()}>
-              <Send className="h-4 w-4" />
-            </Button>
-          </form>
+          
+          <div className="border-t pt-4">
+             {showSuggestions && (
+                <div className="mb-4 animate-in fade-in-0 duration-500">
+                    <p className="text-sm font-medium text-muted-foreground mb-2 flex items-center gap-2">
+                        <Sparkles className="h-4 w-4" />
+                        Not sure where to start? Try these:
+                    </p>
+                    <div className="flex flex-wrap gap-2">
+                        {suggestionPrompts.map(prompt => (
+                            <Button key={prompt} variant="outline" size="sm" onClick={() => handleSendMessage(null, prompt)}>
+                                {prompt}
+                            </Button>
+                        ))}
+                    </div>
+                </div>
+            )}
+            <form onSubmit={handleSendMessage} className="flex items-center gap-2">
+                <Input
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                placeholder="e.g., 'Magkano dapat ipon ko monthly for a trip?'"
+                className="flex-grow"
+                disabled={isLoading}
+                />
+                <Button type="submit" size="icon" disabled={isLoading || !input.trim()}>
+                <Send className="h-4 w-4" />
+                </Button>
+            </form>
+          </div>
         </CardContent>
       </Card>
     </div>

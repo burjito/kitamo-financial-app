@@ -10,7 +10,6 @@ import { Separator } from "@/components/ui/separator";
 import { Progress } from "@/components/ui/progress";
 import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "@/components/ui/tooltip";
 import { 
-  Calculator, 
   TrendingUp, 
   PiggyBank, 
   Target, 
@@ -27,6 +26,7 @@ import {
   Lightbulb,
   Archive,
   RefreshCw, // Added icon
+  Calculator,
 } from "lucide-react";
 import { useAppContext } from '@/contexts/app-context';
 import { useToast } from '@/hooks/use-toast';
@@ -114,6 +114,8 @@ export const WhatIfSimulator = () => {
       target: goalAmount,
       current: 0,
       status: 'On Track',
+      priority: 'Medium',
+      monthlyTarget: monthlySavings > 0 ? monthlySavings : 0
     });
     
     toast({
@@ -144,7 +146,7 @@ export const WhatIfSimulator = () => {
             <CardHeader className="flex-row items-start justify-between">
               <div>
                 <CardTitle className="flex items-center gap-2">
-                  <Calculator className="h-5 w-5 text-primary" />
+                  <Calculator className="h-6 w-6 text-primary" />
                   Financial Simulator
                 </CardTitle>
                 <CardDescription>
@@ -380,6 +382,9 @@ export const WhatIfSimulator = () => {
                       </CardContent>
                     </Card>
                   ))}
+                  {scenarios.length === 0 && (
+                    <p className="text-sm text-muted-foreground text-center py-4">No saved scenarios yet.</p>
+                  )}
                 </div>
               </CardContent>
             </Card>

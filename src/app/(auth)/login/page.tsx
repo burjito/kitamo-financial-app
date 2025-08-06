@@ -52,7 +52,7 @@ const Login = () => {
                 </svg>
                 <h1 className="text-3xl font-bold bg-gradient-to-br from-primary to-[hsl(var(--primary-glow))] bg-clip-text text-transparent">KitaMo</h1>
             </div>
-            <p className="text-muted-foreground mt-1">Your Financial Flight Simulator</p>
+            <p className="text-muted-foreground mt-1">See it. Plan it. Achieve it.</p>
           </div>
       </div>
 

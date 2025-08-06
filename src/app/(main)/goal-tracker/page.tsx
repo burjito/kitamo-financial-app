@@ -3,7 +3,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { Plus, Settings, Shield, Clock, BadgeCheck, Target, PiggyBank, Calendar, Lightbulb } from "lucide-react";
+import { Plus, Settings, Shield, Clock, BadgeCheck, Target, PiggyBank, Calendar, Lightbulb, Filter } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -267,163 +267,171 @@ export default function GoalTrackerPage() {
             onAddFunds={(amount) => addFundsToGoal(selectedGoal.id!, amount)}
         />
       )}
-      <div className="animate-in fade-in-0 duration-500 space-y-6">
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between">
-          <div className="flex items-center gap-3">
-             <div className="bg-primary/10 p-2 rounded-full">
-                <Target className="h-6 w-6 text-primary" />
-             </div>
-            <div>
-              <h1 className="text-2xl font-bold tracking-tight text-foreground">
-                Your Financial Goals
-              </h1>
-              <p className="text-muted-foreground max-w-2xl text-sm">
-                Track progress toward your financial milestones and stay motivated.
-              </p>
-            </div>
-          </div>
-          <div className="mt-4 md:mt-0 flex items-center gap-2">
-            <Button onClick={() => handleOpenDialog()}>
-              <Plus className="mr-2 h-4 w-4" />
-              Add Goal
-            </Button>
-          </div>
-        </div>
-        
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
-            <div className="lg:col-span-2 space-y-6">
-                <Card>
-                    <CardContent className="p-4 flex flex-col md:flex-row gap-4">
-                       <div className="flex-1 space-y-2">
-                           <Label className="font-semibold text-sm">Status</Label>
-                           <Select value={statusFilter} onValueChange={setStatusFilter}>
-                             <SelectTrigger>
-                               <SelectValue placeholder="Filter by status" />
-                             </SelectTrigger>
-                             <SelectContent>
-                               <SelectItem value="all">All Statuses</SelectItem>
-                               <SelectItem value="active">Active</SelectItem>
-                               <SelectItem value="paused">Paused</SelectItem>
-                             </SelectContent>
-                           </Select>
-                       </div>
-                       <div className="flex-1 space-y-2">
-                           <Label className="font-semibold text-sm">Priority</Label>
-                           <Select value={priorityFilter} onValueChange={setPriorityFilter}>
-                             <SelectTrigger>
-                               <SelectValue placeholder="Filter by priority" />
-                             </SelectTrigger>
-                             <SelectContent>
-                               <SelectItem value="all">All Priorities</SelectItem>
-                               <SelectItem value="high">High</SelectItem>
-                               <SelectItem value="medium">Medium</SelectItem>
-                               <SelectItem value="low">Low</SelectItem>
-                             </SelectContent>
-                           </Select>
-                       </div>
-                    </CardContent>
-                </Card>
-
-                 {isLoading ? (
-                    [...Array(2)].map((_, i) => (
-                    <Card key={i}>
-                        <CardContent className="p-6">
-                        <Skeleton className="h-32 w-full" />
-                        </CardContent>
-                    </Card>
-                    ))
-                ) : filteredGoals.length === 0 ? (
-                    <div className="text-center py-20 border-2 border-dashed rounded-lg">
-                    <h2 className="text-xl font-semibold text-muted-foreground">No matching goals found!</h2>
-                    <p className="text-muted-foreground mt-2">Try adjusting your filters or adding a new goal.</p>
+      <div className="animate-in fade-in-0 duration-500">
+        <Card>
+            <CardHeader>
+                <div className="flex flex-col md:flex-row md:items-center md:justify-between space-y-4 md:space-y-0">
+                    <div>
+                        <CardTitle className="text-3xl font-bold tracking-tight text-foreground flex items-center gap-2">
+                            <Target className="h-6 w-6 text-primary" />
+                            Your Financial Goals
+                        </CardTitle>
+                        <CardDescription>
+                            Track progress toward your financial milestones and stay motivated.
+                        </CardDescription>
                     </div>
-                ) : (
-                    filteredGoals.map((goal) => {
-                        const progress = goal.target > 0 ? (goal.current / goal.target) * 100 : 0;
-                        const remaining = goal.target - goal.current;
-                        const timeline = goal.monthlyTarget > 0 ? Math.ceil(remaining / goal.monthlyTarget) : 0;
+                    <Button onClick={() => handleOpenDialog()}>
+                        <Plus className="mr-2 h-4 w-4" />
+                        Add Goal
+                    </Button>
+                </div>
+            </CardHeader>
+            <CardContent>
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+                    <div className="lg:col-span-2 space-y-6">
+                        <Card>
+                            <CardHeader>
+                               <CardTitle className="flex items-center gap-2">
+                                  <Filter className="h-5 w-5 text-primary" />
+                                   Filter Goals
+                               </CardTitle>
+                                <CardDescription>
+                                    Narrow down your goals to focus on what matters most.
+                                </CardDescription>
+                            </CardHeader>
+                            <CardContent className="flex flex-col md:flex-row gap-4">
+                               <div className="flex-1 space-y-2">
+                                   <Label className="font-semibold text-sm">Status</Label>
+                                   <Select value={statusFilter} onValueChange={setStatusFilter}>
+                                     <SelectTrigger>
+                                       <SelectValue placeholder="Filter by status" />
+                                     </SelectTrigger>
+                                     <SelectContent>
+                                       <SelectItem value="all">All Statuses</SelectItem>
+                                       <SelectItem value="active">Active</SelectItem>
+                                       <SelectItem value="paused">Paused</SelectItem>
+                                     </SelectContent>
+                                   </Select>
+                               </div>
+                               <div className="flex-1 space-y-2">
+                                   <Label className="font-semibold text-sm">Priority</Label>
+                                   <Select value={priorityFilter} onValueChange={setPriorityFilter}>
+                                     <SelectTrigger>
+                                       <SelectValue placeholder="Filter by priority" />
+                                     </SelectTrigger>
+                                     <SelectContent>
+                                       <SelectItem value="all">All Priorities</SelectItem>
+                                       <SelectItem value="high">High</SelectItem>
+                                       <SelectItem value="medium">Medium</SelectItem>
+                                       <SelectItem value="low">Low</SelectItem>
+                                     </SelectContent>
+                                   </Select>
+                               </div>
+                            </CardContent>
+                        </Card>
 
-                        return (
-                            <Card key={goal.id}>
-                                <CardContent className="p-6 space-y-6">
-                                    <div className="flex justify-between items-start">
-                                        <div className="flex items-center gap-4">
-                                            <div className="bg-red-50 p-3 rounded-full border border-red-100">
-                                                <Shield className="h-6 w-6 text-red-600" />
-                                            </div>
-                                            <div>
-                                                <h2 className="font-bold text-lg text-foreground">{goal.title}</h2>
-                                                <div className="flex items-center gap-2 mt-1">
-                                                    <Badge className={cn("capitalize", getPriorityStyles(goal.priority))}>
-                                                        {goal.priority} priority
-                                                    </Badge>
-                                                    <Badge className={cn("capitalize", getStatusStyles(goal.status))}>
-                                                        <BadgeCheck className="mr-1 h-3 w-3" />
-                                                        {goal.status}
-                                                    </Badge>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <Button variant="ghost" size="icon" onClick={() => handleOpenDialog(goal)}>
-                                            <Settings className="h-5 w-5 text-muted-foreground" />
-                                        </Button>
-                                    </div>
-
-                                    <div className="space-y-2">
-                                        <div className="flex justify-between">
-                                            <p className="font-medium text-sm">Progress</p>
-                                            <p className="font-medium text-sm text-foreground">{progress.toFixed(0)}%</p>
-                                        </div>
-                                        <Progress value={progress} className="h-3 bg-secondary/20" />
-                                    </div>
-
-                                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
-                                        <div className="space-y-1">
-                                            <p className="text-muted-foreground">Current</p>
-                                            <p className="font-bold text-base text-foreground">₱{goal.current.toLocaleString()}</p>
-                                        </div>
-                                        <div className="space-y-1">
-                                            <p className="text-muted-foreground">Target</p>
-                                            <p className="font-bold text-base text-foreground">₱{goal.target.toLocaleString()}</p>
-                                        </div>
-                                        <div className="space-y-1">
-                                            <p className="text-muted-foreground">Remaining</p>
-                                            <p className="font-bold text-base text-foreground">₱{remaining.toLocaleString()}</p>
-                                        </div>
-                                        <div className="space-y-1">
-                                            <p className="text-muted-foreground">Timeline</p>
-                                            <div className="flex items-center gap-1.5 font-bold text-base text-foreground">
-                                                <Clock className="h-4 w-4" />
-                                                <span>{timeline} months</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    
-                                    <Separator />
-                                    
-                                    <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-                                        <p className="text-sm text-muted-foreground">
-                                        Monthly target: <span className="font-bold text-foreground">₱{goal.monthlyTarget.toLocaleString()}</span>
-                                        </p>
-                                        <div className="flex items-center gap-2">
-                                            <Button variant="outline" onClick={() => handleOpenAddFundsDialog(goal)}>Add Funds</Button>
-                                        </div>
-                                    </div>
+                         {isLoading ? (
+                            [...Array(2)].map((_, i) => (
+                            <Card key={i}>
+                                <CardContent className="p-6">
+                                <Skeleton className="h-32 w-full" />
                                 </CardContent>
                             </Card>
-                        )
-                    })
-                )}
-            </div>
-            <div className="lg:col-span-1 space-y-8">
-                <FinancialSummary 
-                  insight={aiInsight.insight}
-                  feasibilityScore={aiInsight.feasibilityScore}
-                  isLoadingInsight={isLoadingInsight}
-                />
-                <LifeTimeline />
-            </div>
-        </div>
+                            ))
+                        ) : filteredGoals.length === 0 ? (
+                            <div className="text-center py-20 border-2 border-dashed rounded-lg">
+                            <h2 className="text-xl font-semibold text-muted-foreground">No matching goals found!</h2>
+                            <p className="text-muted-foreground mt-2">Try adjusting your filters or adding a new goal.</p>
+                            </div>
+                        ) : (
+                            filteredGoals.map((goal) => {
+                                const progress = goal.target > 0 ? (goal.current / goal.target) * 100 : 0;
+                                const remaining = goal.target - goal.current;
+                                const timeline = goal.monthlyTarget > 0 ? Math.ceil(remaining / goal.monthlyTarget) : 0;
+
+                                return (
+                                    <Card key={goal.id}>
+                                        <CardContent className="p-6 space-y-6">
+                                            <div className="flex justify-between items-start">
+                                                <div className="flex items-center gap-4">
+                                                    <div className="bg-red-50 p-3 rounded-full border border-red-100">
+                                                        <Shield className="h-6 w-6 text-red-600" />
+                                                    </div>
+                                                    <div>
+                                                        <h2 className="font-bold text-lg text-foreground">{goal.title}</h2>
+                                                        <div className="flex items-center gap-2 mt-1">
+                                                            <Badge className={cn("capitalize", getPriorityStyles(goal.priority))}>
+                                                                {goal.priority} priority
+                                                            </Badge>
+                                                            <Badge className={cn("capitalize", getStatusStyles(goal.status))}>
+                                                                <BadgeCheck className="mr-1 h-3 w-3" />
+                                                                {goal.status}
+                                                            </Badge>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <Button variant="ghost" size="icon" onClick={() => handleOpenDialog(goal)}>
+                                                    <Settings className="h-5 w-5 text-muted-foreground" />
+                                                </Button>
+                                            </div>
+
+                                            <div className="space-y-2">
+                                                <div className="flex justify-between">
+                                                    <p className="font-medium text-sm">Progress</p>
+                                                    <p className="font-medium text-sm text-foreground">{progress.toFixed(0)}%</p>
+                                                </div>
+                                                <Progress value={progress} className="h-3 bg-secondary/20" />
+                                            </div>
+
+                                            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+                                                <div className="space-y-1">
+                                                    <p className="text-muted-foreground">Current</p>
+                                                    <p className="font-bold text-base text-foreground">₱{goal.current.toLocaleString()}</p>
+                                                </div>
+                                                <div className="space-y-1">
+                                                    <p className="text-muted-foreground">Target</p>
+                                                    <p className="font-bold text-base text-foreground">₱{goal.target.toLocaleString()}</p>
+                                                </div>
+                                                <div className="space-y-1">
+                                                    <p className="text-muted-foreground">Remaining</p>
+                                                    <p className="font-bold text-base text-foreground">₱{remaining.toLocaleString()}</p>
+                                                </div>
+                                                <div className="space-y-1">
+                                                    <p className="text-muted-foreground">Timeline</p>
+                                                    <div className="flex items-center gap-1.5 font-bold text-base text-foreground">
+                                                        <Clock className="h-4 w-4" />
+                                                        <span>{timeline} months</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <Separator />
+                                            
+                                            <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+                                                <p className="text-sm text-muted-foreground">
+                                                Monthly target: <span className="font-bold text-foreground">₱{goal.monthlyTarget.toLocaleString()}</span>
+                                                </p>
+                                                <div className="flex items-center gap-2">
+                                                    <Button variant="outline" onClick={() => handleOpenAddFundsDialog(goal)}>Add Funds</Button>
+                                                </div>
+                                            </div>
+                                        </CardContent>
+                                    </Card>
+                                )
+                            })
+                        )}
+                    </div>
+                    <div className="lg:col-span-1 space-y-8">
+                        <FinancialSummary 
+                          insight={aiInsight.insight}
+                          feasibilityScore={aiInsight.feasibilityScore}
+                          isLoadingInsight={isLoadingInsight}
+                        />
+                        <LifeTimeline />
+                    </div>
+                </div>
+            </CardContent>
+        </Card>
       </div>
     </>
   );

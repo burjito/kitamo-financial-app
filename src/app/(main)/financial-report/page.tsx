@@ -23,6 +23,20 @@ const getPriorityStyles = (priority: string) => {
     }
 };
 
+// KitaMo Logo Component for Print
+const PrintLogo = () => (
+    <svg viewBox="0 0 64 64" fill="none" className="print-logo-svg">
+      <defs>
+        <linearGradient id="eyeGradientPrint" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="hsl(0, 100%, 25%)" />
+          <stop offset="100%" stopColor="hsl(45, 100%, 50%)" />
+        </linearGradient>
+      </defs>
+      <path d="M2 32 C2 32 10 12 32 12 C54 12 62 32 62 32 C62 32 54 52 32 52 C10 52 2 32 2 32 Z" stroke="url(#eyeGradientPrint)" strokeWidth="4" fill="none"/>
+      <circle cx="32" cy="32" r="8" stroke="url(#eyeGradientPrint)" strokeWidth="2" fill="url(#eyeGradientPrint)"/>
+    </svg>
+);
+
 export default function FinancialReportPage() {
     const { goals, monthlyIncome, user } = useAppContext();
     const router = useRouter();
@@ -41,218 +55,246 @@ export default function FinancialReportPage() {
         <>
             {/* Enhanced Print Styles */}
             <style jsx global>{`
-                @media print {
-                    /* Remove browser UI elements */
-                    @page {
-                        margin: 0.5in;
-                        size: auto;
-                    }
-                    
-                    * {
-                        -webkit-print-color-adjust: exact !important;
-                        print-color-adjust: exact !important;
-                    }
-                    
-                    html, body {
-                        height: auto !important;
-                        overflow: visible !important;
-                        font-size: 10px !important;
-                        line-height: 1.2 !important;
-                        margin: 0 !important;
-                        padding: 0 !important;
-                        background: white !important;
-                    }
-                    
-                    body * {
-                        visibility: hidden;
-                    }
-                    
-                    .print-container, .print-container * {
-                        visibility: visible;
-                    }
-                    
-                    .print-container {
-                        position: absolute;
-                        left: 0;
-                        top: 0;
-                        width: 100% !important;
-                        max-width: none !important;
-                        margin: 0 !important;
-                        padding: 0 !important;
-                        background: white !important;
-                    }
-                    
-                    /* Hide all navigation, tabs, and browser elements */
-                    nav, header, footer, aside, .nav, .navbar, .header, .footer, .sidebar {
-                        display: none !important;
-                        visibility: hidden !important;
-                    }
-                    
-                    /* Print header styling */
-                    .print-header {
-                        text-align: center;
-                        margin-bottom: 20px;
-                        border-bottom: 2px solid #000;
-                        padding-bottom: 10px;
-                    }
-                    
-                    .print-header h1 {
-                        font-size: 20px !important;
-                        margin: 0 0 8px 0 !important;
-                        font-weight: bold;
-                        color: #000 !important;
-                    }
-                    
-                    .print-header p {
-                        font-size: 11px !important;
-                        margin: 0 !important;
-                        color: #666 !important;
-                    }
-                    
-                    /* Summary grid */
-                    .print-summary {
-                        margin-bottom: 20px;
-                        display: grid;
-                        grid-template-columns: repeat(3, 1fr);
-                        gap: 10px;
-                    }
-                    
-                    .print-summary-card {
-                        border: 1px solid #ddd;
-                        padding: 10px;
-                        text-align: center;
-                        background: #f9f9f9;
-                        border-radius: 4px;
-                    }
-                    
-                    .print-summary-label {
-                        font-size: 9px;
-                        color: #666;
-                        margin-bottom: 4px;
-                        font-weight: normal;
-                    }
-                    
-                    .print-summary-value {
-                        font-size: 13px;
-                        font-weight: bold;
-                        margin: 0;
-                        color: #000;
-                    }
-                    
-                    /* Table styling */
-                    .print-table {
-                        width: 100%;
-                        border-collapse: collapse;
-                        margin-top: 15px;
-                        font-size: 10px;
-                        background: white;
-                    }
-                    
-                    .print-table th,
-                    .print-table td {
-                        border: 1px solid #ddd;
-                        padding: 6px 8px;
-                        text-align: left;
-                        vertical-align: middle;
-                    }
-                    
-                    .print-table th {
-                        background-color: #f5f5f5;
-                        font-weight: bold;
-                        font-size: 9px;
-                        color: #000;
-                    }
-                    
-                    .print-table .text-right {
-                        text-align: right;
-                    }
-                    
-                    .print-priority {
-                        padding: 3px 8px;
-                        border-radius: 4px;
-                        font-size: 8px;
-                        font-weight: bold;
-                        display: inline-block;
-                    }
-                    
-                    .print-priority.high {
-                        background: #fecaca;
-                        color: #991b1b;
-                        border: 1px solid #f87171;
-                    }
-                    
-                    .print-priority.medium {
-                        background: #fef3c7;
-                        color: #92400e;
-                        border: 1px solid #fbbf24;
-                    }
-                    
-                    .print-priority.low {
-                        background: #dbeafe;
-                        color: #1e40af;
-                        border: 1px solid #60a5fa;
-                    }
-                    
-                    .print-progress {
-                        display: flex;
-                        align-items: center;
-                        gap: 6px;
-                    }
-                    
-                    .print-progress-bar {
-                        width: 50px;
-                        height: 8px;
-                        background: #e5e7eb;
-                        border-radius: 4px;
-                        overflow: hidden;
-                        border: 1px solid #d1d5db;
-                    }
-                    
-                    .print-progress-fill {
-                        height: 100%;
-                        background: #10b981;
-                        transition: none;
-                    }
-                    
-                    .print-progress-text {
-                        font-size: 8px;
-                        color: #666;
-                        font-weight: 500;
-                    }
-                    
-                    /* Hide screen elements completely */
-                    .print\\:hidden {
-                        display: none !important;
-                        visibility: hidden !important;
-                    }
-                    
-                    /* Show print elements */
-                    .print\\:block {
-                        display: block !important;
-                        visibility: visible !important;
-                    }
-                    
-                    /* Remove any page breaks within table rows */
-                    .print-table tr {
-                        page-break-inside: avoid;
-                    }
-                    
-                    /* Ensure clean page breaks */
-                    .print-break {
-                        page-break-before: always;
-                    }
+            @media print {
+                /* Remove browser UI elements */
+                @page {
+                    margin: 0.5in;
+                    size: auto;
                 }
                 
-                @media screen {
-                    .print\\:hidden {
-                        display: inherit;
-                    }
-                    
-                    .print\\:block {
-                        display: none;
-                    }
+                * {
+                    -webkit-print-color-adjust: exact !important;
+                    print-color-adjust: exact !important;
                 }
-            `}</style>
+                
+                html, body {
+                    height: auto !important;
+                    overflow: visible !important;
+                    font-size: 10px !important;
+                    line-height: 1.2 !important;
+                    margin: 0 !important;
+                    padding: 0 !important;
+                    background: white !important;
+                }
+                
+                body * {
+                    visibility: hidden;
+                }
+                
+                .print-container, .print-container * {
+                    visibility: visible;
+                }
+                
+                .print-container {
+                    position: absolute;
+                    left: 0;
+                    top: 0;
+                    width: 100% !important;
+                    max-width: none !important;
+                    margin: 0 !important;
+                    padding: 0 !important;
+                    background: white !important;
+                }
+                
+                /* Hide all navigation, tabs, and browser elements */
+                nav, header, footer, aside, .nav, .navbar, .header, .footer, .sidebar {
+                    display: none !important;
+                    visibility: hidden !important;
+                }
+                
+                /* Print header styling */
+                .print-header {
+                    margin-bottom: 20px;
+                    padding-bottom: 15px;
+                }
+                
+                .print-logo-section {
+                    display: flex;
+                    align-items: center;
+                    justify-content: flex-start;
+                    gap: 12px;
+                    margin-bottom: 15px;
+                }
+                
+                .print-separator-line {
+                    width: 100%;
+                    height: 2px;
+                    background: hsl(0, 100%, 25%);
+                    margin: 15px 0;
+                    border: none;
+                }
+                
+                .print-logo-svg {
+                    width: 32px;
+                    height: 32px;
+                }
+                
+                .print-brand {
+                    font-size: 24px;
+                    font-weight: bold;
+                    color: hsl(0, 100%, 25%);
+                    margin: 0;
+                }
+                
+                .print-header h1 {
+                    font-size: 20px !important;
+                    margin: 0 0 8px 0 !important;
+                    font-weight: bold;
+                    color: #000 !important;
+                    text-align: center;
+                }
+                
+                .print-header p {
+                    font-size: 11px !important;
+                    margin: 0 !important;
+                    color: #666 !important;
+                    text-align: center;
+                }
+                
+                /* Summary grid */
+                .print-summary {
+                    margin-bottom: 20px;
+                    display: grid;
+                    grid-template-columns: repeat(3, 1fr);
+                    gap: 10px;
+                }
+                
+                .print-summary-card {
+                    border: 1px solid #ddd;
+                    padding: 10px;
+                    text-align: center;
+                    background: #f9f9f9;
+                    border-radius: 4px;
+                }
+                
+                .print-summary-label {
+                    font-size: 9px;
+                    color: #666;
+                    margin-bottom: 4px;
+                    font-weight: normal;
+                }
+                
+                .print-summary-value {
+                    font-size: 13px;
+                    font-weight: bold;
+                    margin: 0;
+                    color: #000;
+                }
+                
+                /* Table styling */
+                .print-table {
+                    width: 100%;
+                    border-collapse: collapse;
+                    margin-top: 15px;
+                    font-size: 10px;
+                    background: white;
+                }
+                
+                .print-table th,
+                .print-table td {
+                    border: 1px solid #ddd;
+                    padding: 6px 8px;
+                    text-align: left;
+                    vertical-align: middle;
+                }
+                
+                .print-table th {
+                    background-color: #f5f5f5;
+                    font-weight: bold;
+                    font-size: 9px;
+                    color: #000;
+                }
+                
+                .print-table .text-right {
+                    text-align: right;
+                }
+                
+                .print-priority {
+                    padding: 3px 8px;
+                    border-radius: 4px;
+                    font-size: 8px;
+                    font-weight: bold;
+                    display: inline-block;
+                }
+                
+                .print-priority.high {
+                    background: #fecaca;
+                    color: #991b1b;
+                    border: 1px solid #f87171;
+                }
+                
+                .print-priority.medium {
+                    background: #fef3c7;
+                    color: #92400e;
+                    border: 1px solid #fbbf24;
+                }
+                
+                .print-priority.low {
+                    background: #dbeafe;
+                    color: #1e40af;
+                    border: 1px solid #60a5fa;
+                }
+                
+                .print-progress {
+                    display: flex;
+                    align-items: center;
+                    gap: 6px;
+                }
+                
+                .print-progress-bar {
+                    width: 50px;
+                    height: 8px;
+                    background: #e5e7eb;
+                    border-radius: 4px;
+                    overflow: hidden;
+                    border: 1px solid #d1d5db;
+                }
+                
+                .print-progress-fill {
+                    height: 100%;
+                    background: linear-gradient(135deg, hsl(0, 100%, 25%) 0%, hsl(45, 100%, 50%) 100%);
+                    transition: none;
+                }
+                
+                .print-progress-text {
+                    font-size: 8px;
+                    color: #666;
+                    font-weight: 500;
+                }
+                
+                /* Hide screen elements completely */
+                .print\\:hidden {
+                    display: none !important;
+                    visibility: hidden !important;
+                }
+                
+                /* Show print elements */
+                .print\\:block {
+                    display: block !important;
+                    visibility: visible !important;
+                }
+                
+                /* Remove any page breaks within table rows */
+                .print-table tr {
+                    page-break-inside: avoid;
+                }
+                
+                /* Ensure clean page breaks */
+                .print-break {
+                    page-break-before: always;
+                }
+            }
+            
+            @media screen {
+                .print\\:hidden {
+                    display: inherit;
+                }
+                
+                .print\\:block {
+                    display: none;
+                }
+            }
+        `}</style>
 
             <div className="animate-in fade-in-0 duration-500 space-y-6 max-w-4xl mx-auto print-container">
                 <div className="flex justify-between items-center print:hidden">
@@ -269,8 +311,13 @@ export default function FinancialReportPage() {
                     </Button>
                 </div>
 
-                {/* Print Header */}
+                {/* Print Header with KitaMo Branding - Logo, Line, Title */}
                 <div className="print:block print-header hidden">
+                    <div className="print-logo-section">
+                        <PrintLogo />
+                        <h2 className="print-brand">KitaMo</h2>
+                    </div>
+                    <hr className="print-separator-line" />
                     <h1>Financial Goals Report</h1>
                     <p>Generated on {new Date().toLocaleDateString()} • {user?.email}</p>
                 </div>
@@ -406,7 +453,7 @@ export default function FinancialReportPage() {
                         <tbody>
                             {goals.map((goal) => {
                                 const progress = goal.target > 0 ? (goal.current / goal.target) * 100 : 0;
-                                remaining = goal.target - goal.current;
+                                const remaining = goal.target - goal.current;
                                 return (
                                     <tr key={goal.id}>
                                         <td>{goal.title}</td>
@@ -435,7 +482,7 @@ export default function FinancialReportPage() {
                             })}
                         </tbody>
                     </table>
-                </div>
+                </div> 
             </div>
         </>
     );

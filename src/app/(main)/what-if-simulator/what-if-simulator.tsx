@@ -1,4 +1,3 @@
-
 "use client"
 
 import { useState } from "react";
@@ -25,9 +24,11 @@ import {
   X,
   Lightbulb,
   Archive,
-  RefreshCw, // Added icon
+  RefreshCw,
   Calculator,
   Rocket,
+  GraduationCap,
+  Shield,
 } from "lucide-react";
 import { useAppContext } from '@/contexts/app-context';
 import { useToast } from '@/hooks/use-toast';
@@ -35,12 +36,98 @@ import { SliderInput } from "./slider-input";
 import { ProductRecommenderDialog } from "./product-recommender-dialog";
 import { Scenario } from "@/contexts/app-context";
 
-// We can move this to a shared file later if needed
+// Updated preset scenarios to match common BPI products
 const presetScenarios = {
   car: { name: "Buy a New Car", amount: 700000, years: 5, months: 0, icon: Car },
-  laptop: { name: "Get a New Laptop", amount: 80000, years: 1, months: 0, icon: Laptop },
+  house: { name: "Buy a Dream Home", amount: 3000000, years: 15, months: 0, icon: Home },
+  education: { name: "Education Fund", amount: 500000, years: 4, months: 0, icon: GraduationCap },
   vacation: { name: "Travel to Japan", amount: 100000, years: 2, months: 0, icon: Plane },
+  emergency: { name: "Emergency Fund", amount: 300000, years: 2, months: 0, icon: Shield },
+  business: { name: "Start a Business", amount: 800000, years: 3, months: 0, icon: Briefcase },
+  laptop: { name: "Get a New Laptop", amount: 80000, years: 1, months: 0, icon: Laptop },
   wedding: { name: "Plan a Wedding", amount: 500000, years: 3, months: 0, icon: Heart },
+};
+
+// Comprehensive goal type detection function
+const detectGoalType = (goalName: string): string => {
+  const name = goalName.toLowerCase().trim();
+  
+  // Car and vehicle-related
+  if (name.includes('car') || name.includes('vehicle') || name.includes('automobile') || name.includes('sedan') || name.includes('suv') || name.includes('truck')) {
+    return 'car';
+  }
+  
+  // Motorcycle and bike-related (only for very specific terms)
+  if (name.includes('motorcycle') || name.includes('motorbike') || name.includes('scooter') || name.includes('big bike')) {
+    return 'motorcycle';
+  }
+  
+  // House and real estate-related
+  if (name.includes('house') || name.includes('home') || name.includes('property') || name.includes('real estate') || 
+      name.includes('condo') || name.includes('apartment') || name.includes('townhouse')) {
+    return 'house';
+  }
+  
+  // Education-related
+  if (name.includes('education') || name.includes('school') || name.includes('college') || name.includes('university') || 
+      name.includes('tuition') || name.includes('study') || name.includes('degree') || name.includes('course') ||
+      name.includes('learning') || name.includes('training')) {
+    return 'education';
+  }
+  
+  // Business-related
+  if (name.includes('business') || name.includes('startup') || name.includes('capital') || name.includes('franchise') ||
+      name.includes('company') || name.includes('venture') || name.includes('shop') || name.includes('store')) {
+    return 'business';
+  }
+  
+  // Emergency fund-related
+  if (name.includes('emergency') || name.includes('safety net') || name.includes('contingency') || 
+      name.includes('rainy day') || name.includes('backup fund')) {
+    return 'emergency';
+  }
+  
+  // Technology and gadgets
+  if (name.includes('laptop') || name.includes('computer') || name.includes('phone') || name.includes('gadget') || 
+      name.includes('tech') || name.includes('tablet') || name.includes('device')) {
+    return 'technology';
+  }
+  
+  // Travel and vacation-related
+  if (name.includes('vacation') || name.includes('travel') || name.includes('trip') || name.includes('holiday') ||
+      name.includes('tour') || name.includes('journey') || name.includes('adventure')) {
+    return 'vacation';
+  }
+  
+  // Wedding and celebration-related
+  if (name.includes('wedding') || name.includes('marriage') || name.includes('ceremony') || name.includes('celebration')) {
+    return 'wedding';
+  }
+  
+  // Investment-related
+  if (name.includes('investment') || name.includes('invest') || name.includes('portfolio') || name.includes('stocks') || 
+      name.includes('mutual fund') || name.includes('retirement') || name.includes('pension')) {
+    return 'investment';
+  }
+  
+  // Health and medical
+  if (name.includes('health') || name.includes('medical') || name.includes('hospital') || name.includes('surgery') ||
+      name.includes('treatment') || name.includes('insurance')) {
+    return 'health';
+  }
+  
+  // Generic savings goals
+  if (name.includes('savings') || name.includes('save') || name.includes('fund')) {
+    return 'savings';
+  }
+  
+  // For very generic goals like "My Next Big Goal", "Dream Goal", etc.
+  if (name.includes('goal') || name.includes('dream') || name.includes('plan') || name.includes('future') ||
+      name.includes('next') || name.includes('big') || name.includes('major')) {
+    return 'general';
+  }
+  
+  return 'general';
 };
 
 export const WhatIfSimulator = () => {
@@ -54,6 +141,7 @@ export const WhatIfSimulator = () => {
   const [timeframeMonths, setTimeframeMonths] = useState(2);
   const [isRecommenderOpen, setIsRecommenderOpen] = useState(false);
   const [showScenarios, setShowScenarios] = useState(false);
+  const [detectedGoalType, setDetectedGoalType] = useState('general');
   
   const timeframe = timeframeYears * 12 + timeframeMonths;
   const monthlySavings = Math.max(0, monthlyIncome - monthlyExpenses);
@@ -65,6 +153,14 @@ export const WhatIfSimulator = () => {
   const handleValueChange = <T,>(setter: React.Dispatch<React.SetStateAction<T>>) => (value: T) => {
     setter(value);
   };
+
+  // Enhanced goal name change handler
+  const handleGoalNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newGoalName = e.target.value;
+    setGoalName(newGoalName);
+    const detected = detectGoalType(newGoalName);
+    setDetectedGoalType(detected);
+  };
   
   const loadPreset = (preset: keyof typeof presetScenarios) => {
     const { name, amount, years, months } = presetScenarios[preset];
@@ -72,6 +168,8 @@ export const WhatIfSimulator = () => {
     setGoalAmount(amount);
     setTimeframeYears(years);
     setTimeframeMonths(months);
+    const detected = detectGoalType(name);
+    setDetectedGoalType(detected);
     toast({
         title: "Scenario Loaded!",
         description: `"${name}" scenario has been loaded into the simulator.`,
@@ -85,7 +183,7 @@ export const WhatIfSimulator = () => {
       monthlyExpenses,
       savingsGoal: goalAmount,
       timeframe,
-      goalType: goalName.toLowerCase().includes('car') ? 'car' : (goalName.toLowerCase().includes('laptop') ? 'laptop' : (goalName.toLowerCase().includes('vacation') ? 'vacation' : (goalName.toLowerCase().includes('wedding') ? 'heart' : 'default')))
+      goalType: detectGoalType(goalName)
     };
     saveScenario(scenarioToSave).then(() => {
         toast({
@@ -106,6 +204,8 @@ export const WhatIfSimulator = () => {
       setMonthlyExpenses(scenario.monthlyExpenses);
       setTimeframeYears(Math.floor(scenario.timeframe / 12));
       setTimeframeMonths(scenario.timeframe % 12);
+      const detected = detectGoalType(scenario.name);
+      setDetectedGoalType(detected);
       toast({
           title: "Scenario Loaded",
           description: `"${scenario.name}" has been loaded into the simulator.`
@@ -155,7 +255,7 @@ export const WhatIfSimulator = () => {
               monthlyExpenses,
               savingsGoal: goalAmount,
               timeframe,
-              goalType: goalName.toLowerCase().includes('car') ? 'car' : 'default'
+              goalType: detectGoalType(goalName)
           }}
       />
         <Card>
@@ -184,7 +284,7 @@ export const WhatIfSimulator = () => {
                         Try a Common Scenario
                       </CardTitle>
                       <CardDescription>
-                        Get a head start by loading a preset goal.
+                        Get a head start by loading a preset goal that matches BPI products.
                       </CardDescription>
                     </CardHeader>
                     <CardContent>
@@ -205,10 +305,15 @@ export const WhatIfSimulator = () => {
                         <Label htmlFor="goal-name">Goal Name</Label>
                         <Input
                           id="goal-name"
-                          placeholder="e.g., Dream Vacation"
+                          placeholder="e.g., Dream Vacation, Education Fund, Emergency Savings"
                           value={goalName}
-                          onChange={(e) => setGoalName(e.target.value)}
+                          onChange={handleGoalNameChange}
                         />
+                        {detectedGoalType !== 'general' && (
+                          <p className="text-xs text-muted-foreground">
+                            Detected goal type: {detectedGoalType}
+                          </p>
+                        )}
                       </div>
 
                       <SliderInput

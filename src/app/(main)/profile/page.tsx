@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, useEffect } from "react";
@@ -211,32 +210,6 @@ const FinancialSettings = () => {
         <div className="space-y-8">
             <Card>
                 <CardHeader>
-                    <CardTitle>Financial Information</CardTitle>
-                    <CardDescription>Manage your core financial information to personalize your app experience.</CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-6">
-                    <div className="space-y-2">
-                        <Label htmlFor="monthlyIncome">Default Monthly Income (PHP)</Label>
-                        <Input id="monthlyIncome" type="number" value={income} onChange={(e) => setIncome(Number(e.target.value))} />
-                         <p className="text-sm text-muted-foreground">
-                            Used as the starting income for calculations in the simulator and goal tracking.
-                        </p>
-                    </div>
-                    <div className="space-y-2">
-                        <Label htmlFor="monthlyExpenses">Default Monthly Expenses (PHP)</Label>
-                        <Input id="monthlyExpenses" type="number" value={expenses} onChange={(e) => setExpenses(Number(e.target.value))} />
-                         <p className="text-sm text-muted-foreground">
-                           Set your typical monthly spending to get a more accurate starting point in simulations.
-                        </p>
-                    </div>
-                     <div className="flex justify-end">
-                        <Button onClick={handleSave}>Save Financial Settings</Button>
-                    </div>
-                </CardContent>
-            </Card>
-
-            <Card>
-                <CardHeader>
                     <CardTitle>Risk Profile</CardTitle>
                     <CardDescription>Your risk profile helps us tailor financial advice for you.</CardDescription>
                 </CardHeader>
@@ -265,6 +238,32 @@ const FinancialSettings = () => {
                         </Button>
                      </div>
                    )}
+                </CardContent>
+            </Card>
+
+            <Card>
+                <CardHeader>
+                    <CardTitle>Financial Information</CardTitle>
+                    <CardDescription>Manage your core financial information to personalize your app experience.</CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-6">
+                    <div className="space-y-2">
+                        <Label htmlFor="monthlyIncome">Default Monthly Income (PHP)</Label>
+                        <Input id="monthlyIncome" type="number" value={income} onChange={(e) => setIncome(Number(e.target.value))} />
+                         <p className="text-sm text-muted-foreground">
+                            Used as the starting income for calculations in the simulator and goal tracking.
+                        </p>
+                    </div>
+                    <div className="space-y-2">
+                        <Label htmlFor="monthlyExpenses">Default Monthly Expenses (PHP)</Label>
+                        <Input id="monthlyExpenses" type="number" value={expenses} onChange={(e) => setExpenses(Number(e.target.value))} />
+                         <p className="text-sm text-muted-foreground">
+                           Set your typical monthly spending to get a more accurate starting point in simulations.
+                        </p>
+                    </div>
+                     <div className="flex justify-end">
+                        <Button onClick={handleSave}>Save Financial Settings</Button>
+                    </div>
                 </CardContent>
             </Card>
         </div>

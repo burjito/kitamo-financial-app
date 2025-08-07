@@ -1,4 +1,3 @@
-
 "use client";
 
 import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
@@ -71,6 +70,45 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
   const monthlyIncome = profile?.monthly_income ?? DEFAULT_MONTHLY_INCOME;
   const monthlyExpenses = profile?.monthly_expenses ?? DEFAULT_MONTHLY_EXPENSES;
   
+  const fetchData = async (user: User) => {
+    if (!supabase) return;
+    setIsLoading(true);
+    try {
+        const { data: profileData, error: profileError } = await supabase
+            .from('profiles')
+            .select('id, first_name, last_name, monthly_income, monthly_expenses, risk_profile')
+            .eq('id', user.id)
+            .single();
+        
+        if (profileError && profileError.code !== 'PGRST116') {
+            console.error("Error fetching profile:", profileError);
+            throw profileError;
+        }
+        setProfile(profileData);
+        
+        // Fixed: Using correct column names with quotes for camelCase
+        const { data: goalsData, error: goalsError } = await supabase
+            .from('goals')
+            .select('id, user_id, title, target, current, status, priority, "monthlyTarget"')
+            .eq('user_id', user.id);
+        if (goalsError) throw goalsError;
+        setGoals(goalsData || []);
+
+        // Fixed: Using correct column names with quotes for camelCase
+        const { data: scenariosData, error: scenariosError } = await supabase
+            .from('scenarios')
+            .select('id, user_id, name, "monthlyIncome", "monthlyExpenses", "savingsGoal", timeframe, "goalType"')
+            .eq('user_id', user.id);
+        if (scenariosError) throw scenariosError;
+        setScenarios(scenariosData || []);
+        
+    } catch (error) {
+        console.error("Error fetching data:", error);
+    } finally {
+        setIsLoading(false);
+    }
+  };
+  
   useEffect(() => {
     if (!supabase) {
         console.warn("Supabase not initialized. Skipping authentication and data fetching.");
@@ -79,8 +117,14 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     }
 
     const getInitialSession = async () => {
-        const { data: { session } } = await supabase.auth.getSession();
-        if (session) {
+        const { data: { session }, error } = await supabase.auth.getSession();
+        if(error) {
+            console.error("Error getting session:", error);
+            setIsLoading(false);
+            return;
+        }
+
+        if (session?.user) {
             setUser(session.user);
             await fetchData(session.user);
         } else {
@@ -109,43 +153,6 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     };
   }, []);
 
-  const fetchData = async (user: User) => {
-    if (!supabase) return;
-    setIsLoading(true);
-    try {
-        const { data: profileData, error: profileError } = await supabase
-            .from('profiles')
-            .select('*')
-            .eq('id', user.id)
-            .single();
-        
-        if (profileError && profileError.code !== 'PGRST116') { // PGRST116: no rows returned
-            console.error("Error fetching profile:", profileError);
-            throw profileError;
-        }
-        setProfile(profileData);
-        
-        const { data: goalsData, error: goalsError } = await supabase
-            .from('goals')
-            .select('id, user_id, title, target, current, status, priority, monthlyTarget:monthlyTarget')
-            .eq('user_id', user.id);
-        if (goalsError) throw goalsError;
-        setGoals(goalsData || []);
-
-        const { data: scenariosData, error: scenariosError } = await supabase
-            .from('scenarios')
-            .select('id, user_id, name, monthlyIncome:monthlyIncome, monthlyExpenses:monthlyExpenses, savingsGoal:savingsGoal, timeframe, goalType:goalType')
-            .eq('user_id', user.id);
-        if (scenariosError) throw scenariosError;
-        setScenarios(scenariosData || []);
-        
-    } catch (error) {
-        console.error("Error fetching data:", error);
-    } finally {
-        setIsLoading(false);
-    }
-  };
-
   const updateProfile = async (data: Partial<Omit<Profile, 'id'>>) => {
       if (!user || !supabase) return;
       const { data: updatedProfile, error } = await supabase
@@ -163,52 +170,50 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const addGoal = async (goal: Omit<Goal, 'id' | 'user_id' | 'current' | 'status'>) => {
-    if (!user || !supabase) return;
+    if (!user || !supabase) throw new Error("Cannot add goal: User not authenticated.");
+    
+    console.log('Adding goal:', goal); // Debug log
+    
+    // Fixed: Using correct property name
     const goalToAdd = { 
+        user_id: user.id,
         title: goal.title,
         target: goal.target,
-        monthlyTarget: goal.monthlyTarget,
         priority: goal.priority,
-        user_id: user.id, 
+        monthlyTarget: goal.monthlyTarget, // Fixed: was monthly_target
         current: 0, 
-        status: 'Active' 
+        status: 'Active'
     };
-    const { data, error } = await supabase
-        .from('goals')
-        .insert([goalToAdd])
-        .select('id, user_id, title, target, current, status, priority, monthlyTarget:monthlyTarget')
-        .single();
+
+    console.log('Goal to add to database:', goalToAdd); // Debug log
+
+    const { data, error } = await supabase.from('goals').insert(goalToAdd).select();
 
     if (error) {
         console.error('Error adding goal:', error);
+        console.error('Error details:', error.details, error.hint, error.code);
         throw error;
     }
-    if (data) setGoals(prev => [...prev, data]);
+    
+    console.log('Successfully added goal:', data); // Debug log
+    await fetchData(user);
   };
   
   const updateGoal = async (updatedGoal: Goal) => {
-    if (!user || !supabase) return;
-    const { id, ...rest } = updatedGoal;
-    const goalToUpdate = {
-        title: rest.title,
-        target: rest.target,
-        monthlyTarget: rest.monthlyTarget,
-        priority: rest.priority,
-        status: rest.status,
-        current: rest.current,
-        user_id: user.id
-    }
-    const { data, error } = await supabase
+    if (!user || !supabase || !updatedGoal.id) return;
+    
+    const { id, user_id, ...goalToUpdate } = updatedGoal;
+
+    const { error } = await supabase
         .from('goals')
         .update(goalToUpdate)
-        .eq('id', id!)
-        .select('id, user_id, title, target, current, status, priority, monthlyTarget:monthlyTarget')
-        .single();
+        .eq('id', updatedGoal.id);
+
     if (error) {
         console.error('Error updating goal:', error);
         throw error;
     }
-    if (data) setGoals(prev => prev.map(g => g.id === data.id ? data : g));
+    await fetchData(user);
   };
   
   const addFundsToGoal = async (id: string, amount: number) => {
@@ -217,67 +222,66 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     if (!goal) return;
 
     const newCurrentAmount = goal.current + amount;
-    const { data, error } = await supabase
+    const { error } = await supabase
         .from('goals')
         .update({ current: newCurrentAmount })
-        .eq('id', id)
-        .select('id, user_id, title, target, current, status, priority, monthlyTarget:monthlyTarget')
-        .single();
+        .eq('id', id);
     
     if (error) {
         console.error('Error adding funds:', error);
         throw error;
     }
-    if (data) setGoals(prev => prev.map(g => g.id === data.id ? data : g));
+    await fetchData(user);
   };
 
   const deleteGoal = async (id: string) => {
     if (!user || !supabase) return;
-    const { error } = await supabase
-        .from('goals')
-        .delete()
-        .eq('id', id);
+    const { error } = await supabase.from('goals').delete().eq('id', id);
+        
     if (error) {
         console.error('Error deleting goal:', error);
         throw error;
     }
-    setGoals(prev => prev.filter(g => g.id !== id));
+    await fetchData(user);
   };
 
   const saveScenario = async (scenario: Omit<Scenario, 'id' | 'user_id'>) => {
-    if (!user || !supabase) return;
-     const scenarioToSave = {
-      name: scenario.name,
-      monthlyIncome: scenario.monthlyIncome,
-      monthlyExpenses: scenario.monthlyExpenses,
-      savingsGoal: scenario.savingsGoal,
-      timeframe: scenario.timeframe,
-      goalType: scenario.goalType,
-      user_id: user.id
+    if (!user || !supabase) throw new Error("Cannot save scenario: User not authenticated.");
+    
+    console.log('Saving scenario:', scenario); // Debug log
+     
+    const scenarioToSave = {
+        user_id: user.id,
+        name: scenario.name,
+        monthlyIncome: scenario.monthlyIncome,
+        monthlyExpenses: scenario.monthlyExpenses,
+        savingsGoal: scenario.savingsGoal,
+        timeframe: scenario.timeframe,
+        goalType: scenario.goalType
     };
-    const { data, error } = await supabase
-        .from('scenarios')
-        .insert([scenarioToSave])
-        .select('id, user_id, name, monthlyIncome:monthlyIncome, monthlyExpenses:monthlyExpenses, savingsGoal:savingsGoal, timeframe, goalType:goalType')
-        .single();
+
+    console.log('Scenario to save to database:', scenarioToSave); // Debug log
+
+    const { data, error } = await supabase.from('scenarios').insert(scenarioToSave).select();
+        
     if (error) {
         console.error('Error saving scenario:', error);
+        console.error('Error details:', error.details, error.hint, error.code);
         throw error;
     }
-    if (data) setScenarios(prev => [...prev, data]);
+    
+    console.log('Successfully saved scenario:', data); // Debug log
+    await fetchData(user);
   };
   
   const deleteScenario = async (id: string) => {
     if (!user || !supabase) return;
-     const { error } = await supabase
-        .from('scenarios')
-        .delete()
-        .eq('id', id);
+     const { error } = await supabase.from('scenarios').delete().eq('id', id);
     if (error) {
         console.error('Error deleting scenario:', error);
         throw error;
     }
-    setScenarios(prev => prev.filter(s => s.id !== id));
+    await fetchData(user);
   }
 
   const value: AppContextType = {
@@ -311,5 +315,3 @@ export const useAppContext = () => {
   }
   return context;
 };
-
-    

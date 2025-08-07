@@ -331,7 +331,7 @@ export const WhatIfSimulator = () => {
 
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-8">
                      <Button variant="outline" className="w-full" onClick={handleSaveScenario}>
-                      <Target className="mr-2 h-4 w-4" />
+                      <Archive className="mr-2 h-4 w-4" />
                       Save Scenario
                     </Button>
                     <Button className="w-full" onClick={handleSetAsGoal}>

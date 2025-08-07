@@ -64,7 +64,7 @@ const getStatusStyles = (status: string) => {
 
 const FinancialSummary = ({ insight, feasibilityScore, isLoadingInsight }: { insight: string; feasibilityScore: number; isLoadingInsight: boolean }) => {
     const { goals, monthlyIncome } = useAppContext();
-    const totalMonthlyTarget = goals.reduce((sum, goal) => sum + goal.monthlyTarget, 0);
+    const totalMonthlyTarget = goals.reduce((sum, goal) => sum + (goal.monthlyTarget || 0), 0);
     const surplus = monthlyIncome - totalMonthlyTarget;
 
     const getFeasibilityStyles = (score: number) => {
@@ -134,7 +134,7 @@ const LifeTimeline = () => {
 
     const getTargetYear = (goal: Goal) => {
         const remaining = goal.target > goal.current ? goal.target - goal.current : 0;
-        if (goal.monthlyTarget <= 0) {
+        if (!goal.monthlyTarget || goal.monthlyTarget <= 0) {
             return new Date().getFullYear();
         }
         const timelineMonths = Math.ceil(remaining / goal.monthlyTarget);
@@ -373,7 +373,7 @@ export default function GoalTrackerPage() {
                             filteredGoals.map((goal) => {
                                 const progress = goal.target > 0 ? (goal.current / goal.target) * 100 : 0;
                                 const remaining = goal.target - goal.current;
-                                const timeline = goal.monthlyTarget > 0 ? Math.ceil(remaining / goal.monthlyTarget) : 0;
+                                const timeline = (goal.monthlyTarget || 0) > 0 ? Math.ceil(remaining / (goal.monthlyTarget || 1)) : 0;
 
                                 return (
                                     <Card key={goal.id}>
@@ -457,7 +457,7 @@ export default function GoalTrackerPage() {
                                             
                                             <div className="flex flex-col md:flex-row justify-between items-center gap-4">
                                                 <p className="text-sm text-muted-foreground">
-                                                Monthly target: <span className="font-bold text-foreground">₱{goal.monthlyTarget.toLocaleString()}</span>
+                                                Monthly target: <span className="font-bold text-foreground">₱{(goal.monthlyTarget || 0).toLocaleString()}</span>
                                                 </p>
                                                 <div className="flex items-center gap-2">
                                                     <Button variant="outline" onClick={() => handleOpenAddFundsDialog(goal)}>Add Funds</Button>

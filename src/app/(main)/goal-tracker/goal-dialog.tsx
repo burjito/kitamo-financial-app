@@ -37,7 +37,7 @@ import {
 const goalSchema = z.object({
   title: z.string().min(3, { message: "Goal title must be at least 3 characters." }),
   target: z.coerce.number().min(1, { message: "Target amount must be greater than 0." }),
-  monthlyTarget: z.coerce.number().min(1, { message: "Monthly target must be greater than 0." }),
+  monthlyTarget: z.coerce.number().min(0, { message: "Monthly target cannot be negative." }),
   priority: z.enum(['High', 'Medium', 'Low']),
 });
 
@@ -84,10 +84,17 @@ export const GoalDialog = ({ open, onOpenChange, onSave, goal }: GoalDialogProps
 
 
   const onSubmit = (data: GoalFormValues) => {
+    const goalData: Omit<Goal, 'id' | 'current' | 'status'> = {
+      title: data.title,
+      target: data.target,
+      monthlyTarget: data.monthlyTarget,
+      priority: data.priority,
+    };
+
     if (goal?.id) {
-        onSave({ ...goal, ...data });
+        onSave({ ...goal, ...goalData });
     } else {
-        onSave(data);
+        onSave(goalData);
     }
     onOpenChange(false);
   };

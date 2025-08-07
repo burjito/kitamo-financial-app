@@ -74,6 +74,9 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     if (!supabase) return;
     setIsLoading(true);
     try {
+        console.log('Fetching data for user:', user.id);
+        
+        // Profiles table uses snake_case
         const { data: profileData, error: profileError } = await supabase
             .from('profiles')
             .select('id, first_name, last_name, monthly_income, monthly_expenses, risk_profile')
@@ -84,22 +87,33 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
             console.error("Error fetching profile:", profileError);
             throw profileError;
         }
+        console.log('Fetched profile data:', profileData);
         setProfile(profileData);
         
-        // Fixed: Using correct column names with quotes for camelCase
+        // Goals table uses camelCase with quotes (based on your schema)
         const { data: goalsData, error: goalsError } = await supabase
             .from('goals')
             .select('id, user_id, title, target, current, status, priority, "monthlyTarget"')
             .eq('user_id', user.id);
-        if (goalsError) throw goalsError;
+        
+        if (goalsError) {
+            console.error("Error fetching goals:", goalsError);
+            throw goalsError;
+        }
+        console.log('Goals fetched:', goalsData);
         setGoals(goalsData || []);
 
-        // Fixed: Using correct column names with quotes for camelCase
+        // Scenarios table uses camelCase with quotes (based on your schema)
         const { data: scenariosData, error: scenariosError } = await supabase
             .from('scenarios')
             .select('id, user_id, name, "monthlyIncome", "monthlyExpenses", "savingsGoal", timeframe, "goalType"')
             .eq('user_id', user.id);
-        if (scenariosError) throw scenariosError;
+        
+        if (scenariosError) {
+            console.error("Error fetching scenarios:", scenariosError);
+            throw scenariosError;
+        }
+        console.log('Scenarios fetched:', scenariosData);
         setScenarios(scenariosData || []);
         
     } catch (error) {
@@ -154,7 +168,14 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   const updateProfile = async (data: Partial<Omit<Profile, 'id'>>) => {
-      if (!user || !supabase) return;
+      if (!user || !supabase) {
+          console.error("Cannot update profile: User not authenticated or Supabase not available");
+          throw new Error("Cannot update profile: User not authenticated.");
+      }
+      
+      console.log('Updating profile with data:', data);
+      console.log('User ID:', user.id);
+      
       const { data: updatedProfile, error } = await supabase
         .from('profiles')
         .update(data)
@@ -164,28 +185,31 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
       
       if (error) {
           console.error("Error updating profile:", error);
+          console.error("Error details:", error.details, error.hint, error.code);
           throw error;
       }
+      
+      console.log('Profile updated successfully:', updatedProfile);
       if(updatedProfile) setProfile(updatedProfile);
   };
 
   const addGoal = async (goal: Omit<Goal, 'id' | 'user_id' | 'current' | 'status'>) => {
     if (!user || !supabase) throw new Error("Cannot add goal: User not authenticated.");
     
-    console.log('Adding goal:', goal); // Debug log
+    console.log('Adding goal:', goal);
     
-    // Fixed: Using correct property name
+    // Goals table uses camelCase with quotes for monthlyTarget
     const goalToAdd = { 
         user_id: user.id,
         title: goal.title,
         target: goal.target,
         priority: goal.priority,
-        monthlyTarget: goal.monthlyTarget, // Fixed: was monthly_target
+        monthlyTarget: goal.monthlyTarget, // This maps to "monthlyTarget" in the database
         current: 0, 
         status: 'Active'
     };
 
-    console.log('Goal to add to database:', goalToAdd); // Debug log
+    console.log('Goal to add to database:', goalToAdd);
 
     const { data, error } = await supabase.from('goals').insert(goalToAdd).select();
 
@@ -195,7 +219,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
         throw error;
     }
     
-    console.log('Successfully added goal:', data); // Debug log
+    console.log('Successfully added goal:', data);
     await fetchData(user);
   };
   
@@ -248,19 +272,20 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
   const saveScenario = async (scenario: Omit<Scenario, 'id' | 'user_id'>) => {
     if (!user || !supabase) throw new Error("Cannot save scenario: User not authenticated.");
     
-    console.log('Saving scenario:', scenario); // Debug log
+    console.log('Saving scenario:', scenario);
      
+    // Scenarios table uses camelCase with quotes
     const scenarioToSave = {
         user_id: user.id,
         name: scenario.name,
-        monthlyIncome: scenario.monthlyIncome,
-        monthlyExpenses: scenario.monthlyExpenses,
-        savingsGoal: scenario.savingsGoal,
+        monthlyIncome: scenario.monthlyIncome,     // Maps to "monthlyIncome"
+        monthlyExpenses: scenario.monthlyExpenses, // Maps to "monthlyExpenses"
+        savingsGoal: scenario.savingsGoal,         // Maps to "savingsGoal"
         timeframe: scenario.timeframe,
-        goalType: scenario.goalType
+        goalType: scenario.goalType                // Maps to "goalType"
     };
 
-    console.log('Scenario to save to database:', scenarioToSave); // Debug log
+    console.log('Scenario to save to database:', scenarioToSave);
 
     const { data, error } = await supabase.from('scenarios').insert(scenarioToSave).select();
         
@@ -270,7 +295,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
         throw error;
     }
     
-    console.log('Successfully saved scenario:', data); // Debug log
+    console.log('Successfully saved scenario:', data);
     await fetchData(user);
   };
   

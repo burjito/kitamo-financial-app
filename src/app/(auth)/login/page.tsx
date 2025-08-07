@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState } from "react";
@@ -9,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
-import { Eye, EyeOff, Mail, Lock, ArrowLeft } from "lucide-react";
+import { Eye, EyeOff, Mail, Lock, ArrowLeft, AlertCircle, CheckCircle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import supabase from "@/lib/supabase-client";
 
@@ -18,32 +17,125 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [isResettingPassword, setIsResettingPassword] = useState(false);
   const router = useRouter();
   const { toast } = useToast();
   
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Basic validation
+    if (!email.trim() || !password.trim()) {
+      toast({
+        title: "Missing Information",
+        description: "Please enter both email and password.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     setIsLoading(true);
 
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email: email.trim(),
       password,
     });
 
     setIsLoading(false);
 
     if (error) {
+      // Enhanced error handling with specific messages
+      let errorTitle = "Login Failed";
+      let errorMessage = "Something went wrong. Please try again.";
+      
+      console.error("Login error:", error); // For debugging
+      
+      switch (error.message) {
+        case "Invalid login credentials":
+          errorTitle = "Invalid Credentials";
+          errorMessage = "The email or password you entered is incorrect. Please check and try again.";
+          break;
+        case "Email not confirmed":
+          errorTitle = "Email Not Verified";
+          errorMessage = "Please check your email and click the verification link before signing in.";
+          break;
+        case "Too many requests":
+          errorTitle = "Too Many Attempts";
+          errorMessage = "Too many login attempts. Please wait a few minutes and try again.";
+          break;
+        case "User not found":
+          errorTitle = "Account Not Found";
+          errorMessage = "No account found with this email address. Please check your email or sign up.";
+          break;
+        case "Account is disabled":
+          errorTitle = "Account Disabled";
+          errorMessage = "Your account has been disabled. Please contact support for assistance.";
+          break;
+        default:
+          if (error.message.includes("rate limit")) {
+            errorTitle = "Rate Limited";
+            errorMessage = "Too many requests. Please wait a moment and try again.";
+          } else if (error.message.includes("network")) {
+            errorTitle = "Connection Error";
+            errorMessage = "Please check your internet connection and try again.";
+          } else {
+            errorMessage = error.message;
+          }
+      }
+
       toast({
-        title: "Login Failed",
-        description: error.message,
+        title: errorTitle,
+        description: errorMessage,
         variant: "destructive",
       });
     } else {
+      console.log("Login success:", data); // For debugging
       toast({
         title: "Welcome back!",
         description: "You've successfully logged in to KitaMo.",
       });
       router.push("/home");
+    }
+  };
+
+  const handleForgotPassword = async () => {
+    if (!email.trim()) {
+      toast({
+        title: "Email Required",
+        description: "Please enter your email address first, then click 'Forgot password?'",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    setIsResettingPassword(true);
+
+    const { error } = await supabase.auth.resetPasswordForEmail(email.trim(), {
+      redirectTo: `${window.location.origin}/reset-password`,
+    });
+
+    setIsResettingPassword(false);
+
+    if (error) {
+      console.error("Password reset error:", error);
+      
+      let errorMessage = "Failed to send reset email. Please try again.";
+      if (error.message.includes("rate limit")) {
+        errorMessage = "Too many reset requests. Please wait a moment and try again.";
+      } else if (error.message.includes("not found")) {
+        errorMessage = "No account found with this email address.";
+      }
+
+      toast({
+        title: "Reset Failed",
+        description: errorMessage,
+        variant: "destructive"
+      });
+    } else {
+      toast({
+        title: "Reset Email Sent",
+        description: "Check your email for password reset instructions. Don't forget to check your spam folder.",
+      });
     }
   };
 
@@ -89,6 +181,7 @@ const Login = () => {
                   onChange={(e) => setEmail(e.target.value)}
                   className="pl-10"
                   required
+                  disabled={isLoading || isResettingPassword}
                 />
               </div>
             </div>
@@ -105,6 +198,7 @@ const Login = () => {
                   onChange={(e) => setPassword(e.target.value)}
                   className="pl-10 pr-10"
                   required
+                  disabled={isLoading || isResettingPassword}
                 />
                 <Button
                   type="button"
@@ -112,6 +206,7 @@ const Login = () => {
                   size="sm"
                   className="absolute right-0 top-0 h-full px-3 hover:bg-transparent"
                   onClick={() => setShowPassword(!showPassword)}
+                  disabled={isLoading || isResettingPassword}
                 >
                   {showPassword ? (
                     <EyeOff className="h-4 w-4 text-muted-foreground" />
@@ -123,14 +218,22 @@ const Login = () => {
             </div>
 
             <div className="flex items-center justify-between">
-              <div className="text-sm">
-                <Link href="/forgot-password" passHref className="text-primary hover:underline">
-                  Forgot password?
-                </Link>
-              </div>
+              <Button
+                type="button"
+                variant="link"
+                className="text-sm text-primary hover:underline p-0 h-auto"
+                onClick={handleForgotPassword}
+                disabled={isLoading || isResettingPassword}
+              >
+                {isResettingPassword ? "Sending..." : "Forgot password?"}
+              </Button>
             </div>
 
-            <Button type="submit" className="w-full" disabled={isLoading}>
+            <Button 
+              type="submit" 
+              className="w-full" 
+              disabled={isLoading || isResettingPassword}
+            >
               {isLoading ? "Signing in..." : "Sign in"}
             </Button>
           </form>

@@ -1,17 +1,18 @@
-
 "use client";
 
 import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Bot, Send, User, BrainCircuit, Sparkles } from "lucide-react";
+import { Bot, Send, User, BrainCircuit, Sparkles, MessageSquare, ChevronDown, ChevronUp, RotateCcw } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { kitaMoBot, KitaMoBotInput } from "@/ai/flows/kita-mo-bot-flow";
+import { kitaMoBot } from "@/ai/flows/kita-mo-bot-flow";
+import { predefinedQuestions } from "@/data/predefined-questions";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useAppContext } from "@/contexts/app-context";
 import { cn } from "@/lib/utils";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 
 interface Message {
   id: string;
@@ -26,19 +27,24 @@ const suggestionPrompts = [
     "Is it okay to pause one goal to focus on another?",
 ]
 
+const initialGreeting = { 
+  id: 'start', 
+  text: "Hey! I'm KitaMo Bot, your financial buddy. Ask me anything about your money goals, or try one of the suggestions below. Need inspiration? Click the 'Browse Questions' button!", 
+  sender: 'bot' as const
+};
+
 export default function KitaMoBotPage() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [showPredefinedQuestions, setShowPredefinedQuestions] = useState(false);
+  const [openCategories, setOpenCategories] = useState<Record<string, boolean>>({});
   const scrollViewportRef = useRef<HTMLDivElement>(null);
   const { profile, goals, monthlyIncome, monthlyExpenses } = useAppContext();
 
-
   useEffect(() => {
     // Greet the user on initial load
-    setMessages([
-        { id: 'start', text: "Hey! I'm KitaMo Bot, your financial buddy. Ask me anything about your money goals, or try one of the suggestions below.", sender: 'bot' }
-    ]);
+    setMessages([initialGreeting]);
   }, []);
 
   useEffect(() => {
@@ -58,6 +64,7 @@ export default function KitaMoBotPage() {
     setMessages(prev => [...prev, userMessage]);
     setInput("");
     setIsLoading(true);
+    setShowPredefinedQuestions(false); // Hide predefined questions after sending
 
     try {
         const userContext = JSON.stringify({
@@ -89,6 +96,20 @@ export default function KitaMoBotPage() {
     } finally {
         setIsLoading(false);
     }
+  };
+
+  const handleNewChat = () => {
+    setMessages([initialGreeting]);
+    setInput("");
+    setShowPredefinedQuestions(false);
+    setOpenCategories({});
+  };
+
+  const toggleCategory = (categoryKey: string) => {
+    setOpenCategories(prev => ({
+      ...prev,
+      [categoryKey]: !prev[categoryKey]
+    }));
   };
   
   const showSuggestions = messages.filter(m => m.sender === 'user').length === 0;
@@ -141,7 +162,57 @@ export default function KitaMoBotPage() {
           </ScrollArea>
           
           <div className="border-t pt-4">
-             {showSuggestions && (
+            {/* Predefined Questions Section */}
+            {showPredefinedQuestions && (
+              <div className="mb-4 animate-in fade-in-0 duration-300">
+                <Card className="bg-muted/50">
+                  <CardHeader className="pb-3">
+                    <CardTitle className="text-lg flex items-center gap-2">
+                      <MessageSquare className="h-5 w-5" />
+                      Browse Questions by Category
+                    </CardTitle>
+                    <CardDescription>
+                      Can't think of what to ask? Pick from these popular questions!
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-3">
+                    {Object.entries(predefinedQuestions).map(([categoryKey, category]) => (
+                      <Collapsible 
+                        key={categoryKey} 
+                        open={openCategories[categoryKey]} 
+                        onOpenChange={() => toggleCategory(categoryKey)}
+                      >
+                        <CollapsibleTrigger asChild>
+                          <Button variant="ghost" className="w-full justify-between text-left p-3 h-auto">
+                            <span className="font-medium">{category.title}</span>
+                            {openCategories[categoryKey] ? 
+                              <ChevronUp className="h-4 w-4" /> : 
+                              <ChevronDown className="h-4 w-4" />
+                            }
+                          </Button>
+                        </CollapsibleTrigger>
+                        <CollapsibleContent className="space-y-2 px-3 pb-2">
+                          {category.questions.map((question) => (
+                            <Button
+                              key={question}
+                              variant="outline"
+                              size="sm"
+                              className="w-full text-left justify-start h-auto py-2 px-3 text-wrap"
+                              onClick={() => handleSendMessage(null, question)}
+                            >
+                              {question}
+                            </Button>
+                          ))}
+                        </CollapsibleContent>
+                      </Collapsible>
+                    ))}
+                  </CardContent>
+                </Card>
+              </div>
+            )}
+
+            {/* Quick Suggestions for First-time Users */}
+            {showSuggestions && !showPredefinedQuestions && (
                 <div className="mb-4 animate-in fade-in-0 duration-500">
                     <p className="text-sm font-medium text-muted-foreground mb-2 flex items-center gap-2">
                         <Sparkles className="h-4 w-4" />
@@ -156,16 +227,47 @@ export default function KitaMoBotPage() {
                     </div>
                 </div>
             )}
+
+            {/* Browse Questions Button */}
+            <div className="flex items-center gap-2 mb-4">
+              <Button
+                variant="secondary"
+                size="sm"
+                onClick={() => setShowPredefinedQuestions(!showPredefinedQuestions)}
+                className="flex items-center gap-2"
+              >
+                <MessageSquare className="h-4 w-4" />
+                {showPredefinedQuestions ? "Hide Questions" : "Browse Questions"}
+              </Button>
+              {showPredefinedQuestions && (
+                <span className="text-xs text-muted-foreground">
+                  Click any question to ask it instantly!
+                </span>
+              )}
+            </div>
+
+            {/* Input Form */}
             <form onSubmit={handleSendMessage} className="flex items-center gap-2">
-                <Input
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                placeholder="e.g., 'Magkano dapat ipon ko monthly for a trip?'"
-                className="flex-grow"
-                disabled={isLoading}
-                />
+                <Button
+                  type="button"
+                  size="icon"
+                  variant="ghost"
+                  onClick={handleNewChat}
+                  disabled={isLoading}
+                  title="New Chat"
+                  className="hover:bg-transparent"
+                >
+                  <RotateCcw className="h-4 w-4" />
+                </Button>
+                  <Input
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                  placeholder="e.g., 'Magkano dapat ipon ko monthly for a trip?'"
+                  className="flex-grow"
+                  disabled={isLoading}
+                  />
                 <Button type="submit" size="icon" disabled={isLoading || !input.trim()}>
-                <Send className="h-4 w-4" />
+                  <Send className="h-4 w-4" />
                 </Button>
             </form>
           </div>

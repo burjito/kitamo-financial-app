@@ -1,4 +1,3 @@
-
 'use server';
 
 /**
@@ -18,7 +17,7 @@ const ProductRecommenderInputSchema = z.object({
   monthlyExpenses: z.number().describe('User\'s monthly expenses.'),
   savingsGoal: z.number().describe('The total amount of the user\'s savings goal.'),
   timeframe: z.number().describe('The user\'s desired timeframe in months to reach the goal.'),
-  goalType: z.string().describe('The category of the goal (e.g., "car", "house", "vacation", "investment", "emergency").'),
+  goalType: z.string().describe('The category of the goal (e.g., "car", "house", "vacation", "investment", "emergency", "big bike", "motorcycle").'),
 });
 export type ProductRecommenderInput = z.infer<typeof ProductRecommenderInputSchema>;
 
@@ -72,7 +71,7 @@ const BPI_PRODUCTS_DATA = {
             { "name": "BPI Rewards Card", "details": "Earn BPI Rewards Points for shopping credits, vouchers, miles, and more.", "url": "https://www.bpi.com.ph/personal/cards/credit-cards/bpi-blue-mastercard" },
             { "name": "BPI Amore Platinum Cashback Card", "details": "Earn cashback anywhere you shop and enjoy exclusive perks at Ayala Malls.", "url": "https://www.bpi.com.ph/personal/cards/credit-cards/amore-visa-platinum" },
             { "name": "BPI Amore Cashback Card", "details": "Earn cashback on your essentials and other local expenses.", "url": "https://www.bpi.com.ph/personal/cards/credit-cards/amore-visa-classic" },
-            { "name": "Petron BPI Card", "details": "Get as much as one free full tank with your partner card on the road.", "url": "https://www.bpi.com.ph/personal/cards/credit-cards/petron-bpi-mastercard" },
+            { "name": "Petron BPI Card", "details": "Get as much as one free full tank with your partner card on the road.", "eligibleGoals": ["car", "motorcycle", "big bike", "bike"], "url": "https://www.bpi.com.ph/personal/cards/credit-cards/petron-bpi-mastercard" },
             { "name": "BPI Edge Card", "details": "Experience a cutting-edge lifestyle with our exclusive rewards and perks.", "url": "https://www.bpi.com.ph/personal/cards/credit-cards/bpi-edge-mastercard" },
             { "name": "BPI DOS Card", "details": "All your purchases are automatically converted to a 2-month installment.", "url": "https://www.bpi.com.ph/personal/cards/credit-cards/bpi-dos-card" },
             { "name": "Robinsons Cashback Card", "details": "Enjoy up to 3% rebate at Robinsons Stores and up to 1% rebate on all other merchants.", "url": "https://www.bpi.com.ph/personal/cards/credit-cards/robinsons-cashback-card" }
@@ -83,42 +82,41 @@ const BPI_PRODUCTS_DATA = {
     },
     "LOANS": {
         "AUTO_LOAN": [
-            { "name": "Auto Loan", "details": "Finance a brand new or second-hand car.", "eligibleGoals": ["car"], "url": "https://www.bpi.com.ph/personal/loans/auto-loan" },
-            { "name": "MyKotse", "details": "An auto loan offer with up to 84 months loan term.", "eligibleGoals": ["car"], "url": "https://www.bpi.com.ph/personal/loans/auto-loan/passenger-car/mykotse" },
-            { "name": "Big Bike Loan", "details": "Finance your dream big bike.", "eligibleGoals": ["motorcycle", "bike"], "url": "https://www.bpi.com.ph/personal/loans/auto-loan/big-bike" }
+            { "name": "Auto Loan", "details": "Finance a brand new or second-hand car.", "eligibleGoals": ["car", "vehicle", "automobile"], "url": "https://www.bpi.com.ph/personal/loans/auto-loan" },
+            { "name": "MyKotse", "details": "An auto loan offer with up to 84 months loan term.", "eligibleGoals": ["car", "vehicle", "automobile"], "url": "https://www.bpi.com.ph/personal/loans/auto-loan/passenger-car/mykotse" },
+            { "name": "Big Bike Loan", "details": "Finance your dream big bike.", "eligibleGoals": ["motorcycle", "bike", "big bike", "motorbike", "motor"], "url": "https://www.bpi.com.ph/personal/loans/auto-loan/big-bike" }
         ],
         "HOUSING_LOAN": [
-            { "name": "Housing Loan", "details": "Make your dream home a reality.", "eligibleGoals": ["house"], "url": "https://www.bpi.com.ph/personal/loans/housing-loan/buy" },
-            { "name": "MyBahay", "details": "Affordable home financing with low downpayment and longer payment terms.", "eligibleGoals": ["house"], "url": "https://www.bpi.com.ph/personal/loans/housing-loan/buy/mybahay" }
+            { "name": "Housing Loan", "details": "Make your dream home a reality.", "eligibleGoals": ["house", "home", "property", "real estate"], "url": "https://www.bpi.com.ph/personal/loans/housing-loan/buy" },
+            { "name": "MyBahay", "details": "Affordable home financing with low downpayment and longer payment terms.", "eligibleGoals": ["house", "home", "property", "real estate"], "url": "https://www.bpi.com.ph/personal/loans/housing-loan/buy/mybahay" }
         ],
         "PERSONAL_LOAN": [
-            { "name": "Personal Loan", "details": "Get extra cash for your different needs like home renovation, education, business, or travel.", "eligibleGoals": ["emergency", "vacation", "business", "education", "renovation"], "url": "https://www.bpi.com.ph/personal/loans/personal-loan/regular" }
+            { "name": "Personal Loan", "details": "Get extra cash for your different needs like home renovation, education, business, or travel.", "eligibleGoals": ["emergency", "vacation", "business", "education", "renovation", "travel", "personal", "general"], "url": "https://www.bpi.com.ph/personal/loans/personal-loan/regular" }
         ]
     },
     "INVESTMENTS": {
         "UITF": [
-            { "name": "BPI Short Term Fund", "details": "A must-have fund for emergencies or immediate cash needs.", "url": "https://www.bpi.com.ph/wealth/assetandwealth/investment-solutions/funds/short-term-invest-fund" },
-            { "name": "BPI Philippine Equity Index Fund", "details": "Ride the Philippine economic growth through investments in top local companies.", "url": "https://www.bpi.com.ph/wealth/assetandwealth/investment-solutions/funds/philippine-equity-index-fund" },
-            { "name": "BPI US Equity Index Feeder Fund", "details": "Global diversification through the largest companies in the US.", "url": "https://www.bpi.com.ph/wealth/assetandwealth/investment-solutions/funds/us-equity-index-feeder-fund" }
+            { "name": "BPI Short Term Fund", "details": "A must-have fund for emergencies or immediate cash needs.", "eligibleGoals": ["emergency", "short-term", "liquidity"], "url": "https://www.bpi.com.ph/wealth/assetandwealth/investment-solutions/funds/short-term-invest-fund" },
+            { "name": "BPI Philippine Equity Index Fund", "details": "Ride the Philippine economic growth through investments in top local companies.", "eligibleGoals": ["investment", "long-term", "growth", "retirement"], "url": "https://www.bpi.com.ph/wealth/assetandwealth/investment-solutions/funds/philippine-equity-index-fund" },
+            { "name": "BPI US Equity Index Feeder Fund", "details": "Global diversification through the largest companies in the US.", "eligibleGoals": ["investment", "long-term", "growth", "retirement", "international"], "url": "https://www.bpi.com.ph/wealth/assetandwealth/investment-solutions/funds/us-equity-index-feeder-fund" }
         ],
         "MUTUAL_FUNDS": [
-             { "name": "ALFM Peso Bond Fund", "details": "Ideal for investors who are looking for a well-diversified fixed-income investment fund.", "url": "https://www.alfmmutualfunds.com/funds/alfm-peso-bond-fund" },
-             { "name": "Philippine Stock Index Fund", "details": "Suitable for investors who seek long-term capital growth, or those who want to track the performance of the PSEi.", "url": "https://www.alfmmutualfunds.com/funds/philippine-stock-index-fund" }
+             { "name": "ALFM Peso Bond Fund", "details": "Ideal for investors who are looking for a well-diversified fixed-income investment fund.", "eligibleGoals": ["investment", "conservative", "stable income"], "url": "https://www.alfmmutualfunds.com/funds/alfm-peso-bond-fund" },
+             { "name": "Philippine Stock Index Fund", "details": "Suitable for investors who seek long-term capital growth, or those who want to track the performance of the PSEi.", "eligibleGoals": ["investment", "long-term", "growth"], "url": "https://www.alfmmutualfunds.com/funds/philippine-stock-index-fund" }
         ],
          "PERA": [
-            { "name": "BPI PERA Equity Fund", "details": "Strengthen your retirement plan with this tax-advantaged investment.", "url": "https://www.bpi.com.ph/wealth/assetandwealth/investment-solutions/pera/equity-fund" }
+            { "name": "BPI PERA Equity Fund", "details": "Strengthen your retirement plan with this tax-advantaged investment.", "eligibleGoals": ["retirement", "long-term", "tax-advantaged"], "url": "https://www.bpi.com.ph/wealth/assetandwealth/investment-solutions/pera/equity-fund" }
         ]
     }
 };
-
 
 const prompt = ai.definePrompt({
   name: 'productRecommenderPrompt',
   input: { schema: ProductRecommenderInputSchema },
   output: { schema: ProductRecommenderOutputSchema },
-  prompt: `You are a sophisticated BPI financial advisor AI. Your primary goal is to provide intelligent, personalized, and actionable product recommendations to users based on their financial simulation.
+  prompt: `You are a sophisticated BPI financial advisor AI specializing in precise product matching. Your primary goal is to recommend the MOST RELEVANT BPI products that directly address the user's specific goal and financial situation.
 
-Analyze the user's situation holistically. Go beyond simple goal matching. Consider their income, expenses, savings capacity, and the nature of their goal to recommend the most appropriate financial products from the comprehensive BPI product list provided.
+CRITICAL INSTRUCTION: You MUST prioritize products that directly match the user's goal type. If the user's goal is "big bike", "motorcycle", "bike", or "motorbike", you MUST recommend the "Big Bike Loan" as the primary recommendation.
 
 User's Financial Scenario:
 - Monthly Income: ₱{{{monthlyIncome}}}
@@ -126,26 +124,49 @@ User's Financial Scenario:
 - Savings Goal: ₱{{{savingsGoal}}} in {{{timeframe}}} months.
 - Goal Type: "{{{goalType}}}"
 
-Your Thought Process:
-1.  Calculate the user's monthly savings (income - expenses). This is their capacity to save or invest.
-2.  Calculate the total projected savings over the timeframe (monthly savings * timeframe).
-3.  Determine the financial position: Is there a surplus (projected savings > goal) or a shortfall (projected savings < goal)?
-4.  Analyze the Goal Type and Timeframe: Is it a short-term goal (e.g., emergency fund, vacation) or a long-term one (e.g., house, retirement)? This dictates the risk appetite.
-5.  Recommend Products Based on Analysis:
-    - **If there's a significant shortfall for a large, necessary purchase (e.g., house, car):** A relevant LOAN is a primary recommendation. Match the loan type to the goal.
-    - **If there's a small shortfall or the user needs to build savings:** Recommend a suitable SAVINGS account. For users starting out, suggest accounts with low initial deposits. For those with more funds, suggest higher-yield accounts like Maxi-Saver or a Time Deposit.
-    - **If there's a surplus or the goal is long-term growth (e.g., "investment", "retirement"):** Recommend an INVESTMENT product. Suggest Money Market funds (like BPI Short Term Fund) for low-risk/emergency funds, and Equity funds (like BPI Philippine Equity Index Fund or a PERA fund for retirement) for higher growth potential.
-    - **For general spending or specific perks (e.g., travel, cashback):** A CREDIT CARD could be a supplementary recommendation. Match the card's benefits to the user's goal type or lifestyle (e.g., Amore Cashback for savings on essentials, Platinum Rewards for travel).
+STEP-BY-STEP ANALYSIS PROCESS:
 
-Your Response:
-- Provide 1 to 3 diverse and relevant recommendations.
-- For each recommendation, provide a compelling, personalized reason. Explain *why* it fits their specific situation (e.g., "Since you have a ₱15,000 monthly surplus, you can channel this into the BPI Philippine Equity Index Fund to grow your money faster for your long-term goal.").
-- The clarification should be a simple, one-sentence explanation of the product type.
-- Do not recommend products if they don't make sense for the user's financial situation. For example, don't recommend a high-end investment product to someone with no savings.
+1. **GOAL MATCHING FIRST** - Look for products with eligibleGoals that match the user's goalType exactly:
+   - For "big bike", "motorcycle", "bike", "motorbike", "motor" → MUST recommend "Big Bike Loan"
+   - For "car", "vehicle", "automobile" → recommend "Auto Loan" or "MyKotse"
+   - For "house", "home", "property" → recommend "Housing Loan" or "MyBahay"
+   - For other goals, find matching products in the eligibleGoals arrays
 
-Available BPI Products (for your reference only, do not show this structure to the user):
+2. **FINANCIAL ANALYSIS** - Calculate financial capacity:
+   - Monthly Savings = Monthly Income - Monthly Expenses
+   - Total Projected Savings = Monthly Savings × Timeframe
+   - Gap Analysis = Savings Goal - Total Projected Savings
+
+3. **PRODUCT RECOMMENDATION LOGIC**:
+   - **If there's a SIGNIFICANT SHORTFALL (Gap > 50% of goal) AND the goal has a matching loan product**: Recommend the specific loan as PRIMARY recommendation
+   - **If moderate shortfall or building savings**: Recommend appropriate savings products
+   - **If surplus or investment goal**: Recommend investment products
+   - **For lifestyle goals**: Consider credit cards with relevant benefits
+
+4. **PRIORITIZATION RULES**:
+   - ALWAYS prioritize exact goal matches from eligibleGoals
+   - For vehicle-related goals, Big Bike Loan takes priority over general auto loans when goal contains "bike", "motorcycle", etc.
+   - For fuel/vehicle expenses, consider Petron BPI Card as secondary recommendation
+
+GOAL TYPE MATCHING TABLE (MANDATORY TO FOLLOW):
+- "big bike", "motorcycle", "bike", "motorbike", "motor" → "Big Bike Loan" (PRIMARY)
+- "car", "vehicle", "automobile" → "Auto Loan" or "MyKotse"
+- "house", "home", "property", "real estate" → "Housing Loan" or "MyBahay"
+- "emergency" → "BPI Short Term Fund" or emergency-friendly savings
+- "investment", "retirement" → Equity funds or PERA
+- "vacation", "travel" → "Personal Loan" if shortfall exists
+
+Your Response Requirements:
+- Provide 1-3 recommendations with the MOST RELEVANT product first
+- For each recommendation, explain WHY it specifically matches their goal and financial situation
+- Include one sentence clarification of what the product type is
+- If recommending a loan, explain how it bridges their financial gap
+- Never recommend products that don't align with the user's specific goal
+
+Available BPI Products Database:
 ${JSON.stringify(BPI_PRODUCTS_DATA, null, 2)}
-`,
+
+REMEMBER: Goal matching is PARAMOUNT. If someone wants a big bike, the Big Bike Loan must be recommended if there's any financial shortfall.`,
 });
 
 const productRecommenderFlow = ai.defineFlow(

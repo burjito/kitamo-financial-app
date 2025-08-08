@@ -360,40 +360,42 @@ export default function KitaMoBotPage() {
                       Can't think of what to ask? Pick from these popular questions!
                     </CardDescription>
                   </CardHeader>
-                  <ScrollArea className="max-h-80">
-                    <CardContent className="space-y-3">
-                      {Object.entries(predefinedQuestions).map(([categoryKey, category]) => (
-                        <Collapsible 
-                          key={categoryKey} 
-                          open={openCategories[categoryKey]} 
-                          onOpenChange={() => toggleCategory(categoryKey)}
-                        >
-                          <CollapsibleTrigger asChild>
-                            <Button variant="ghost" className="w-full justify-between text-left p-3 h-auto">
-                              <span className="font-medium">{category.title}</span>
-                              {openCategories[categoryKey] ? 
-                                <ChevronUp className="h-4 w-4" /> : 
-                                <ChevronDown className="h-4 w-4" />
-                              }
-                            </Button>
-                          </CollapsibleTrigger>
-                          <CollapsibleContent className="space-y-2 px-3 pb-2">
-                            {category.questions.map((question) => (
-                              <Button
-                                key={question}
-                                variant="outline"
-                                size="sm"
-                                className="w-full text-left justify-start h-auto py-2 px-3 text-wrap"
-                                onClick={() => handleSendMessage(null, question)}
-                              >
-                                {question}
+                  <CardContent className="p-0">
+                    <ScrollArea className="h-80 px-6">
+                      <div className="space-y-3 py-4">
+                        {Object.entries(predefinedQuestions).map(([categoryKey, category]) => (
+                          <Collapsible 
+                            key={categoryKey} 
+                            open={openCategories[categoryKey]} 
+                            onOpenChange={() => toggleCategory(categoryKey)}
+                          >
+                            <CollapsibleTrigger asChild>
+                              <Button variant="ghost" className="w-full justify-between text-left p-3 h-auto">
+                                <span className="font-medium">{category.title}</span>
+                                {openCategories[categoryKey] ? 
+                                  <ChevronUp className="h-4 w-4" /> : 
+                                  <ChevronDown className="h-4 w-4" />
+                                }
                               </Button>
-                            ))}
-                          </CollapsibleContent>
-                        </Collapsible>
-                      ))}
-                    </CardContent>
-                  </ScrollArea>
+                            </CollapsibleTrigger>
+                            <CollapsibleContent className="space-y-2 px-3 pb-2">
+                              {category.questions.map((question) => (
+                                <Button
+                                  key={question}
+                                  variant="outline"
+                                  size="sm"
+                                  className="w-full text-left justify-start h-auto py-2 px-3 text-wrap whitespace-normal"
+                                  onClick={() => handleSendMessage(null, question)}
+                                >
+                                  {question}
+                                </Button>
+                              ))}
+                            </CollapsibleContent>
+                          </Collapsible>
+                        ))}
+                      </div>
+                    </ScrollArea>
+                  </CardContent>
                 </Card>
               </div>
             )}

@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, useEffect } from "react";
@@ -34,25 +33,25 @@ export default function HomePage() {
   const welcomeName = profile?.first_name || "there";
   
   const renderLockedDashboard = () => (
-    <div className="space-y-8">
+    <div className="space-y-6 md:space-y-8">
        <Card className="bg-gradient-to-br from-primary/90 to-primary text-primary-foreground text-center shadow-xl">
-          <CardHeader>
+          <CardHeader className="pb-4 md:pb-6">
             <div className="flex justify-center items-center pb-2">
-              <div className="bg-primary-foreground/20 p-3 rounded-full">
-                <ShieldQuestion className="h-8 w-8 text-primary-foreground" />
+              <div className="bg-primary-foreground/20 p-2 md:p-3 rounded-full">
+                <ShieldQuestion className="h-6 w-6 md:h-8 md:w-8 text-primary-foreground" />
               </div>
             </div>
-            <CardTitle className="text-3xl">One Last Step, {welcomeName}!</CardTitle>
-            <CardDescription className="text-primary-foreground/80 text-lg">
+            <CardTitle className="text-xl md:text-3xl">One Last Step, {welcomeName}!</CardTitle>
+            <CardDescription className="text-primary-foreground/80 text-sm md:text-lg">
                 Complete your risk assessment to unlock your personalized dashboard.
             </CardDescription>
           </CardHeader>
-          <CardContent className="space-y-6">
-            <p className="text-lg">This helps us tailor financial insights just for you.</p>
+          <CardContent className="space-y-4 md:space-y-6">
+            <p className="text-sm md:text-lg">This helps us tailor financial insights just for you.</p>
 
-            <Button asChild size="lg" variant="secondary" className="bg-primary-foreground text-primary hover:bg-primary-foreground/90 animate-pulse">
+            <Button asChild size="default" className="bg-primary-foreground text-primary hover:bg-primary-foreground/90 animate-pulse w-full md:w-auto md:size-lg">
                 <Link href="/risk-profile-assessment">
-                    <Rocket className="mr-2 h-5 w-5" />
+                    <Rocket className="mr-2 h-4 w-4 md:h-5 md:w-5" />
                     Take Your Risk Assessment
                 </Link>
             </Button>
@@ -66,27 +65,27 @@ export default function HomePage() {
     const monthlySavings = (monthlyIncome || 0) - (monthlyExpenses || 0);
 
     return (
-        <div className="space-y-8">
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        <div className="space-y-6 md:space-y-8">
+        <div className="grid gap-3 md:gap-4 md:grid-cols-2 lg:grid-cols-4">
             <Card>
             <CardHeader className="flex flex-row items-center justify-between pb-2">
-                <CardTitle className="text-sm font-medium">Total Saved</CardTitle>
-                <PiggyBank className="h-4 w-4 text-muted-foreground" />
+                <CardTitle className="text-xs md:text-sm font-medium">Total Saved</CardTitle>
+                <PiggyBank className="h-3 w-3 md:h-4 md:w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-                <div className="text-2xl font-bold">₱{totalCurrent.toLocaleString('en-US', { minimumFractionDigits: 2 })}</div>
+                <div className="text-lg md:text-2xl font-bold">₱{totalCurrent.toLocaleString('en-US', { minimumFractionDigits: 2 })}</div>
                 <p className="text-xs text-muted-foreground">Across all your goals</p>
             </CardContent>
             </Card>
             <Card>
             <CardHeader className="flex flex-row items-center justify-between pb-2">
-                <CardTitle className="text-sm font-medium">
+                <CardTitle className="text-xs md:text-sm font-medium">
                 Monthly Surplus
                 </CardTitle>
-                <Target className="h-4 w-4 text-muted-foreground" />
+                <Target className="h-3 w-3 md:h-4 md:w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-                <div className="text-2xl font-bold">+₱{monthlySavings.toLocaleString('en-US', { minimumFractionDigits: 2 })}</div>
+                <div className="text-lg md:text-2xl font-bold">+₱{monthlySavings.toLocaleString('en-US', { minimumFractionDigits: 2 })}</div>
                 <p className="text-xs text-muted-foreground">
                 Available to fund your goals
                 </p>
@@ -94,56 +93,58 @@ export default function HomePage() {
             </Card>
              <Card>
                 <CardHeader className="flex flex-row items-center justify-between pb-2">
-                    <CardTitle className="text-sm font-medium">Risk Profile</CardTitle>
-                    <Shield className="h-4 w-4 text-muted-foreground" />
+                    <CardTitle className="text-xs md:text-sm font-medium">Risk Profile</CardTitle>
+                    <Shield className="h-3 w-3 md:h-4 md:w-4 text-muted-foreground" />
                 </CardHeader>
                 <CardContent>
-                    <Badge variant={profile?.risk_profile === "Aggressive" ? "destructive" : "secondary"}>{profile?.risk_profile || 'N/A'}</Badge>
+                    <Badge variant={profile?.risk_profile === "Aggressive" ? "destructive" : "secondary"} className="text-xs">
+                        {profile?.risk_profile || 'N/A'}
+                    </Badge>
                     <p className="text-xs text-muted-foreground mt-2">Based on your assessment</p>
                 </CardContent>
             </Card>
-            <Card className="bg-primary text-primary-foreground">
+            <Card className="bg-primary text-primary-foreground md:col-span-1 lg:col-span-1">
             <CardHeader className="flex flex-row items-center justify-between pb-2">
-                <CardTitle className="text-sm font-medium">
+                <CardTitle className="text-xs md:text-sm font-medium">
                 Explore Possibilities
                 </CardTitle>
-                <Lightbulb className="h-4 w-4 text-primary-foreground/80" />
+                <Lightbulb className="h-3 w-3 md:h-4 md:w-4 text-primary-foreground/80" />
             </CardHeader>
             <CardContent>
-                <p className="text-sm text-primary-foreground/90 mb-4">
+                <p className="text-xs md:text-sm text-primary-foreground/90 mb-3 md:mb-4">
                 What if you saved for a new car? Or a trip abroad?
                 </p>
-                <Button asChild variant="secondary" className="bg-primary-foreground text-primary hover:bg-primary-foreground/90">
+                <Button asChild variant="secondary" size="sm" className="bg-primary-foreground text-primary hover:bg-primary-foreground/90 w-full md:w-auto">
                     <Link href="/what-if-simulator">
                         Run a Simulation
-                        <ArrowUpRight className="h-4 w-4 ml-2" />
+                        <ArrowUpRight className="h-3 w-3 md:h-4 md:w-4 ml-2" />
                     </Link>
                 </Button>
             </CardContent>
             </Card>
         </div>
 
-        <div className="grid gap-8 md:grid-cols-2">
+        <div className="grid gap-6 md:gap-8 md:grid-cols-2">
             <Card>
             <CardHeader>
-                <CardTitle>Active Goals</CardTitle>
-                <CardDescription>
+                <CardTitle className="text-lg md:text-xl">Active Goals</CardTitle>
+                <CardDescription className="text-sm">
                 Your next milestones are just around the corner.
                 </CardDescription>
             </CardHeader>
-            <CardContent className="space-y-6">
+            <CardContent className="space-y-4 md:space-y-6">
                 {goals.slice(0, 2).map(goal => (
                      <div className="space-y-2" key={goal.id}>
                         <div className="flex justify-between items-center">
-                            <p className="font-medium">{goal.title}</p>
-                            <p className="text-sm text-muted-foreground">₱{goal.current.toLocaleString()} / ₱{goal.target.toLocaleString()}</p>
+                            <p className="font-medium text-sm md:text-base">{goal.title}</p>
+                            <p className="text-xs md:text-sm text-muted-foreground">₱{goal.current.toLocaleString()} / ₱{goal.target.toLocaleString()}</p>
                         </div>
                         <Progress value={(goal.current / goal.target) * 100} className="h-2" />
                     </div>
                 ))}
                  {goals.length === 0 && (
-                  <div className="text-center py-10 border-2 border-dashed rounded-lg">
-                    <h3 className="text-lg font-semibold text-muted-foreground">No Goals Yet!</h3>
+                  <div className="text-center py-8 md:py-10 border-2 border-dashed rounded-lg">
+                    <h3 className="text-base md:text-lg font-semibold text-muted-foreground">No Goals Yet!</h3>
                     <p className="text-sm text-muted-foreground mt-1">Start by adding a financial goal.</p>
                     <Button asChild variant="link" className="mt-2">
                       <Link href="/goal-tracker">Go to Goal Tracker</Link>
@@ -161,24 +162,24 @@ export default function HomePage() {
             </Card>
             <Card>
             <CardHeader>
-                <CardTitle>Personalized Insights</CardTitle>
-                <CardDescription>
+                <CardTitle className="text-lg md:text-xl">Personalized Insights</CardTitle>
+                <CardDescription className="text-sm">
                 AI-powered suggestions based on your {profile?.risk_profile} profile.
                 </CardDescription>
             </CardHeader>
-            <CardContent className="space-y-4">
-                <div className="flex items-start gap-4 p-3 rounded-lg bg-secondary/10">
-                    <BrainCircuit className="h-5 w-5 mt-1 text-primary flex-shrink-0" />
+            <CardContent className="space-y-3 md:space-y-4">
+                <div className="flex items-start gap-3 p-3 rounded-lg bg-secondary/10">
+                    <BrainCircuit className="h-4 w-4 md:h-5 md:w-5 mt-0.5 md:mt-1 text-primary flex-shrink-0" />
                     <div>
-                        <p className="font-medium">Optimize Your Savings</p>
-                        <p className="text-sm text-muted-foreground">Consider moving ₱5,000 to a high-yield savings account to reach your Japan trip goal 2 months faster.</p>
+                        <p className="font-medium text-sm md:text-base">Optimize Your Savings</p>
+                        <p className="text-xs md:text-sm text-muted-foreground">Consider moving ₱5,000 to a high-yield savings account to reach your Japan trip goal 2 months faster.</p>
                     </div>
                 </div>
-                <div className="flex items-start gap-4 p-3 rounded-lg bg-secondary/10">
-                    <BrainCircuit className="h-5 w-5 mt-1 text-primary flex-shrink-0" />
+                <div className="flex items-start gap-3 p-3 rounded-lg bg-secondary/10">
+                    <BrainCircuit className="h-4 w-4 md:h-5 md:w-5 mt-0.5 md:mt-1 text-primary flex-shrink-0" />
                     <div>
-                        <p className="font-medium">Subscription Review</p>
-                        <p className="text-sm text-muted-foreground">We noticed 3 subscriptions you rarely use, totaling ₱899/month. Reviewing them could boost your savings.</p>
+                        <p className="font-medium text-sm md:text-base">Subscription Review</p>
+                        <p className="text-xs md:text-sm text-muted-foreground">We noticed 3 subscriptions you rarely use, totaling ₱899/month. Reviewing them could boost your savings.</p>
                     </div>
                 </div>
             </CardContent>
@@ -196,12 +197,12 @@ export default function HomePage() {
       isOpen={isSetupModalOpen}
       onClose={() => setIsSetupModalOpen(false)}
     />
-    <div className="space-y-8 animate-in fade-in-0 duration-500">
-      <div className="space-y-2">
-        <h1 className="text-3xl font-bold tracking-tight text-foreground">
+    <div className="space-y-6 md:space-y-8 animate-in fade-in-0 duration-500">
+      <div className="space-y-1 md:space-y-2">
+        <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-foreground">
           Welcome back, {welcomeName}!
         </h1>
-        <p className="text-muted-foreground">
+        <p className="text-sm md:text-base text-muted-foreground">
           {shouldShowLockedDashboard
             ? "Let's complete your profile to unlock your financial dashboard."
             : "Here's your financial snapshot. Let's make today count."}

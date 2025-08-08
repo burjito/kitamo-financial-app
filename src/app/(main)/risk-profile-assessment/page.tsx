@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState } from "react";
@@ -168,45 +167,65 @@ export default function RiskProfileAssessmentPage() {
     };
 
     return (
-        <div className="animate-in fade-in-0 duration-500 max-w-4xl mx-auto space-y-8 py-8">
+        <div className="animate-in fade-in-0 duration-500 max-w-4xl mx-auto space-y-8 py-8 px-4">
              <Card>
-                <CardHeader>
-                   <div className="flex justify-between items-center w-full">
-                        <Button asChild variant="ghost" className="-ml-4">
-                            <Link href="/home"><ArrowLeft className="mr-2 h-4 w-4" /> Back to Home</Link>
-                        </Button>
-                        <div className="flex-grow text-center">
-                             <div className="flex justify-center items-center pb-2">
+                <CardHeader className="pb-4">
+                    {/* Mobile-First Header Layout */}
+                    <div className="space-y-4">
+                        {/* Back Button - Top on Mobile */}
+                        <div className="flex justify-start">
+                            <Button asChild variant="ghost" size="sm" className="-ml-2">
+                                <Link href="/home">
+                                    <ArrowLeft className="mr-2 h-4 w-4" /> 
+                                    <span className="hidden sm:inline">Back to Home</span>
+                                    <span className="sm:hidden">Back</span>
+                                </Link>
+                            </Button>
+                        </div>
+                        
+                        {/* Title Section - Centered */}
+                        <div className="text-center space-y-3">
+                            <div className="flex justify-center items-center">
                                 <div className="bg-primary/10 p-3 rounded-full">
-                                    <ShieldQuestion className="h-8 w-8 text-primary" />
+                                    <ShieldQuestion className="h-6 w-6 sm:h-8 sm:w-8 text-primary" />
                                 </div>
                             </div>
-                            <CardTitle className="text-3xl">Risk Profile Assessment</CardTitle>
-                            <CardDescription>
-                                Answer these questions to help us understand your investment style.
-                            </CardDescription>
+                            <div className="space-y-2">
+                                <CardTitle className="text-xl sm:text-2xl lg:text-3xl leading-tight">
+                                    Risk Profile Assessment
+                                </CardTitle>
+                                <CardDescription className="text-sm sm:text-base px-2">
+                                    Answer these questions to help us understand your investment style.
+                                </CardDescription>
+                            </div>
                         </div>
-                        <div className="w-32"></div>
-                   </div>
+                    </div>
                 </CardHeader>
              </Card>
             
             {assessmentQuestions.map((section, sectionIndex) => (
                 <Card key={section.section}>
                     <CardHeader>
-                        <CardTitle>{section.section}</CardTitle>
+                        <CardTitle className="text-lg sm:text-xl">{section.section}</CardTitle>
                     </CardHeader>
-                    <CardContent className="space-y-8">
+                    <CardContent className="space-y-6 sm:space-y-8">
                          {section.questions.map((q, qIndex) => (
                             <div key={q.id}>
-                                {qIndex > 0 && <Separator className="mb-8" />}
-                                <p className="font-semibold mb-4">{q.text}</p>
+                                {qIndex > 0 && <Separator className="mb-6 sm:mb-8" />}
+                                <p className="font-semibold mb-4 text-sm sm:text-base">{q.text}</p>
                                 <RadioGroup onValueChange={(value) => handleValueChange(q.id, value)}>
                                     <div className="space-y-3">
                                         {q.options.map(opt => (
-                                            <div key={opt.value} className="flex items-center space-x-3 p-3 rounded-lg border has-[:checked]:bg-primary/10 has-[:checked]:border-primary transition-all">
-                                                <RadioGroupItem value={opt.value.toString()} id={`${q.id}-${opt.value}`} />
-                                                <Label htmlFor={`${q.id}-${opt.value}`} className="font-normal flex-1 cursor-pointer">
+                                            <div key={opt.value} className="flex items-start space-x-3 p-3 rounded-lg border has-[:checked]:bg-primary/10 has-[:checked]:border-primary transition-all">
+                                                <RadioGroupItem 
+                                                    value={opt.value.toString()} 
+                                                    id={`${q.id}-${opt.value}`}
+                                                    className="mt-0.5 flex-shrink-0"
+                                                />
+                                                <Label 
+                                                    htmlFor={`${q.id}-${opt.value}`} 
+                                                    className="font-normal flex-1 cursor-pointer text-sm sm:text-base leading-relaxed"
+                                                >
                                                     {opt.label}
                                                 </Label>
                                             </div>
@@ -220,16 +239,21 @@ export default function RiskProfileAssessmentPage() {
             ))}
 
             <Card>
-                <CardContent className="p-6">
-                    <div className="flex justify-between items-center">
-                        <p className="text-muted-foreground">
+                <CardContent className="p-4 sm:p-6">
+                    <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
+                        <p className="text-muted-foreground text-sm">
                             {questionsAnswered} of {allQuestions.length} questions answered
                         </p>
-                        <Button onClick={handleSubmit} disabled={!isComplete} size="lg">
-                            {isComplete ? "View My Personalized Dashboard" : "Complete Assessment"}
+                        <Button onClick={handleSubmit} disabled={!isComplete} size="lg" className="w-full sm:w-auto">
+                            <span className="hidden sm:inline">
+                                {isComplete ? "View My Personalized Dashboard" : "Complete Assessment"}
+                            </span>
+                            <span className="sm:hidden">
+                                {isComplete ? "View Dashboard" : "Complete Assessment"}
+                            </span>
                         </Button>
                     </div>
-                     <p className="text-xs text-muted-foreground mt-4">
+                     <p className="text-xs text-muted-foreground mt-4 leading-relaxed">
                         Your Client Suitability Assessment (CSA) must be reviewed every three years or earlier should there be any changes in your personal or financial circumstances.
                     </p>
                 </CardContent>

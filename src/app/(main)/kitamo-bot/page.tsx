@@ -4,7 +4,7 @@ import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Bot, Send, User, BrainCircuit, Sparkles, MessageSquare, ChevronDown, ChevronUp, RotateCcw } from "lucide-react";
+import { Bot, Send, User, BrainCircuit, Sparkles, MessageSquare, ChevronDown, ChevronUp, RotateCcw, History, Trash2, Clock } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { kitaMoBot } from "@/ai/flows/kita-mo-bot-flow";
@@ -13,11 +13,20 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useAppContext } from "@/contexts/app-context";
 import { cn } from "@/lib/utils";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 
 interface Message {
   id: string;
   text: string;
   sender: "user" | "bot";
+}
+
+interface ChatSession {
+  id: string;
+  title: string;
+  messages: Message[];
+  createdAt: Date;
+  lastMessageAt: Date;
 }
 
 const suggestionPrompts = [
@@ -38,14 +47,39 @@ export default function KitaMoBotPage() {
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [showPredefinedQuestions, setShowPredefinedQuestions] = useState(false);
+  const [showHistory, setShowHistory] = useState(false);
   const [openCategories, setOpenCategories] = useState<Record<string, boolean>>({});
+  const [chatHistory, setChatHistory] = useState<ChatSession[]>([]);
+  const [currentChatId, setCurrentChatId] = useState<string | null>(null);
   const scrollViewportRef = useRef<HTMLDivElement>(null);
   const { profile, goals, monthlyIncome, monthlyExpenses } = useAppContext();
 
+  // Load chat history from localStorage on component mount
   useEffect(() => {
-    // Greet the user on initial load
+    const savedHistory = localStorage.getItem('kitamo-bot-history');
+    if (savedHistory) {
+      try {
+        const parsedHistory = JSON.parse(savedHistory).map((session: any) => ({
+          ...session,
+          createdAt: new Date(session.createdAt),
+          lastMessageAt: new Date(session.lastMessageAt)
+        }));
+        setChatHistory(parsedHistory);
+      } catch (error) {
+        console.error('Error loading chat history:', error);
+      }
+    }
+    
+    // Start with greeting
     setMessages([initialGreeting]);
   }, []);
+
+  // Save chat history to localStorage whenever it changes
+  useEffect(() => {
+    if (chatHistory.length > 0) {
+      localStorage.setItem('kitamo-bot-history', JSON.stringify(chatHistory));
+    }
+  }, [chatHistory]);
 
   useEffect(() => {
     // Scroll to the bottom when new messages are added
@@ -53,6 +87,44 @@ export default function KitaMoBotPage() {
         scrollViewportRef.current.scrollTo({ top: scrollViewportRef.current.scrollHeight, behavior: 'smooth' });
     }
   }, [messages, isLoading]);
+
+  const generateChatTitle = (firstUserMessage: string): string => {
+    // Take first 50 characters of the first user message as title
+    return firstUserMessage.length > 50 
+      ? firstUserMessage.substring(0, 50) + "..."
+      : firstUserMessage;
+  };
+
+  const saveCurrentChat = () => {
+    const userMessages = messages.filter(m => m.sender === 'user');
+    if (userMessages.length === 0) return; // Don't save if no user messages
+
+    const now = new Date();
+    const title = generateChatTitle(userMessages[0].text);
+    
+    const chatSession: ChatSession = {
+      id: currentChatId || Date.now().toString(),
+      title,
+      messages: [...messages],
+      createdAt: currentChatId ? chatHistory.find(c => c.id === currentChatId)?.createdAt || now : now,
+      lastMessageAt: now
+    };
+
+    setChatHistory(prev => {
+      const existingIndex = prev.findIndex(c => c.id === chatSession.id);
+      if (existingIndex >= 0) {
+        // Update existing chat
+        const updated = [...prev];
+        updated[existingIndex] = chatSession;
+        return updated.sort((a, b) => b.lastMessageAt.getTime() - a.lastMessageAt.getTime());
+      } else {
+        // Add new chat
+        return [chatSession, ...prev].sort((a, b) => b.lastMessageAt.getTime() - a.lastMessageAt.getTime());
+      }
+    });
+
+    setCurrentChatId(chatSession.id);
+  };
 
   const handleSendMessage = async (e: React.FormEvent | null, messageText?: string) => {
     if (e) e.preventDefault();
@@ -64,7 +136,7 @@ export default function KitaMoBotPage() {
     setMessages(prev => [...prev, userMessage]);
     setInput("");
     setIsLoading(true);
-    setShowPredefinedQuestions(false); // Hide predefined questions after sending
+    setShowPredefinedQuestions(false);
 
     try {
         const userContext = JSON.stringify({
@@ -84,7 +156,13 @@ export default function KitaMoBotPage() {
             text: botResponse.response,
             sender: "bot",
         };
-        setMessages(prev => [...prev, botMessage]);
+        
+        setMessages(prev => {
+          const newMessages = [...prev, botMessage];
+          // Save chat after bot responds
+          setTimeout(() => saveCurrentChat(), 100);
+          return newMessages;
+        });
     } catch (error) {
         const errorMessage: Message = {
             id: (Date.now() + 1).toString(),
@@ -99,10 +177,45 @@ export default function KitaMoBotPage() {
   };
 
   const handleNewChat = () => {
+    // Save current chat before starting new one
+    saveCurrentChat();
+    
     setMessages([initialGreeting]);
     setInput("");
     setShowPredefinedQuestions(false);
     setOpenCategories({});
+    setCurrentChatId(null);
+    setShowHistory(false);
+  };
+
+  const loadChatSession = (session: ChatSession) => {
+    setMessages(session.messages);
+    setCurrentChatId(session.id);
+    setShowHistory(false);
+    setShowPredefinedQuestions(false);
+  };
+
+  const clearAllHistory = () => {
+    setChatHistory([]);
+    localStorage.removeItem('kitamo-bot-history');
+    setShowHistory(false);
+  };
+
+  const formatRelativeTime = (date: Date): string => {
+    const now = new Date();
+    const diffInMs = now.getTime() - date.getTime();
+    const diffInHours = diffInMs / (1000 * 60 * 60);
+    const diffInDays = diffInHours / 24;
+
+    if (diffInHours < 1) {
+      return 'Just now';
+    } else if (diffInHours < 24) {
+      return `${Math.floor(diffInHours)}h ago`;
+    } else if (diffInDays < 7) {
+      return `${Math.floor(diffInDays)}d ago`;
+    } else {
+      return date.toLocaleDateString();
+    }
   };
 
   const toggleCategory = (categoryKey: string) => {
@@ -125,6 +238,74 @@ export default function KitaMoBotPage() {
           <CardDescription>Your AI financial assistant. Ask me in Taglish!</CardDescription>
         </CardHeader>
         <CardContent className="flex-grow flex flex-col p-4 overflow-hidden">
+          {/* Chat History Panel */}
+          {showHistory && (
+            <div className="mb-4 animate-in fade-in-0 duration-300">
+              <Card className="bg-muted/50">
+                <CardHeader className="pb-3">
+                  <div className="flex items-center justify-between">
+                    <CardTitle className="text-lg flex items-center gap-2">
+                      <History className="h-5 w-5" />
+                      Chat History
+                    </CardTitle>
+                    {chatHistory.length > 0 && (
+                      <AlertDialog>
+                        <AlertDialogTrigger asChild>
+                          <Button variant="destructive" size="sm">
+                            <Trash2 className="h-4 w-4 mr-2" />
+                            Clear All
+                          </Button>
+                        </AlertDialogTrigger>
+                        <AlertDialogContent>
+                          <AlertDialogHeader>
+                            <AlertDialogTitle>Clear Chat History</AlertDialogTitle>
+                            <AlertDialogDescription>
+                              This will permanently delete all your chat history. This action cannot be undone.
+                            </AlertDialogDescription>
+                          </AlertDialogHeader>
+                          <AlertDialogFooter>
+                            <AlertDialogCancel>Cancel</AlertDialogCancel>
+                            <AlertDialogAction onClick={clearAllHistory}>
+                              Clear All
+                            </AlertDialogAction>
+                          </AlertDialogFooter>
+                        </AlertDialogContent>
+                      </AlertDialog>
+                    )}
+                  </div>
+                  <CardDescription>
+                    {chatHistory.length === 0 
+                      ? "No chat history yet. Start a conversation to see it here!"
+                      : "Click on any conversation to continue where you left off."
+                    }
+                  </CardDescription>
+                </CardHeader>
+                {chatHistory.length > 0 && (
+                  <CardContent className="space-y-2 max-h-60 overflow-y-auto">
+                    {chatHistory.map((session) => (
+                      <Button
+                        key={session.id}
+                        variant={currentChatId === session.id ? "secondary" : "ghost"}
+                        className="w-full justify-start text-left p-3 h-auto"
+                        onClick={() => loadChatSession(session)}
+                      >
+                        <div className="flex flex-col items-start w-full">
+                          <span className="font-medium text-sm line-clamp-2">{session.title}</span>
+                          <div className="flex items-center gap-2 text-xs text-muted-foreground mt-1">
+                            <Clock className="h-3 w-3" />
+                            {formatRelativeTime(session.lastMessageAt)}
+                            <span>•</span>
+                            <span>{session.messages.filter(m => m.sender === 'user').length} messages</span>
+                          </div>
+                        </div>
+                      </Button>
+                    ))}
+                  </CardContent>
+                )}
+              </Card>
+            </div>
+          )}
+
           <ScrollArea className="flex-grow mb-4 pr-4" viewportRef={scrollViewportRef}>
             <div className="space-y-6">
               {messages.map((message) => (
@@ -212,7 +393,7 @@ export default function KitaMoBotPage() {
             )}
 
             {/* Quick Suggestions for First-time Users */}
-            {showSuggestions && !showPredefinedQuestions && (
+            {showSuggestions && !showPredefinedQuestions && !showHistory && (
                 <div className="mb-4 animate-in fade-in-0 duration-500">
                     <p className="text-sm font-medium text-muted-foreground mb-2 flex items-center gap-2">
                         <Sparkles className="h-4 w-4" />
@@ -228,7 +409,7 @@ export default function KitaMoBotPage() {
                 </div>
             )}
 
-            {/* Browse Questions Button */}
+            {/* Action Buttons */}
             <div className="flex items-center gap-2 mb-4">
               <Button
                 variant="secondary"
@@ -239,9 +420,26 @@ export default function KitaMoBotPage() {
                 <MessageSquare className="h-4 w-4" />
                 {showPredefinedQuestions ? "Hide Questions" : "Browse Questions"}
               </Button>
-              {showPredefinedQuestions && (
+              
+              <Button
+                variant="secondary"
+                size="sm"
+                onClick={() => setShowHistory(!showHistory)}
+                className="flex items-center gap-2"
+              >
+                <History className="h-4 w-4" />
+                {showHistory ? "Hide History" : "Chat History"}
+                {chatHistory.length > 0 && (
+                  <span className="bg-primary text-primary-foreground text-xs rounded-full px-2 py-0.5 ml-1">
+                    {chatHistory.length}
+                  </span>
+                )}
+              </Button>
+
+              {(showPredefinedQuestions || showHistory) && (
                 <span className="text-xs text-muted-foreground">
-                  Click any question to ask it instantly!
+                  {showPredefinedQuestions && "Click any question to ask it instantly!"}
+                  {showHistory && "Click any conversation to continue it!"}
                 </span>
               )}
             </div>

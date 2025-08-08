@@ -230,17 +230,17 @@ export default function KitaMoBotPage() {
   return (
     <div className="animate-in fade-in-0 duration-500 flex justify-center items-start h-full">
       <Card className="w-full max-w-4xl h-[calc(100vh-10rem)] flex flex-col">
-        <CardHeader className="text-center">
+        <CardHeader className="text-center flex-shrink-0">
           <div className="flex justify-center items-center gap-2">
             <BrainCircuit className="h-8 w-8 text-primary" />
             <CardTitle className="text-3xl">KitaMo Bot</CardTitle>
           </div>
           <CardDescription>Your AI financial assistant. Ask me in Taglish!</CardDescription>
         </CardHeader>
-        <CardContent className="flex-grow flex flex-col p-4 overflow-hidden">
+        <CardContent className="flex-grow flex flex-col p-4 overflow-hidden min-h-0">
           {/* Chat History Panel */}
           {showHistory && (
-            <div className="mb-4 animate-in fade-in-0 duration-300">
+            <div className="mb-4 animate-in fade-in-0 duration-300 flex-shrink-0">
               <Card className="bg-muted/50">
                 <CardHeader className="pb-3">
                   <div className="flex items-center justify-between">
@@ -306,44 +306,48 @@ export default function KitaMoBotPage() {
             </div>
           )}
 
-          <ScrollArea className="flex-grow mb-4 pr-4" viewportRef={scrollViewportRef}>
-            <div className="space-y-6">
-              {messages.map((message) => (
-                <div key={message.id} className={`flex items-start gap-3 ${message.sender === 'user' ? 'justify-end' : ''}`}>
-                  {message.sender === 'bot' && (
-                    <Avatar className="h-8 w-8">
-                      <AvatarImage src="/bot-avatar.png" alt="Bot" />
-                      <AvatarFallback><Bot /></AvatarFallback>
-                    </Avatar>
-                  )}
-                  <div className={`rounded-lg px-4 py-2 max-w-lg ${message.sender === 'user' ? 'bg-primary text-primary-foreground' : 'bg-muted'}`}>
-                    <p className="text-sm whitespace-pre-wrap">{message.text}</p>
-                  </div>
-                   {message.sender === 'user' && (
-                    <Avatar className="h-8 w-8">
-                       <AvatarImage src="https://placehold.co/100x100.png" alt="@alex" data-ai-hint="person" />
-                      <AvatarFallback><User /></AvatarFallback>
-                    </Avatar>
-                  )}
-                </div>
-              ))}
-              {isLoading && (
-                 <div className="flex items-start gap-3">
-                    <Avatar className="h-8 w-8">
+          {/* Chat Messages Area */}
+          <div className="flex-grow flex flex-col min-h-0">
+            <ScrollArea className="flex-grow mb-4 pr-4" viewportRef={scrollViewportRef}>
+              <div className="space-y-6">
+                {messages.map((message) => (
+                  <div key={message.id} className={`flex items-start gap-3 ${message.sender === 'user' ? 'justify-end' : ''}`}>
+                    {message.sender === 'bot' && (
+                      <Avatar className="h-8 w-8">
                         <AvatarImage src="/bot-avatar.png" alt="Bot" />
                         <AvatarFallback><Bot /></AvatarFallback>
-                    </Avatar>
-                    <div className="rounded-lg px-4 py-2 max-w-sm bg-muted space-y-2">
-                       <Skeleton className="h-4 w-48" />
-                       <Skeleton className="h-4 w-32" />
+                      </Avatar>
+                    )}
+                    <div className={`rounded-lg px-4 py-2 max-w-lg ${message.sender === 'user' ? 'bg-primary text-primary-foreground' : 'bg-muted'}`}>
+                      <p className="text-sm whitespace-pre-wrap">{message.text}</p>
                     </div>
-                </div>
-              )}
-            </div>
-          </ScrollArea>
+                     {message.sender === 'user' && (
+                      <Avatar className="h-8 w-8">
+                         <AvatarImage src="https://placehold.co/100x100.png" alt="@alex" data-ai-hint="person" />
+                        <AvatarFallback><User /></AvatarFallback>
+                      </Avatar>
+                    )}
+                  </div>
+                ))}
+                {isLoading && (
+                   <div className="flex items-start gap-3">
+                      <Avatar className="h-8 w-8">
+                          <AvatarImage src="/bot-avatar.png" alt="Bot" />
+                          <AvatarFallback><Bot /></AvatarFallback>
+                      </Avatar>
+                      <div className="rounded-lg px-4 py-2 max-w-sm bg-muted space-y-2">
+                         <Skeleton className="h-4 w-48" />
+                         <Skeleton className="h-4 w-32" />
+                      </div>
+                  </div>
+                )}
+              </div>
+            </ScrollArea>
+          </div>
           
-          <div className="border-t pt-4">
-            {/* Predefined Questions Section */}
+          {/* Bottom Section - Fixed Height */}
+          <div className="border-t pt-4 flex-shrink-0">
+            {/* Predefined Questions Section - Scrollable */}
             {showPredefinedQuestions && (
               <div className="mb-4 animate-in fade-in-0 duration-300">
                 <Card className="bg-muted/50">
@@ -356,38 +360,40 @@ export default function KitaMoBotPage() {
                       Can't think of what to ask? Pick from these popular questions!
                     </CardDescription>
                   </CardHeader>
-                  <CardContent className="space-y-3">
-                    {Object.entries(predefinedQuestions).map(([categoryKey, category]) => (
-                      <Collapsible 
-                        key={categoryKey} 
-                        open={openCategories[categoryKey]} 
-                        onOpenChange={() => toggleCategory(categoryKey)}
-                      >
-                        <CollapsibleTrigger asChild>
-                          <Button variant="ghost" className="w-full justify-between text-left p-3 h-auto">
-                            <span className="font-medium">{category.title}</span>
-                            {openCategories[categoryKey] ? 
-                              <ChevronUp className="h-4 w-4" /> : 
-                              <ChevronDown className="h-4 w-4" />
-                            }
-                          </Button>
-                        </CollapsibleTrigger>
-                        <CollapsibleContent className="space-y-2 px-3 pb-2">
-                          {category.questions.map((question) => (
-                            <Button
-                              key={question}
-                              variant="outline"
-                              size="sm"
-                              className="w-full text-left justify-start h-auto py-2 px-3 text-wrap"
-                              onClick={() => handleSendMessage(null, question)}
-                            >
-                              {question}
+                  <ScrollArea className="max-h-80">
+                    <CardContent className="space-y-3">
+                      {Object.entries(predefinedQuestions).map(([categoryKey, category]) => (
+                        <Collapsible 
+                          key={categoryKey} 
+                          open={openCategories[categoryKey]} 
+                          onOpenChange={() => toggleCategory(categoryKey)}
+                        >
+                          <CollapsibleTrigger asChild>
+                            <Button variant="ghost" className="w-full justify-between text-left p-3 h-auto">
+                              <span className="font-medium">{category.title}</span>
+                              {openCategories[categoryKey] ? 
+                                <ChevronUp className="h-4 w-4" /> : 
+                                <ChevronDown className="h-4 w-4" />
+                              }
                             </Button>
-                          ))}
-                        </CollapsibleContent>
-                      </Collapsible>
-                    ))}
-                  </CardContent>
+                          </CollapsibleTrigger>
+                          <CollapsibleContent className="space-y-2 px-3 pb-2">
+                            {category.questions.map((question) => (
+                              <Button
+                                key={question}
+                                variant="outline"
+                                size="sm"
+                                className="w-full text-left justify-start h-auto py-2 px-3 text-wrap"
+                                onClick={() => handleSendMessage(null, question)}
+                              >
+                                {question}
+                              </Button>
+                            ))}
+                          </CollapsibleContent>
+                        </Collapsible>
+                      ))}
+                    </CardContent>
+                  </ScrollArea>
                 </Card>
               </div>
             )}
@@ -410,7 +416,7 @@ export default function KitaMoBotPage() {
             )}
 
             {/* Action Buttons */}
-            <div className="flex items-center gap-2 mb-4">
+            <div className="flex items-center gap-2 mb-4 flex-wrap">
               <Button
                 variant="secondary"
                 size="sm"
@@ -437,7 +443,7 @@ export default function KitaMoBotPage() {
               </Button>
 
               {(showPredefinedQuestions || showHistory) && (
-                <span className="text-xs text-muted-foreground">
+                <span className="text-xs text-muted-foreground hidden sm:inline">
                   {showPredefinedQuestions && "Click any question to ask it instantly!"}
                   {showHistory && "Click any conversation to continue it!"}
                 </span>

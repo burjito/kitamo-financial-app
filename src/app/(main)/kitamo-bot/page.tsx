@@ -347,22 +347,22 @@ export default function KitaMoBotPage() {
           
           {/* Bottom Section - Fixed Height */}
           <div className="border-t pt-4 flex-shrink-0">
-            {/* Predefined Questions Section - Scrollable */}
+            {/* Predefined Questions Section - More Compact */}
             {showPredefinedQuestions && (
-              <div className="mb-4 animate-in fade-in-0 duration-300">
+              <div className="mb-3 animate-in fade-in-0 duration-300">
                 <Card className="bg-muted/50">
-                  <CardHeader className="pb-3">
-                    <CardTitle className="text-lg flex items-center gap-2">
-                      <MessageSquare className="h-5 w-5" />
+                  <CardHeader className="pb-2 pt-3">
+                    <CardTitle className="text-base flex items-center gap-2">
+                      <MessageSquare className="h-4 w-4" />
                       Browse Questions by Category
                     </CardTitle>
-                    <CardDescription>
+                    <CardDescription className="text-xs">
                       Can't think of what to ask? Pick from these popular questions!
                     </CardDescription>
                   </CardHeader>
                   <CardContent className="p-0">
-                    <ScrollArea className="h-80 px-6">
-                      <div className="space-y-3 py-4">
+                    <ScrollArea className="h-64 px-4">
+                      <div className="space-y-2 py-3">
                         {Object.entries(predefinedQuestions).map(([categoryKey, category]) => (
                           <Collapsible 
                             key={categoryKey} 
@@ -370,21 +370,21 @@ export default function KitaMoBotPage() {
                             onOpenChange={() => toggleCategory(categoryKey)}
                           >
                             <CollapsibleTrigger asChild>
-                              <Button variant="ghost" className="w-full justify-between text-left p-3 h-auto">
+                              <Button variant="ghost" className="w-full justify-between text-left p-2 h-auto text-sm">
                                 <span className="font-medium">{category.title}</span>
                                 {openCategories[categoryKey] ? 
-                                  <ChevronUp className="h-4 w-4" /> : 
-                                  <ChevronDown className="h-4 w-4" />
+                                  <ChevronUp className="h-3 w-3" /> : 
+                                  <ChevronDown className="h-3 w-3" />
                                 }
                               </Button>
                             </CollapsibleTrigger>
-                            <CollapsibleContent className="space-y-2 px-3 pb-2">
+                            <CollapsibleContent className="space-y-1 px-2 pb-1">
                               {category.questions.map((question) => (
                                 <Button
                                   key={question}
                                   variant="outline"
                                   size="sm"
-                                  className="w-full text-left justify-start h-auto py-2 px-3 text-wrap whitespace-normal"
+                                  className="w-full text-left justify-start h-auto py-1.5 px-2 text-xs text-wrap whitespace-normal"
                                   onClick={() => handleSendMessage(null, question)}
                                 >
                                   {question}
@@ -402,14 +402,14 @@ export default function KitaMoBotPage() {
 
             {/* Quick Suggestions for First-time Users */}
             {showSuggestions && !showPredefinedQuestions && !showHistory && (
-                <div className="mb-4 animate-in fade-in-0 duration-500">
-                    <p className="text-sm font-medium text-muted-foreground mb-2 flex items-center gap-2">
-                        <Sparkles className="h-4 w-4" />
+                <div className="mb-3 animate-in fade-in-0 duration-500">
+                    <p className="text-xs font-medium text-muted-foreground mb-2 flex items-center gap-2">
+                        <Sparkles className="h-3 w-3" />
                         Not sure where to start? Try these:
                     </p>
-                    <div className="flex flex-wrap gap-2">
+                    <div className="flex flex-wrap gap-1">
                         {suggestionPrompts.map(prompt => (
-                            <Button key={prompt} variant="outline" size="sm" onClick={() => handleSendMessage(null, prompt)}>
+                            <Button key={prompt} variant="outline" size="sm" className="text-xs" onClick={() => handleSendMessage(null, prompt)}>
                                 {prompt}
                             </Button>
                         ))}
@@ -417,15 +417,15 @@ export default function KitaMoBotPage() {
                 </div>
             )}
 
-            {/* Action Buttons */}
-            <div className="flex items-center gap-2 mb-4 flex-wrap">
+            {/* Action Buttons - Always Visible */}
+            <div className="flex items-center gap-2 mb-3 flex-wrap">
               <Button
                 variant="secondary"
                 size="sm"
                 onClick={() => setShowPredefinedQuestions(!showPredefinedQuestions)}
-                className="flex items-center gap-2"
+                className="flex items-center gap-1 text-xs"
               >
-                <MessageSquare className="h-4 w-4" />
+                <MessageSquare className="h-3 w-3" />
                 {showPredefinedQuestions ? "Hide Questions" : "Browse Questions"}
               </Button>
               
@@ -433,19 +433,19 @@ export default function KitaMoBotPage() {
                 variant="secondary"
                 size="sm"
                 onClick={() => setShowHistory(!showHistory)}
-                className="flex items-center gap-2"
+                className="flex items-center gap-1 text-xs"
               >
-                <History className="h-4 w-4" />
+                <History className="h-3 w-3" />
                 {showHistory ? "Hide History" : "Chat History"}
                 {chatHistory.length > 0 && (
-                  <span className="bg-primary text-primary-foreground text-xs rounded-full px-2 py-0.5 ml-1">
+                  <span className="bg-primary text-primary-foreground text-xs rounded-full px-1.5 py-0.5 ml-1">
                     {chatHistory.length}
                   </span>
                 )}
               </Button>
 
               {(showPredefinedQuestions || showHistory) && (
-                <span className="text-xs text-muted-foreground hidden sm:inline">
+                <span className="text-xs text-muted-foreground hidden md:inline">
                   {showPredefinedQuestions && "Click any question to ask it instantly!"}
                   {showHistory && "Click any conversation to continue it!"}
                 </span>
@@ -461,19 +461,19 @@ export default function KitaMoBotPage() {
                   onClick={handleNewChat}
                   disabled={isLoading}
                   title="New Chat"
-                  className="hover:bg-transparent"
+                  className="hover:bg-transparent h-8 w-8"
                 >
-                  <RotateCcw className="h-4 w-4" />
+                  <RotateCcw className="h-3 w-3" />
                 </Button>
                   <Input
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
                   placeholder="e.g., 'Magkano dapat ipon ko monthly for a trip?'"
-                  className="flex-grow"
+                  className="flex-grow h-8 text-sm"
                   disabled={isLoading}
                   />
-                <Button type="submit" size="icon" disabled={isLoading || !input.trim()}>
-                  <Send className="h-4 w-4" />
+                <Button type="submit" size="icon" disabled={isLoading || !input.trim()} className="h-8 w-8">
+                  <Send className="h-3 w-3" />
                 </Button>
             </form>
           </div>

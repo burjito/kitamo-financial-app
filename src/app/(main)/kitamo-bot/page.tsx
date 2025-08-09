@@ -14,6 +14,7 @@ import { useAppContext } from "@/contexts/app-context";
 import { cn } from "@/lib/utils";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
+import ReactMarkdown from 'react-markdown';
 
 interface Message {
   id: string;
@@ -319,7 +320,20 @@ export default function KitaMoBotPage() {
                       </Avatar>
                     )}
                     <div className={`rounded-lg px-4 py-2 max-w-lg ${message.sender === 'user' ? 'bg-primary text-primary-foreground' : 'bg-muted'}`}>
-                      <p className="text-sm whitespace-pre-wrap">{message.text}</p>
+                      {message.sender === 'bot' ? (
+                        <ReactMarkdown 
+                          className="text-sm prose prose-sm max-w-none
+                            prose-p:my-1 prose-p:leading-relaxed prose-p:text-sm
+                            prose-strong:font-semibold prose-strong:text-foreground
+                            prose-ul:my-2 prose-ul:text-sm prose-li:my-0.5 prose-li:text-sm prose-li:leading-relaxed
+                            prose-headings:text-foreground prose-headings:font-semibold prose-headings:text-sm
+                            [&>*:first-child]:mt-0 [&>*:last-child]:mb-0"
+                        >
+                          {message.text}
+                        </ReactMarkdown>
+                      ) : (
+                        <p className="text-sm whitespace-pre-wrap">{message.text}</p>
+                      )}
                     </div>
                      {message.sender === 'user' && (
                       <Avatar className="h-8 w-8">

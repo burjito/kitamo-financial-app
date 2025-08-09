@@ -7,7 +7,20 @@ export async function GET(request: NextRequest) {
   const code = requestUrl.searchParams.get('code')
   const token_hash = requestUrl.searchParams.get('token_hash')
   const type = requestUrl.searchParams.get('type')
+  const token = requestUrl.searchParams.get('token')
+  const email = requestUrl.searchParams.get('email')
+  const confirmation_url = requestUrl.searchParams.get('confirmation_url')
   const next = requestUrl.searchParams.get('next') ?? '/home'
+
+  // Debug: Log all query parameters
+  console.log('Email verification URL:', requestUrl.toString())
+  console.log('All search params:', Object.fromEntries(requestUrl.searchParams.entries()))
+  console.log('code:', code)
+  console.log('token_hash:', token_hash)
+  console.log('type:', type)
+  console.log('token:', token)
+  console.log('email:', email)
+  console.log('confirmation_url:', confirmation_url)
 
   // Check for required environment variables
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL?.trim();
@@ -28,6 +41,8 @@ export async function GET(request: NextRequest) {
 
   // Handle both PKCE code flow and legacy token_hash flow
   if (code) {
+    // PKCE code flow
+    console.log('Using PKCE code flow with code:', code)
     // PKCE code flow
     const cookieStore = await cookies()
     
@@ -70,6 +85,7 @@ export async function GET(request: NextRequest) {
     }
   } else if (token_hash && type) {
     // Legacy token_hash flow
+    console.log('Using token_hash flow with token_hash:', token_hash, 'type:', type)
     const cookieStore = await cookies()
     
     try {
@@ -112,8 +128,60 @@ export async function GET(request: NextRequest) {
       console.error('Unexpected error during token hash verification:', error)
       return NextResponse.redirect(`${requestUrl.origin}/auth/verify-error?message=${encodeURIComponent('An unexpected error occurred')}`)
     }
+  } else if (token && type) {
+    // Alternative token flow (some Supabase configurations)
+    console.log('Using alternative token flow with token:', token, 'type:', type)
+    const cookieStore = await cookies()
+    
+    try {
+      const supabase = createServerClient(
+        supabaseUrl,
+        supabaseAnonKey,
+        {
+          cookies: {
+            getAll() {
+              return cookieStore.getAll()
+            },
+            setAll(cookiesToSet) {
+              try {
+                cookiesToSet.forEach(({ name, value, options }) =>
+                  cookieStore.set(name, value, options)
+                )
+              } catch {
+                // The `setAll` method was called from a Server Component.
+                // This can be ignored if you have middleware refreshing
+                // user sessions.
+              }
+            },
+          },
+        }
+      )
+
+      const { error } = await supabase.auth.verifyOtp({
+        type: type as any,
+        token,
+        email: email || '', // Add email if available
+      });
+      
+      if (error) {
+        console.error('Token verification error:', error)
+        return NextResponse.redirect(`${requestUrl.origin}/auth/verify-error?message=${encodeURIComponent(error.message)}`)
+      }
+
+      // Verification successful
+      return NextResponse.redirect(`${requestUrl.origin}/auth/verify-success`)
+    } catch (error) {
+      console.error('Unexpected error during token verification:', error)
+      return NextResponse.redirect(`${requestUrl.origin}/auth/verify-error?message=${encodeURIComponent('An unexpected error occurred')}`)
+    }
   }
 
   // No valid verification parameters provided
-  return NextResponse.redirect(`${requestUrl.origin}/auth/verify-error?message=${encodeURIComponent('No verification code provided')}`)
+  console.log('No valid verification parameters found')
+  const availableParams = Object.fromEntries(requestUrl.searchParams.entries())
+  const paramsList = Object.keys(availableParams).length > 0 ? 
+    `Available parameters: ${JSON.stringify(availableParams)}` : 
+    'No parameters received'
+  
+  return NextResponse.redirect(`${requestUrl.origin}/auth/verify-error?message=${encodeURIComponent(`No verification code provided. ${paramsList}`)}`)
 }

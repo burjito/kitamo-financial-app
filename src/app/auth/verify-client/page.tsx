@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -8,7 +8,7 @@ import { CheckCircle, Loader2, XCircle, ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import supabase from "@/lib/supabase-client";
 
-export default function VerifyClientPage() {
+function VerifyClientContent() {
   const [status, setStatus] = useState<'loading' | 'success' | 'error'>('loading');
   const [errorMessage, setErrorMessage] = useState('');
   const searchParams = useSearchParams();
@@ -29,11 +29,13 @@ export default function VerifyClientPage() {
           throw new Error('Authentication service is not available');
         }
 
+        console.log('Attempting client-side verification with code:', code);
+
         // Use client-side PKCE verification
         const { data, error } = await supabase.auth.exchangeCodeForSession(code);
         
         if (error) {
-          console.error('Verification error:', error);
+          console.error('Client-side verification error:', error);
           setStatus('error');
           setErrorMessage(error.message || 'Verification failed');
           return;
@@ -41,6 +43,7 @@ export default function VerifyClientPage() {
 
         if (data.user) {
           setStatus('success');
+          console.log('Verification successful, user:', data.user.email);
           // Redirect to home after a short delay
           setTimeout(() => {
             router.push('/home');
@@ -153,5 +156,20 @@ export default function VerifyClientPage() {
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background to-muted p-4">
       {renderContent()}
     </div>
+  );
+}
+
+export default function VerifyClientPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background to-muted">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto"></div>
+          <p className="mt-2 text-sm text-muted-foreground">Loading verification...</p>
+        </div>
+      </div>
+    }>
+      <VerifyClientContent />
+    </Suspense>
   );
 }

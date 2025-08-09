@@ -93,13 +93,49 @@ function VerificationContent() {
             if (pkceError.message.includes('code verifier') || 
                 pkceError.message.includes('auth code and code verifier')) {
               
-              console.log('🔄 PKCE failed due to session mismatch - this is normal when opening email in new tab');
+              console.log('🔄 PKCE failed, attempting URL session detection');
               
-              // Instead of showing error, let's be more user-friendly
+              // Try to detect session in URL parameters (implicit flow fallback)
+              const urlParams = new URLSearchParams(window.location.hash.substring(1));
+              const accessToken = urlParams.get('access_token');
+              const refreshToken = urlParams.get('refresh_token');
+              
+              if (accessToken) {
+                console.log('✅ Found session tokens in URL, setting session');
+                
+                try {
+                  const { data: sessionData, error: sessionError } = await supabase.auth.setSession({
+                    access_token: accessToken,
+                    refresh_token: refreshToken || ''
+                  });
+                  
+                  if (sessionError) {
+                    throw sessionError;
+                  }
+                  
+                  if (sessionData?.user) {
+                    console.log('✅ Session verification successful for user:', sessionData.user.email);
+                    setState({
+                      status: 'success',
+                      message: 'Email verified successfully!',
+                      details: 'Your account has been verified. Redirecting to your dashboard...'
+                    });
+                    
+                    setTimeout(() => {
+                      router.push('/home');
+                    }, 2000);
+                    return;
+                  }
+                } catch (sessionError: any) {
+                  console.error('❌ Session setting failed:', sessionError);
+                }
+              }
+              
+              // If all methods fail, show helpful message with auto-retry option
               setState({
                 status: 'error',
-                message: 'Almost there!',
-                details: 'It looks like you opened this link in a new tab (which is totally normal!). For security reasons, email verification needs to happen in the original signup tab. You can either go back to your original tab, or simply sign up again - it only takes a moment.'
+                message: 'Verification needs a small adjustment',
+                details: 'This verification link needs to be opened in a specific way. We\'ll try to fix this automatically, or you can sign up again for a fresh start.'
               });
             } else if (pkceError.message.includes('expired')) {
               setState({
@@ -269,10 +305,20 @@ function VerificationContent() {
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-3">
+              <Button 
+                onClick={() => {
+                  // Retry verification by reloading the page
+                  window.location.reload();
+                }}
+                className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800"
+              >
+                <Loader2 className="w-4 h-4 mr-2" />
+                Try Auto-Fix
+              </Button>
               <Button asChild className="w-full bg-gradient-to-r from-primary to-secondary">
                 <Link href="/signup">
                   <Mail className="w-4 h-4 mr-2" />
-                  Try Signing Up Again
+                  Sign Up Again (Fresh Start)
                 </Link>
               </Button>
               <Button asChild variant="outline" className="w-full">

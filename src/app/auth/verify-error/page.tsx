@@ -1,12 +1,13 @@
 "use client";
 
+import { Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { XCircle, Mail, ArrowLeft } from "lucide-react";
 
-export default function VerifyErrorPage() {
+function VerifyErrorContent() {
   const searchParams = useSearchParams();
   const errorMessage = searchParams.get('message') || 'An error occurred during email verification';
 
@@ -48,6 +49,29 @@ export default function VerifyErrorPage() {
               className="text-sm text-muted-foreground hover:text-primary transition-colors inline-flex items-center"
             >
               <ArrowLeft className="w-4 h-4 mr-1" />
+              Back to Home
+            </Link>
+          </div>
+        </CardContent>
+      </Card>
+    </div>
+  );
+}
+
+export default function VerifyErrorPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background to-muted">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto"></div>
+          <p className="mt-2 text-sm text-muted-foreground">Loading...</p>
+        </div>
+      </div>
+    }>
+      <VerifyErrorContent />
+    </Suspense>
+  );
+}
               Return to Home
             </Link>
           </div>

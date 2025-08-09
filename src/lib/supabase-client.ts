@@ -2,8 +2,8 @@
 import { createBrowserClient } from '@supabase/ssr'
 
 function createSupabaseClient() {
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL?.trim();
+  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY?.trim();
 
   // During build time, environment variables might not be available
   if (!supabaseUrl || !supabaseAnonKey) {
@@ -18,6 +18,24 @@ function createSupabaseClient() {
         getUser: () => Promise.resolve({ data: { user: null }, error: null }),
         getSession: () => Promise.resolve({ data: { session: null }, error: null }),
         exchangeCodeForSession: () => Promise.resolve({ error: new Error('Supabase not configured') }),
+      }
+    } as any;
+  }
+
+  // Validate URL format
+  try {
+    new URL(supabaseUrl);
+  } catch (error) {
+    console.error('Invalid Supabase URL format:', supabaseUrl);
+    // Return mock client for invalid URL
+    return {
+      auth: {
+        signUp: () => Promise.resolve({ error: new Error('Invalid Supabase URL') }),
+        signInWithPassword: () => Promise.resolve({ error: new Error('Invalid Supabase URL') }),
+        signOut: () => Promise.resolve({ error: null }),
+        getUser: () => Promise.resolve({ data: { user: null }, error: null }),
+        getSession: () => Promise.resolve({ data: { session: null }, error: null }),
+        exchangeCodeForSession: () => Promise.resolve({ error: new Error('Invalid Supabase URL') }),
       }
     } as any;
   }

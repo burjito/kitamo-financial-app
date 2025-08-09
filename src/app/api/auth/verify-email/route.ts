@@ -7,12 +7,20 @@ export async function GET(request: NextRequest) {
   const code = requestUrl.searchParams.get('code')
 
   // Check for required environment variables
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL?.trim();
+  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY?.trim();
 
   if (!supabaseUrl || !supabaseAnonKey) {
     console.error('Missing Supabase environment variables during email verification');
     return NextResponse.redirect(`${requestUrl.origin}/auth/verify-error?message=${encodeURIComponent('Service configuration error')}`)
+  }
+
+  // Validate URL format
+  try {
+    new URL(supabaseUrl);
+  } catch (error) {
+    console.error('Invalid Supabase URL format during verification:', supabaseUrl);
+    return NextResponse.redirect(`${requestUrl.origin}/auth/verify-error?message=${encodeURIComponent('Invalid service configuration')}`)
   }
 
   if (code) {

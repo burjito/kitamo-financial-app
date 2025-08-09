@@ -1,43 +1,26 @@
 
 import { createBrowserClient } from '@supabase/ssr'
 
+/**
+ * Clean Supabase client configuration
+ * Optimized for PKCE flow and better error handling
+ */
 function createSupabaseClient() {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL?.trim();
   const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY?.trim();
 
-  // During build time, environment variables might not be available
+  // Validate environment variables
   if (!supabaseUrl || !supabaseAnonKey) {
-    console.warn("Supabase URL or Anon Key is missing. Backend functionality will be disabled.");
-    
-    // Return a mock client for build time
-    return {
-      auth: {
-        signUp: () => Promise.resolve({ error: new Error('Supabase not configured') }),
-        signInWithPassword: () => Promise.resolve({ error: new Error('Supabase not configured') }),
-        signOut: () => Promise.resolve({ error: null }),
-        getUser: () => Promise.resolve({ data: { user: null }, error: null }),
-        getSession: () => Promise.resolve({ data: { session: null }, error: null }),
-        exchangeCodeForSession: () => Promise.resolve({ error: new Error('Supabase not configured') }),
-      }
-    } as any;
+    console.warn("⚠️ Supabase environment variables missing");
+    return createMockClient('Environment variables not configured');
   }
 
   // Validate URL format
   try {
     new URL(supabaseUrl);
   } catch (error) {
-    console.error('Invalid Supabase URL format:', supabaseUrl);
-    // Return mock client for invalid URL
-    return {
-      auth: {
-        signUp: () => Promise.resolve({ error: new Error('Invalid Supabase URL') }),
-        signInWithPassword: () => Promise.resolve({ error: new Error('Invalid Supabase URL') }),
-        signOut: () => Promise.resolve({ error: null }),
-        getUser: () => Promise.resolve({ data: { user: null }, error: null }),
-        getSession: () => Promise.resolve({ data: { session: null }, error: null }),
-        exchangeCodeForSession: () => Promise.resolve({ error: new Error('Invalid Supabase URL') }),
-      }
-    } as any;
+    console.error('❌ Invalid Supabase URL format:', supabaseUrl);
+    return createMockClient('Invalid Supabase URL format');
   }
 
   try {
@@ -45,24 +28,33 @@ function createSupabaseClient() {
       auth: {
         autoRefreshToken: true,
         persistSession: true,
-        detectSessionInUrl: false
-        // Remove flowType to use default behavior
+        detectSessionInUrl: true, // Enable for PKCE flow
+        flowType: 'pkce' // Explicitly use PKCE flow
       }
     });
   } catch (error) {
-    console.error('Failed to create Supabase client:', error);
-    // Return mock client on error
-    return {
-      auth: {
-        signUp: () => Promise.resolve({ error: new Error('Supabase client creation failed') }),
-        signInWithPassword: () => Promise.resolve({ error: new Error('Supabase client creation failed') }),
-        signOut: () => Promise.resolve({ error: null }),
-        getUser: () => Promise.resolve({ data: { user: null }, error: null }),
-        getSession: () => Promise.resolve({ data: { session: null }, error: null }),
-        exchangeCodeForSession: () => Promise.resolve({ error: new Error('Supabase client creation failed') }),
-      }
-    } as any;
+    console.error('💥 Failed to create Supabase client:', error);
+    return createMockClient('Supabase client creation failed');
   }
+}
+
+/**
+ * Creates a mock client for development/error scenarios
+ */
+function createMockClient(reason: string) {
+  const mockError = new Error(`Supabase not available: ${reason}`);
+  
+  return {
+    auth: {
+      signUp: () => Promise.resolve({ error: mockError }),
+      signInWithPassword: () => Promise.resolve({ error: mockError }),
+      signOut: () => Promise.resolve({ error: null }),
+      getUser: () => Promise.resolve({ data: { user: null }, error: null }),
+      getSession: () => Promise.resolve({ data: { session: null }, error: null }),
+      exchangeCodeForSession: () => Promise.resolve({ error: mockError }),
+      verifyOtp: () => Promise.resolve({ error: mockError }),
+    }
+  } as any;
 }
 
 const supabase = createSupabaseClient();

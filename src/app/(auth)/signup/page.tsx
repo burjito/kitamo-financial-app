@@ -64,6 +64,17 @@ const Signup = () => {
 
     setIsLoading(true);
 
+    // Get the base URL for email redirect
+    const getBaseUrl = () => {
+      if (process.env.NEXT_PUBLIC_SITE_URL) {
+        return process.env.NEXT_PUBLIC_SITE_URL;
+      }
+      if (typeof window !== 'undefined') {
+        return window.location.origin;
+      }
+      return 'http://localhost:3000'; // fallback for build time
+    };
+
     const { error } = await supabase.auth.signUp({
       email: formData.email,
       password: formData.password,
@@ -72,7 +83,7 @@ const Signup = () => {
           first_name: formData.firstName,
           last_name: formData.lastName,
         },
-        emailRedirectTo: `${process.env.NEXT_PUBLIC_SITE_URL || window.location.origin}/api/auth/verify-email`,
+        emailRedirectTo: `${getBaseUrl()}/api/auth/verify-email`,
       },
     });
 

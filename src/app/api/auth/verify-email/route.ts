@@ -17,7 +17,20 @@ export async function GET(request: NextRequest) {
   console.log('Email verification URL:', requestUrl.toString())
   console.log('All search params:', Object.fromEntries(requestUrl.searchParams.entries()))
 
-  // Handle Supabase errors first
+  // Immediately redirect PKCE codes to client-side before any server-side processing
+  if (code && !token_hash) {
+    // This is likely a PKCE code - redirect immediately to client-side handling
+    console.log('PKCE code detected, immediately redirecting to client-side verification:', code)
+    
+    const clientParams = new URLSearchParams()
+    clientParams.set('code', code)
+    if (type) clientParams.set('type', type)
+    if (email) clientParams.set('email', email)
+    
+    return NextResponse.redirect(`${requestUrl.origin}/auth/verify-client?${clientParams.toString()}`)
+  }
+
+  // Handle Supabase errors first (only for non-PKCE flows)
   if (error) {
     console.log('Supabase returned an error:', error, error_code, error_description)
     
@@ -70,20 +83,7 @@ export async function GET(request: NextRequest) {
   }
 
   // Handle different verification methods
-  if (code) {
-    // This is likely a PKCE code, redirect to client-side handling
-    console.log('Code detected, redirecting to client-side verification:', code)
-    
-    // Preserve all query parameters for client-side verification
-    const clientParams = new URLSearchParams()
-    clientParams.set('code', code)
-    
-    // Also preserve other important parameters that might be needed
-    if (type) clientParams.set('type', type)
-    if (email) clientParams.set('email', email)
-    
-    return NextResponse.redirect(`${requestUrl.origin}/auth/verify-client?${clientParams.toString()}`)
-  } else if (token_hash && type) {
+  if (token_hash && type) {
     // Legacy token_hash flow (works with server-side verification)
     console.log('Using token_hash flow with token_hash:', token_hash, 'type:', type)
     const cookieStore = await cookies()

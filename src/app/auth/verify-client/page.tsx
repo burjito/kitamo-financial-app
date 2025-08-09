@@ -17,8 +17,13 @@ function VerifyClientContent() {
   useEffect(() => {
     const handleVerification = async () => {
       const code = searchParams.get('code');
+      const type = searchParams.get('type');
+      const email = searchParams.get('email');
+      
+      console.log('Client-side verification starting with params:', { code, type, email });
       
       if (!code) {
+        console.error('No verification code provided');
         setStatus('error');
         setErrorMessage('No verification code provided');
         return;
@@ -30,9 +35,13 @@ function VerifyClientContent() {
         }
 
         console.log('Attempting client-side verification with code:', code);
+        console.log('Supabase client available:', !!supabase);
+        console.log('Supabase auth available:', !!supabase.auth);
 
         // Use client-side PKCE verification
         const { data, error } = await supabase.auth.exchangeCodeForSession(code);
+        
+        console.log('exchangeCodeForSession result:', { data: !!data, error: error?.message });
         
         if (error) {
           console.error('Client-side verification error:', error);

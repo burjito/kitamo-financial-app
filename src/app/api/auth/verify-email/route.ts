@@ -64,8 +64,49 @@ export async function GET(request: NextRequest) {
 
   // Handle both PKCE code flow and legacy token_hash flow
   if (code) {
-    // PKCE code flow
-    console.log('Using PKCE code flow with code:', code)
+    // For email verification with implicit flow
+    console.log('Using code flow with code:', code)
+    const cookieStore = await cookies()
+    
+    try {
+      const supabase = createServerClient(
+        supabaseUrl,
+        supabaseAnonKey,
+        {
+          cookies: {
+            getAll() {
+              return cookieStore.getAll()
+            },
+            setAll(cookiesToSet) {
+              try {
+                cookiesToSet.forEach(({ name, value, options }) =>
+                  cookieStore.set(name, value, options)
+                )
+              } catch {
+                // The `setAll` method was called from a Server Component.
+                // This can be ignored if you have middleware refreshing
+                // user sessions.
+              }
+            },
+          },
+        }
+      )
+
+      // Try to get session from code without PKCE requirements
+      const { data, error } = await supabase.auth.exchangeCodeForSession(code!)
+      
+      if (error) {
+        console.error('Code verification error:', error)
+        return NextResponse.redirect(`${requestUrl.origin}/auth/verify-error?message=${encodeURIComponent(error.message)}`)
+      }
+
+      // Verification successful
+      return NextResponse.redirect(`${requestUrl.origin}/auth/verify-success`)
+    } catch (error) {
+      console.error('Unexpected error during code verification:', error)
+      return NextResponse.redirect(`${requestUrl.origin}/auth/verify-error?message=${encodeURIComponent('An unexpected error occurred')}`)
+    }
+  } else if (token_hash && type) {
     // PKCE code flow
     const cookieStore = await cookies()
     

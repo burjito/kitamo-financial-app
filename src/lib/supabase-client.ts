@@ -45,7 +45,8 @@ function createSupabaseClient() {
       auth: {
         autoRefreshToken: true,
         persistSession: true,
-        flowType: 'pkce'
+        detectSessionInUrl: false,
+        flowType: 'implicit'
       }
     });
   } catch (error) {

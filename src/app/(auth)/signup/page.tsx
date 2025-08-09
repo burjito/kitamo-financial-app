@@ -89,7 +89,8 @@ const Signup = () => {
             first_name: formData.firstName,
             last_name: formData.lastName,
           },
-          emailRedirectTo: `${getBaseUrl()}/api/auth/verify-email`,
+          // Remove emailRedirectTo to use OTP instead of email links
+          // Supabase will send a 6-digit OTP to the email
         },
       });
 
@@ -99,19 +100,12 @@ const Signup = () => {
 
       toast({
         title: "Welcome to KitaMo!",
-        description: "Account created successfully! Please check your email and click the verification link within 24 hours. If you don't see the email, check your spam folder.",
+        description: "Account created successfully! We've sent a 6-digit verification code to your email. Please check your email and enter the code on the next page.",
         duration: 8000,
       });
        
-      // Don't redirect immediately, let them check their email first
-      setFormData({
-        firstName: "",
-        lastName: "",
-        email: "",
-        password: "",
-        confirmPassword: "",
-        agreeToTerms: false
-      });
+      // Redirect to OTP verification page
+      router.push(`/verify-otp?email=${encodeURIComponent(formData.email)}`);
     } catch (error: any) {
       setIsLoading(false);
       toast({

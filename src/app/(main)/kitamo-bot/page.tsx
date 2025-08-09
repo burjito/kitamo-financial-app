@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -15,6 +15,7 @@ import { cn } from "@/lib/utils";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 
 interface Message {
   id: string;
@@ -228,7 +229,7 @@ export default function KitaMoBotPage() {
   
   const showSuggestions = messages.filter(m => m.sender === 'user').length === 0;
 
-  // Enhanced markdown components with better bullet point styling
+  // Simplified markdown components
   const markdownComponents = {
     p: ({ children }: { children?: React.ReactNode }) => (
       <p className="text-sm my-2 leading-relaxed">{children}</p>
@@ -262,6 +263,44 @@ export default function KitaMoBotPage() {
         {children}
       </blockquote>
     ),
+    table: ({ children }: { children?: React.ReactNode }) => (
+      <div className="overflow-x-auto my-4">
+        <table className="min-w-full border-collapse border border-gray-300 text-xs">
+          {children}
+        </table>
+      </div>
+    ),
+    thead: ({ children }: { children?: React.ReactNode }) => (
+      <thead className="bg-muted">
+        {children}
+      </thead>
+    ),
+    tbody: ({ children }: { children?: React.ReactNode }) => (
+      <tbody>
+        {children}
+      </tbody>
+    ),
+    tr: ({ children }: { children?: React.ReactNode }) => (
+      <tr className="border-b border-gray-200">
+        {children}
+      </tr>
+    ),
+    th: ({ children }: { children?: React.ReactNode }) => (
+      <th className="border border-gray-300 px-2 py-1 text-left font-medium text-foreground bg-muted">
+        {children}
+      </th>
+    ),
+    td: ({ children }: { children?: React.ReactNode }) => (
+      <td className="border border-gray-300 px-2 py-1 text-muted-foreground">
+        {children}
+      </td>
+    ),
+  };
+
+  // Function to preprocess text for better bullet point handling
+  const preprocessMessage = (text: string): string => {
+    // Convert bullet points to proper markdown format
+    return text.replace(/•\s*/g, '\n• ');
   };
 
   return (
@@ -358,8 +397,11 @@ export default function KitaMoBotPage() {
                     <div className={`rounded-lg px-4 py-3 max-w-lg ${message.sender === 'user' ? 'bg-primary text-primary-foreground' : 'bg-muted'}`}>
                       {message.sender === 'bot' ? (
                         <div className="[&>*:first-child]:mt-0 [&>*:last-child]:mb-0">
-                          <ReactMarkdown components={markdownComponents}>
-                            {message.text}
+                          <ReactMarkdown 
+                            components={markdownComponents}
+                            remarkPlugins={[remarkGfm]}
+                          >
+                            {preprocessMessage(message.text)}
                           </ReactMarkdown>
                         </div>
                       ) : (

@@ -228,6 +228,31 @@ export default function KitaMoBotPage() {
   
   const showSuggestions = messages.filter(m => m.sender === 'user').length === 0;
 
+  // Custom components for ReactMarkdown
+  const markdownComponents = {
+    p: ({ children }: { children?: React.ReactNode }) => (
+      <p className="text-sm my-1 leading-relaxed">{children}</p>
+    ),
+    strong: ({ children }: { children?: React.ReactNode }) => (
+      <strong className="font-semibold text-foreground">{children}</strong>
+    ),
+    ul: ({ children }: { children?: React.ReactNode }) => (
+      <ul className="text-sm my-2 ml-4 list-disc">{children}</ul>
+    ),
+    li: ({ children }: { children?: React.ReactNode }) => (
+      <li className="text-sm my-0.5 leading-relaxed">{children}</li>
+    ),
+    h1: ({ children }: { children?: React.ReactNode }) => (
+      <h1 className="text-sm font-semibold text-foreground">{children}</h1>
+    ),
+    h2: ({ children }: { children?: React.ReactNode }) => (
+      <h2 className="text-sm font-semibold text-foreground">{children}</h2>
+    ),
+    h3: ({ children }: { children?: React.ReactNode }) => (
+      <h3 className="text-sm font-semibold text-foreground">{children}</h3>
+    ),
+  };
+
   return (
     <div className="animate-in fade-in-0 duration-500 flex justify-center items-start h-full">
       <Card className="w-full max-w-4xl h-[calc(100vh-10rem)] flex flex-col">
@@ -321,16 +346,11 @@ export default function KitaMoBotPage() {
                     )}
                     <div className={`rounded-lg px-4 py-2 max-w-lg ${message.sender === 'user' ? 'bg-primary text-primary-foreground' : 'bg-muted'}`}>
                       {message.sender === 'bot' ? (
-                        <ReactMarkdown 
-                          className="text-sm prose prose-sm max-w-none
-                            prose-p:my-1 prose-p:leading-relaxed prose-p:text-sm
-                            prose-strong:font-semibold prose-strong:text-foreground
-                            prose-ul:my-2 prose-ul:text-sm prose-li:my-0.5 prose-li:text-sm prose-li:leading-relaxed
-                            prose-headings:text-foreground prose-headings:font-semibold prose-headings:text-sm
-                            [&>*:first-child]:mt-0 [&>*:last-child]:mb-0"
-                        >
-                          {message.text}
-                        </ReactMarkdown>
+                        <div className="[&>*:first-child]:mt-0 [&>*:last-child]:mb-0">
+                          <ReactMarkdown components={markdownComponents}>
+                            {message.text}
+                          </ReactMarkdown>
+                        </div>
                       ) : (
                         <p className="text-sm whitespace-pre-wrap">{message.text}</p>
                       )}

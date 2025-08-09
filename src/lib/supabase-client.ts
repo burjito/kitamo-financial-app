@@ -28,8 +28,9 @@ function createSupabaseClient() {
       auth: {
         autoRefreshToken: true,
         persistSession: true,
-        detectSessionInUrl: true, // Enable for PKCE flow
-        flowType: 'pkce' // Explicitly use PKCE flow
+        detectSessionInUrl: true, // Enable for email verification
+        // Remove explicit flowType to let Supabase choose the best method
+        // This allows fallback to implicit flow when PKCE fails
       }
     });
   } catch (error) {

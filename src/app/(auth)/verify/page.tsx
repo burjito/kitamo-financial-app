@@ -65,6 +65,22 @@ function VerificationContent() {
           throw new Error('Authentication service is not available');
         }
 
+        // Check if user is already signed in (session might be in URL)
+        const { data: sessionData } = await supabase.auth.getSession();
+        if (sessionData?.session?.user) {
+          console.log('✅ User already verified and signed in:', sessionData.session.user.email);
+          setState({
+            status: 'success',
+            message: 'Already verified!',
+            details: 'Your email is already verified. Redirecting to your dashboard...'
+          });
+          
+          setTimeout(() => {
+            router.push('/home');
+          }, 1500);
+          return;
+        }
+
         // Handle PKCE flow (modern, secure method)
         if (code) {
           console.log('🔐 Processing PKCE verification with code');
@@ -74,11 +90,16 @@ function VerificationContent() {
           if (pkceError) {
             console.error('❌ PKCE verification failed:', pkceError);
             
-            if (pkceError.message.includes('code verifier')) {
+            if (pkceError.message.includes('code verifier') || 
+                pkceError.message.includes('auth code and code verifier')) {
+              
+              console.log('🔄 PKCE failed due to session mismatch - this is normal when opening email in new tab');
+              
+              // Instead of showing error, let's be more user-friendly
               setState({
                 status: 'error',
-                message: 'Browser session mismatch',
-                details: 'Please open the verification link in the same browser where you signed up. If this continues, try signing up again.'
+                message: 'Almost there!',
+                details: 'It looks like you opened this link in a new tab (which is totally normal!). For security reasons, email verification needs to happen in the original signup tab. You can either go back to your original tab, or simply sign up again - it only takes a moment.'
               });
             } else if (pkceError.message.includes('expired')) {
               setState({

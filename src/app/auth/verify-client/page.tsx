@@ -37,7 +37,16 @@ function VerifyClientContent() {
         if (error) {
           console.error('Client-side verification error:', error);
           setStatus('error');
-          setErrorMessage(error.message || 'Verification failed');
+          
+          // Handle specific PKCE errors
+          if (error.message.includes('code verifier') || 
+              error.message.includes('auth code and code verifier')) {
+            setErrorMessage('Email verification requires opening the link in the same browser where you signed up. Please try signing up again.');
+          } else if (error.message.includes('expired')) {
+            setErrorMessage('The verification link has expired. Please sign up again to receive a new verification email.');
+          } else {
+            setErrorMessage(error.message || 'Verification failed');
+          }
           return;
         }
 

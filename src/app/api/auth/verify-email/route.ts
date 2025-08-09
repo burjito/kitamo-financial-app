@@ -26,13 +26,18 @@ export async function GET(request: NextRequest) {
     // Check for PKCE-related errors
     if (error_description && (
       error_description.includes('auth code and code verifier') ||
-      error_description.includes('code verifier')
+      error_description.includes('code verifier') ||
+      error_description.includes('both auth code and code verifier should be non-empty')
     )) {
       // This is a PKCE configuration error, redirect to client-side verification
       console.log('PKCE error detected, redirecting to client-side verification')
       const codeParam = requestUrl.searchParams.get('code')
       if (codeParam) {
-        return NextResponse.redirect(`${requestUrl.origin}/auth/verify-client?code=${encodeURIComponent(codeParam)}`)
+        const clientParams = new URLSearchParams()
+        clientParams.set('code', codeParam)
+        if (type) clientParams.set('type', type)
+        if (email) clientParams.set('email', email)
+        return NextResponse.redirect(`${requestUrl.origin}/auth/verify-client?${clientParams.toString()}`)
       } else {
         userFriendlyMessage = 'Email verification configuration error. Please try signing up again.'
       }
@@ -68,7 +73,16 @@ export async function GET(request: NextRequest) {
   if (code) {
     // This is likely a PKCE code, redirect to client-side handling
     console.log('Code detected, redirecting to client-side verification:', code)
-    return NextResponse.redirect(`${requestUrl.origin}/auth/verify-client?code=${encodeURIComponent(code)}`)
+    
+    // Preserve all query parameters for client-side verification
+    const clientParams = new URLSearchParams()
+    clientParams.set('code', code)
+    
+    // Also preserve other important parameters that might be needed
+    if (type) clientParams.set('type', type)
+    if (email) clientParams.set('email', email)
+    
+    return NextResponse.redirect(`${requestUrl.origin}/auth/verify-client?${clientParams.toString()}`)
   } else if (token_hash && type) {
     // Legacy token_hash flow (works with server-side verification)
     console.log('Using token_hash flow with token_hash:', token_hash, 'type:', type)

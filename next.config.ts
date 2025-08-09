@@ -18,20 +18,61 @@ const nextConfig: NextConfig = {
       },
     ],
   },
-  webpack: (config, { isServer }) => {
-    // Handle optional dependencies for Genkit AI
+  experimental: {
+    serverComponentsExternalPackages: [
+      '@genkit-ai/core',
+      '@genkit-ai/ai',
+      '@genkit-ai/flow',
+      '@genkit-ai/googleai',
+      '@genkit-ai/firebase',
+      '@opentelemetry/exporter-jaeger',
+    ],
+  },
+  webpack: (config, { isServer, dev }) => {
+    // List of problematic dependencies to externalize
+    const externalDeps = [
+      '@opentelemetry/exporter-jaeger',
+      '@genkit-ai/firebase',
+      '@genkit-ai/core',
+      '@genkit-ai/ai',
+      '@genkit-ai/flow',
+      '@genkit-ai/googleai',
+      'jaeger-client',
+      'firebase-admin',
+      'firebase-functions',
+    ];
+
+    // Handle fallbacks for client-side
     config.resolve.fallback = {
       ...config.resolve.fallback,
-      '@opentelemetry/exporter-jaeger': false,
-      '@genkit-ai/firebase': false,
+      fs: false,
+      net: false,
+      tls: false,
+      crypto: false,
+      stream: false,
+      url: false,
+      zlib: false,
+      http: false,
+      https: false,
+      assert: false,
+      os: false,
+      path: false,
     };
-    
-    // Ignore optional dependencies
+
+    // Mark dependencies as external
     config.externals = config.externals || [];
+    
     if (isServer) {
-      config.externals.push({
-        '@opentelemetry/exporter-jaeger': 'commonjs @opentelemetry/exporter-jaeger',
-        '@genkit-ai/firebase': 'commonjs @genkit-ai/firebase',
+      // For server-side, externalize these dependencies
+      externalDeps.forEach(dep => {
+        config.externals.push({
+          [dep]: `commonjs ${dep}`
+        });
+      });
+    } else {
+      // For client-side, set fallbacks to false
+      externalDeps.forEach(dep => {
+        config.resolve.fallback[dep] = false;
       });
     }
     

@@ -75,41 +75,50 @@ const Signup = () => {
       return 'http://localhost:3000'; // fallback for build time
     };
 
-    const { error } = await supabase.auth.signUp({
-      email: formData.email,
-      password: formData.password,
-      options: {
-        data: {
-          first_name: formData.firstName,
-          last_name: formData.lastName,
+    try {
+      // Check if supabase is available
+      if (!supabase || !supabase.auth) {
+        throw new Error('Authentication service is not available');
+      }
+
+      const { error } = await supabase.auth.signUp({
+        email: formData.email,
+        password: formData.password,
+        options: {
+          data: {
+            first_name: formData.firstName,
+            last_name: formData.lastName,
+          },
+          emailRedirectTo: `${getBaseUrl()}/api/auth/verify-email`,
         },
-        emailRedirectTo: `${getBaseUrl()}/api/auth/verify-email`,
-      },
-    });
-
-    setIsLoading(false);
-
-    if (error) {
-       toast({
-        title: "Signup Failed",
-        description: error.message,
-        variant: "destructive"
       });
-    } else {
+
+      if (error) throw error;
+
+      setIsLoading(false);
+
       toast({
         title: "Welcome to KitaMo!",
         description: "Account created successfully! Please check your email and click the 'Confirm My Account' button to verify your account.",
         duration: 6000,
       });
-       // Don't redirect immediately, let them check their email first
-       setFormData({
-         firstName: "",
-         lastName: "",
-         email: "",
-         password: "",
-         confirmPassword: "",
-         agreeToTerms: false
-       });
+       
+      // Don't redirect immediately, let them check their email first
+      setFormData({
+        firstName: "",
+        lastName: "",
+        email: "",
+        password: "",
+        confirmPassword: "",
+        agreeToTerms: false
+      });
+    } catch (error: any) {
+      setIsLoading(false);
+      toast({
+        title: "Signup Failed",
+        description: error.message || 'An unexpected error occurred',
+        variant: "destructive"
+      });
     }
   };
 
@@ -235,7 +244,7 @@ const Signup = () => {
                   variant="ghost"
                   size="sm"
                   className="absolute right-0 top-0 h-full px-3 hover:bg-transparent"
-                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  onClick={() => setShowPassword(!showConfirmPassword)}
                 >
                   {showConfirmPassword ? (
                     <EyeOff className="h-4 w-4 text-muted-foreground" />

@@ -10,6 +10,9 @@ export async function GET(request: NextRequest) {
   const token = requestUrl.searchParams.get('token')
   const email = requestUrl.searchParams.get('email')
   const confirmation_url = requestUrl.searchParams.get('confirmation_url')
+  const error = requestUrl.searchParams.get('error')
+  const error_code = requestUrl.searchParams.get('error_code')
+  const error_description = requestUrl.searchParams.get('error_description')
   const next = requestUrl.searchParams.get('next') ?? '/home'
 
   // Debug: Log all query parameters
@@ -21,6 +24,26 @@ export async function GET(request: NextRequest) {
   console.log('token:', token)
   console.log('email:', email)
   console.log('confirmation_url:', confirmation_url)
+  console.log('error:', error)
+  console.log('error_code:', error_code)
+  console.log('error_description:', error_description)
+
+  // Handle Supabase errors first
+  if (error) {
+    console.log('Supabase returned an error:', error, error_code, error_description)
+    
+    let userFriendlyMessage = 'An error occurred during verification'
+    
+    if (error_code === 'otp_expired') {
+      userFriendlyMessage = 'The verification link has expired. Please sign up again to receive a new verification email.'
+    } else if (error === 'access_denied') {
+      userFriendlyMessage = 'Access denied. The verification link may be invalid or expired.'
+    } else if (error_description) {
+      userFriendlyMessage = error_description
+    }
+    
+    return NextResponse.redirect(`${requestUrl.origin}/auth/verify-error?message=${encodeURIComponent(userFriendlyMessage)}`)
+  }
 
   // Check for required environment variables
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL?.trim();

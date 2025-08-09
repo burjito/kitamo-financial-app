@@ -99,8 +99,8 @@ const Signup = () => {
 
       toast({
         title: "Welcome to KitaMo!",
-        description: "Account created successfully! Please check your email and click the 'Confirm My Account' button to verify your account.",
-        duration: 6000,
+        description: "Account created successfully! Please check your email and click the verification link within 24 hours. If you don't see the email, check your spam folder.",
+        duration: 8000,
       });
        
       // Don't redirect immediately, let them check their email first

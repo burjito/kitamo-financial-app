@@ -34,8 +34,8 @@ export default function LandingPage() {
             <LandingHeader />
             <main className="flex-1">
                 {/* Hero Section */}
-                <section className="relative w-full h-screen flex items-center">
-                    <div className="absolute inset-0">
+                <section className="relative w-full min-h-[120vh] flex items-start pt-36">
+                    <div className="absolute inset-0 w-full h-full">
                         <Image
                             src="/final_cover.png"
                             alt="KitaMo Financial Simulator background"
@@ -48,7 +48,8 @@ export default function LandingPage() {
                        <div className="max-w-xl text-center md:text-left">
                            <div className="space-y-6">
                                 <h1 className="text-4xl md:text-6xl font-extrabold tracking-tighter leading-tight text-foreground">
-                                    Basta may <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">kita</span>, may <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">matatamo.</span>
+                                    Basta may <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">kita</span>,<br />
+                                    may <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">matatamo.</span>
                                 </h1>
                                 <p className="max-w-lg mx-auto md:mx-0 text-lg md:text-xl text-muted-foreground">
                                    Make smarter money decisions with AI-powered what-if scenarios.
@@ -71,8 +72,8 @@ export default function LandingPage() {
                 </section>
 
                 {/* Features Section */}
-                <section id="features" className="py-20 md:py-32 bg-background">
-                    <div className="container max-w-6xl mx-auto px-4">
+                <section id="features" className="relative py-20 md:py-32 bg-gradient-to-b from-transparent via-background/80 to-background">
+                    <div className="container max-w-6xl mx-auto px-4 relative z-10">
                         <div className="text-center mb-16">
                             <h2 className="text-3xl md:text-4xl font-bold text-foreground">A Future You Can See</h2>
                             <p className="max-w-2xl mx-auto text-lg text-muted-foreground mt-4">

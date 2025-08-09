@@ -17,13 +17,15 @@ const FeatureCard = ({ icon, title, description }: { icon: React.ReactNode, titl
 );
 
 const StatCard = ({ icon, value, label }: { icon: React.ReactNode, value: string, label: string }) => (
-    <div className="bg-primary/90 backdrop-blur-sm text-primary-foreground p-4 rounded-lg flex items-center gap-4 shadow-lg">
-        <div className="text-secondary">
-            {icon}
-        </div>
-        <div>
-            <div className="text-xl font-bold">{value}</div>
-            <div className="text-sm opacity-80">{label}</div>
+    <div className="relative p-0.5 rounded-lg bg-gradient-to-r from-primary to-yellow-400 shadow-lg">
+        <div className="bg-white rounded-lg p-4 h-full flex flex-col items-center justify-center text-center">
+            <div className="flex items-center gap-2 mb-1">
+                <div className="text-yellow-500 flex-shrink-0">
+                    {icon}
+                </div>
+                <div className="text-xl font-bold text-red-900">{value}</div>
+            </div>
+            <div className="text-sm text-red-700">{label}</div>
         </div>
     </div>
 );
@@ -47,7 +49,7 @@ export default function LandingPage() {
                     <div className="relative container max-w-7xl mx-auto px-4 z-10">
                        <div className="max-w-xl text-center md:text-left">
                            <div className="space-y-6">
-                                <h1 className="text-4xl md:text-6xl font-extrabold tracking-tighter leading-tight text-foreground">
+                                <h1 className="text-5xl md:text-7xl font-extrabold tracking-tighter leading-tight text-foreground">
                                     Basta may <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">kita</span>,<br />
                                     may <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">matatamo.</span>
                                 </h1>

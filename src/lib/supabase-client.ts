@@ -10,7 +10,12 @@ function createSupabaseClient() {
     return null;
   }
 
-  return createBrowserClient(supabaseUrl, supabaseAnonKey);
+  return createBrowserClient(supabaseUrl, supabaseAnonKey, {
+    auth: {
+      autoRefreshToken: true,
+      persistSession: true,
+    }
+  });
 }
 
 const supabase = createSupabaseClient();

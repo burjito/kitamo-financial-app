@@ -264,34 +264,34 @@ export default function KitaMoBotPage() {
       </blockquote>
     ),
     table: ({ children }: { children?: React.ReactNode }) => (
-      <div className="overflow-x-auto my-4">
-        <table className="min-w-full border-collapse border border-gray-300 text-xs">
+      <div className="overflow-x-auto my-4 border rounded-lg">
+        <table className="min-w-full border-collapse text-sm">
           {children}
         </table>
       </div>
     ),
     thead: ({ children }: { children?: React.ReactNode }) => (
-      <thead className="bg-muted">
+      <thead className="bg-primary/10">
         {children}
       </thead>
     ),
     tbody: ({ children }: { children?: React.ReactNode }) => (
-      <tbody>
+      <tbody className="bg-white">
         {children}
       </tbody>
     ),
     tr: ({ children }: { children?: React.ReactNode }) => (
-      <tr className="border-b border-gray-200">
+      <tr className="border-b border-gray-200 hover:bg-gray-50">
         {children}
       </tr>
     ),
     th: ({ children }: { children?: React.ReactNode }) => (
-      <th className="border border-gray-300 px-2 py-1 text-left font-medium text-foreground bg-muted">
+      <th className="border-r border-gray-200 px-3 py-2 text-left font-semibold text-foreground bg-primary/5 first:border-l-0 last:border-r-0">
         {children}
       </th>
     ),
     td: ({ children }: { children?: React.ReactNode }) => (
-      <td className="border border-gray-300 px-2 py-1 text-muted-foreground">
+      <td className="border-r border-gray-200 px-3 py-2 text-foreground first:border-l-0 last:border-r-0">
         {children}
       </td>
     ),

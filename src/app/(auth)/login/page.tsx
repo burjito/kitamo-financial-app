@@ -247,6 +247,13 @@ const Login = () => {
                 Sign up
                 </Link>
             </div>
+            
+            <div className="text-sm">
+                Need to verify your email?{" "}
+                <Link href="/auth/check-verification" passHref className="text-secondary hover:underline font-medium">
+                Check verification status
+                </Link>
+            </div>
 
             <Button asChild variant="ghost" className="text-muted-foreground hover:text-primary hover:bg-transparent">
                 <Link href="/">

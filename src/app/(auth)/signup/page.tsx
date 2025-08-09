@@ -72,6 +72,7 @@ const Signup = () => {
           first_name: formData.firstName,
           last_name: formData.lastName,
         },
+        emailRedirectTo: `${process.env.NEXT_PUBLIC_SITE_URL || window.location.origin}/api/auth/verify-email`,
       },
     });
 
@@ -86,9 +87,18 @@ const Signup = () => {
     } else {
       toast({
         title: "Welcome to KitaMo!",
-        description: "Your account has been created. Please check your email to verify your account.",
+        description: "Account created successfully! Please check your email and click the 'Confirm My Account' button to verify your account.",
+        duration: 6000,
       });
-       router.push("/login");
+       // Don't redirect immediately, let them check their email first
+       setFormData({
+         firstName: "",
+         lastName: "",
+         email: "",
+         password: "",
+         confirmPassword: "",
+         agreeToTerms: false
+       });
     }
   };
 

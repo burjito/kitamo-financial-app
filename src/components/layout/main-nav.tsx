@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils"
 
 const navItems = [
   { href: "/home", label: "Home" },
-  { href: "/kitamo-bot", label: "AI Bot" },
+  { href: "/kita-bot", label: "AI Bot" },
   { href: "/what-if-simulator", label: "Simulator" },
   { href: "/goal-tracker", label: "Goals" },
 ];

@@ -60,7 +60,7 @@ export async function middleware(req: NextRequest) {
       req.nextUrl.pathname.startsWith('/goal-tracker') ||
       req.nextUrl.pathname.startsWith('/what-if-simulator') ||
       req.nextUrl.pathname.startsWith('/financial-report') ||
-      req.nextUrl.pathname.startsWith('/kitamo-bot') ||
+      req.nextUrl.pathname.startsWith('/kita-bot') ||
       req.nextUrl.pathname.startsWith('/profile')) {
     if (!session) {
       return NextResponse.redirect(new URL('/login', req.url))
@@ -81,7 +81,7 @@ export const config = {
     '/goal-tracker/:path*',
     '/what-if-simulator/:path*',
     '/financial-report/:path*',
-    '/kitamo-bot/:path*',
+    '/kita-bot/:path*',
     '/profile/:path*',
     '/login',
     '/signup'

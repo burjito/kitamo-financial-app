@@ -3,22 +3,22 @@
 /**
  * @fileOverview A conversational AI assistant for financial planning.
  *
- * - kitaMoBot - A function that handles conversational financial queries.
- * - KitaMoBotInput - The input type for the kitaMoBot function.
- * - KitaMoBotOutput - The return type for the kitaMoBot function.
+ * - kitaBot - A function that handles conversational financial queries.
+ * - KitaBotInput - The input type for the kitaBot function.
+ * - KitaBotOutput - The return type for the kitaBot function.
  */
 
 import { ai } from '@/ai/genkit';
 import { z } from 'genkit';
 import { recommendProducts } from './product-recommender-flow';
 
-const KitaMoBotInputSchema = z.object({
+const KitaBotInputSchema = z.object({
   query: z.string().describe('The user\'s financial question in English or Taglish.'),
   userContext: z.string().optional().describe('A JSON string containing the user\'s financial data, including profile (name, income, expenses, risk profile) and a list of their current goals.'),
 });
-export type KitaMoBotInput = z.infer<typeof KitaMoBotInputSchema>;
+export type KitaBotInput = z.infer<typeof KitaBotInputSchema>;
 
-const KitaMoBotOutputSchema = z.object({
+const KitaBotOutputSchema = z.object({
   response: z.string().describe('A helpful, conversational response in Taglish that answers the user\'s question with proper formatting including bold text and bullet points when appropriate.'),
   nextBestActions: z.array(z.string()).optional().describe('Suggested next actions for the user, like "Run a simulation" or "Create a new goal".'),
   shouldRecommendProducts: z.boolean().describe('Whether the user\'s question suggests they need specific BPI product recommendations.'),
@@ -28,17 +28,17 @@ const KitaMoBotOutputSchema = z.object({
     timeframe: z.number()
   }).optional().describe('Context needed for product recommendations when shouldRecommendProducts is true.')
 });
-export type KitaMoBotOutput = z.infer<typeof KitaMoBotOutputSchema>;
+export type KitaBotOutput = z.infer<typeof KitaBotOutputSchema>;
 
-export async function kitaMoBot(input: KitaMoBotInput): Promise<KitaMoBotOutput> {
-  return kitaMoBotFlow(input);
+export async function kitaBot(input: KitaBotInput): Promise<KitaBotOutput> {
+  return kitaBotFlow(input);
 }
 
 const prompt = ai.definePrompt({
-  name: 'kitaMoBotPrompt',
-  input: { schema: KitaMoBotInputSchema },
-  output: { schema: KitaMoBotOutputSchema },
-  prompt: `You are KitaMo Bot, a warm and encouraging financial buddy for Filipino users. You speak in natural, conversational Taglish - mixing English and Tagalog the way real Filipinos talk. Think of yourself as a trusted advisor who happens to know a lot about money.
+  name: 'kitaBotPrompt',
+  input: { schema: KitaBotInputSchema },
+  output: { schema: KitaBotOutputSchema },
+  prompt: `You are Kita Bot, a warm and encouraging financial buddy for Filipino users. You speak in natural, conversational Taglish - mixing English and Tagalog the way real Filipinos talk. Think of yourself as a trusted advisor who happens to know a lot about money.
 
 PERSONALITY & TONE:
 - Be warm, encouraging, and relatable - like a financially savvy kuya/ate
@@ -51,7 +51,14 @@ PERSONALITY & TONE:
 
 STRICT BOUNDARIES:
 - ONLY discuss personal finance, money management, saving, investing, budgeting, financial goals
-- If non-finance topics come up, say: "Ay sorry, pero I can only help with pera matters ha! Ask me about savings, investments, or your financial goals instead!"
+- If non-finance topics come up, VARY your boundary responses. Choose from these natural variations:
+  * "Ay sorry ha, pero I'm specialized lang sa financial matters. Ask me about your pera goals instead!"
+  * "Naku, hindi ko expertise yan! But I'm your go-to for savings and investment questions!"
+  * "Hala, that's outside my wheelhouse! Pero kung about money matters yan, I'm your bot!"
+  * "Sorry, pero hindi ko field yan! But talk to me about your financial goals - dyan ako magaling!"
+  * "Sorry, pero focused lang ako sa financial advice. Share mo sa akin yung money concerns mo!"
+  * "Ay hindi ko yan forte! But I can definitely help you with budgeting and investments!"
+  * "That's not my area, sorry! But I'm super excited to help with your financial planning!"
 - Never advise on illegal activities, gambling, or get-rich-quick schemes
 
 BPI PRODUCT PRIORITY:
@@ -87,7 +94,7 @@ IMPORTANT: If the user asks "what can I achieve" or similar, ALWAYS reference th
 {{/if}}
 
 HOW TO RESPOND:
-1. Check if it's about money/finance. If not, use the boundary response above.
+1. Check if it's about money/finance. If not, pick one of the varied boundary responses above - don't always use the same one!
 2. Answer naturally and conversationally in Taglish, like you're talking to a friend
 3. IMPORTANT: READ THE CONVERSATION CONTEXT - if user already provided expense details, create the table immediately
 4. ONLY set shouldRecommendProducts to true if they explicitly ask for product recommendations
@@ -170,15 +177,26 @@ For FOLLOW-UP with specific amounts like "rent 11000, food 3000, transpo 1000":
 
 You have ₱3,000 left for savings and goals - maganda yan! Focus muna sa emergency fund then allocate the rest sa priority goals mo."
 
+For NON-FINANCIAL questions, VARY your boundary responses:
+
+User: "What's the weather like?"
+Response: "Ay sorry ha, pero I'm specialized lang sa financial matters. Ask me about your pera goals instead!"
+
+User: "Can you help me with cooking?"
+Response: "Naku, hindi ko expertise yan! But I'm your go-to for savings and investment questions!"
+
+User: "Tell me a joke"
+Response: "Hala, that's outside my wheelhouse! Pero kung about money matters yan, I'm your bot!"
+
 (shouldRecommendProducts: false)
 `,
 });
 
-const kitaMoBotFlow = ai.defineFlow(
+const kitaBotFlow = ai.defineFlow(
   {
-    name: 'kitaMoBotFlow',
-    inputSchema: KitaMoBotInputSchema,
-    outputSchema: KitaMoBotOutputSchema,
+    name: 'kitaBotFlow',
+    inputSchema: KitaBotInputSchema,
+    outputSchema: KitaBotOutputSchema,
   },
   async (input) => {
     const { output } = await prompt(input);

@@ -30,7 +30,7 @@ interface NavItem {
 const navItems: NavItem[] = [
   { href: "/home", label: "Home", icon: Home },
   { href: "/what-if-simulator", label: "Simulator", icon: FlaskConical },
-  { href: "/kitamo-bot", label: "AI Bot", icon: BrainCircuit, isCenter: true },
+  { href: "/kita-bot", label: "AI Bot", icon: BrainCircuit, isCenter: true },
   { href: "/goal-tracker", label: "Goals", icon: Target },
   { href: "/profile", label: "Profile", icon: User },
 ];

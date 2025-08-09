@@ -228,28 +228,39 @@ export default function KitaMoBotPage() {
   
   const showSuggestions = messages.filter(m => m.sender === 'user').length === 0;
 
-  // Custom components for ReactMarkdown
+  // Enhanced markdown components with better bullet point styling
   const markdownComponents = {
     p: ({ children }: { children?: React.ReactNode }) => (
-      <p className="text-sm my-1 leading-relaxed">{children}</p>
+      <p className="text-sm my-2 leading-relaxed">{children}</p>
     ),
     strong: ({ children }: { children?: React.ReactNode }) => (
       <strong className="font-semibold text-foreground">{children}</strong>
     ),
     ul: ({ children }: { children?: React.ReactNode }) => (
-      <ul className="text-sm my-2 ml-4 list-disc">{children}</ul>
+      <ul className="text-sm my-3 ml-1 space-y-1">{children}</ul>
     ),
     li: ({ children }: { children?: React.ReactNode }) => (
-      <li className="text-sm my-0.5 leading-relaxed">{children}</li>
+      <li className="text-sm leading-relaxed flex items-start">
+        <span className="text-primary mr-2 font-bold flex-shrink-0 mt-0.5">•</span>
+        <span className="flex-1">{children}</span>
+      </li>
     ),
     h1: ({ children }: { children?: React.ReactNode }) => (
-      <h1 className="text-sm font-semibold text-foreground">{children}</h1>
+      <h1 className="text-base font-semibold text-foreground mt-4 mb-2">{children}</h1>
     ),
     h2: ({ children }: { children?: React.ReactNode }) => (
-      <h2 className="text-sm font-semibold text-foreground">{children}</h2>
+      <h2 className="text-sm font-semibold text-foreground mt-3 mb-2">{children}</h2>
     ),
     h3: ({ children }: { children?: React.ReactNode }) => (
-      <h3 className="text-sm font-semibold text-foreground">{children}</h3>
+      <h3 className="text-sm font-semibold text-foreground mt-2 mb-1">{children}</h3>
+    ),
+    em: ({ children }: { children?: React.ReactNode }) => (
+      <em className="italic text-muted-foreground">{children}</em>
+    ),
+    blockquote: ({ children }: { children?: React.ReactNode }) => (
+      <blockquote className="border-l-2 border-primary pl-3 my-2 text-sm text-muted-foreground italic">
+        {children}
+      </blockquote>
     ),
   };
 
@@ -344,7 +355,7 @@ export default function KitaMoBotPage() {
                         <AvatarFallback><Bot /></AvatarFallback>
                       </Avatar>
                     )}
-                    <div className={`rounded-lg px-4 py-2 max-w-lg ${message.sender === 'user' ? 'bg-primary text-primary-foreground' : 'bg-muted'}`}>
+                    <div className={`rounded-lg px-4 py-3 max-w-lg ${message.sender === 'user' ? 'bg-primary text-primary-foreground' : 'bg-muted'}`}>
                       {message.sender === 'bot' ? (
                         <div className="[&>*:first-child]:mt-0 [&>*:last-child]:mb-0">
                           <ReactMarkdown components={markdownComponents}>

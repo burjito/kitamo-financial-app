@@ -72,11 +72,3 @@ export default function VerifyErrorPage() {
     </Suspense>
   );
 }
-              Return to Home
-            </Link>
-          </div>
-        </CardContent>
-      </Card>
-    </div>
-  );
-}

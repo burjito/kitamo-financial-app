@@ -148,10 +148,8 @@ function OTPVerificationContent() {
           description: "Your account has been successfully verified. Redirecting to login...",
         });
 
-        // Redirect to login after a short delay
-        setTimeout(() => {
-          router.push('/login');
-        }, 2000);
+        // Redirect to login immediately
+        router.push('/login');
       }
 
     } catch (error: any) {

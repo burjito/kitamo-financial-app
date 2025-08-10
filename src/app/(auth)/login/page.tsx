@@ -57,7 +57,7 @@ const Login = () => {
           break;
         case "Email not confirmed":
           errorTitle = "Email Not Verified";
-          errorMessage = "Please check your email and click the verification link before signing in.";
+          errorMessage = "Please verify your email with the 6-digit code that was sent to your email address during signup.";
           break;
         case "Too many requests":
           errorTitle = "Too Many Attempts";
@@ -245,13 +245,6 @@ const Login = () => {
                 Don't have an account?{" "}
                 <Link href="/signup" passHref className="text-primary hover:underline font-medium">
                 Sign up
-                </Link>
-            </div>
-            
-            <div className="text-sm">
-                Need to verify your email?{" "}
-                <Link href="/auth/check-verification" passHref className="text-secondary hover:underline font-medium">
-                Check verification status
                 </Link>
             </div>
 

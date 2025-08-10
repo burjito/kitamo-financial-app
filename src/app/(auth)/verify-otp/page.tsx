@@ -145,10 +145,13 @@ function OTPVerificationContent() {
         
         toast({
           title: "Email Verified!",
-          description: "Your account has been successfully verified. Redirecting to login...",
+          description: "Your account has been successfully verified. Please log in to continue.",
         });
 
-        // Redirect to login immediately
+        // Sign out the user after verification so they must manually log in
+        await supabase.auth.signOut();
+        
+        // Redirect to login page
         router.push('/login');
       }
 

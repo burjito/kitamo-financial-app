@@ -38,6 +38,11 @@ const suggestionPrompts = [
     "Is it okay to pause one goal to focus on another?",
 ]
 
+const mobileSuggestionPrompts = [
+    "Ano ang kaya kong ma-achieve with my current savings?",
+    "Based sa risk profile ko, saan maganda mag-invest?",
+]
+
 const initialGreeting = { 
   id: 'start', 
   text: "Hey! I'm Kita Bot, your financial buddy. Ask me anything about your money goals, or try one of the suggestions below. Need inspiration? Click the 'Browse Questions' button!", 
@@ -305,13 +310,18 @@ export default function KitaMoBotPage() {
 
   return (
     <div className="animate-in fade-in-0 duration-500 flex justify-center items-start h-full">
-      <Card className="w-full max-w-4xl h-[calc(100vh-8rem)] md:h-[calc(100vh-10rem)] flex flex-col">
+      <Card className="w-full max-w-4xl h-[calc(100vh-6rem)] md:h-[calc(100vh-10rem)] flex flex-col">
         <CardHeader className="text-center flex-shrink-0 pb-3 md:pb-6">
           <div className="flex justify-center items-center gap-2">
             <BrainCircuit className="h-6 w-6 md:h-8 md:w-8 text-primary" />
             <CardTitle className="text-xl md:text-3xl">Kita Bot</CardTitle>
           </div>
-          <CardDescription className="text-sm md:text-base">Your AI financial assistant. Ask me in Taglish!</CardDescription>
+          <CardDescription className="text-sm md:text-base">
+            <div className="space-y-1">
+              <div>Your AI financial assistant.</div>
+              <div>Ask me in Taglish!</div>
+            </div>
+          </CardDescription>
         </CardHeader>
         <CardContent className="flex-grow flex flex-col p-3 md:p-4 overflow-hidden min-h-0">
           {/* Chat Messages Area - Hidden when history is shown */}
@@ -501,11 +511,21 @@ export default function KitaMoBotPage() {
                         Not sure where to start? Try these:
                     </p>
                     <div className="flex flex-wrap gap-1">
-                        {suggestionPrompts.map(prompt => (
-                            <Button key={prompt} variant="outline" size="sm" className="text-xs" onClick={() => handleSendMessage(null, prompt)}>
-                                {prompt}
-                            </Button>
-                        ))}
+                        {/* Show only 2 prompts on mobile, all on desktop */}
+                        <div className="md:hidden">
+                          {mobileSuggestionPrompts.map(prompt => (
+                              <Button key={prompt} variant="outline" size="sm" className="text-xs mb-1" onClick={() => handleSendMessage(null, prompt)}>
+                                  {prompt}
+                              </Button>
+                          ))}
+                        </div>
+                        <div className="hidden md:flex md:flex-wrap md:gap-1">
+                          {suggestionPrompts.map(prompt => (
+                              <Button key={prompt} variant="outline" size="sm" className="text-xs" onClick={() => handleSendMessage(null, prompt)}>
+                                  {prompt}
+                              </Button>
+                          ))}
+                        </div>
                     </div>
                 </div>
             )}

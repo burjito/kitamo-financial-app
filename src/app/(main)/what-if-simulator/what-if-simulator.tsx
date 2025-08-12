@@ -29,6 +29,8 @@ import {
   Rocket,
   GraduationCap,
   Shield,
+  ChevronLeft,
+  ChevronRight,
 } from "lucide-react";
 import { useAppContext } from '@/contexts/app-context';
 import { useToast } from '@/hooks/use-toast';
@@ -142,12 +144,30 @@ export const WhatIfSimulator = () => {
   const [isRecommenderOpen, setIsRecommenderOpen] = useState(false);
   const [showScenarios, setShowScenarios] = useState(false);
   const [detectedGoalType, setDetectedGoalType] = useState('general');
+  const [currentScenarioPage, setCurrentScenarioPage] = useState(0);
   
   const timeframe = timeframeYears * 12 + timeframeMonths;
   const monthlySavings = Math.max(0, monthlyIncome - monthlyExpenses);
   const projectedSavings = monthlySavings * timeframe;
   const savingsRate = monthlyIncome > 0 ? (monthlySavings / monthlyIncome) * 100 : 0;
   const goalProgress = goalAmount > 0 ? (projectedSavings / goalAmount) * 100 : 0;
+  
+  // Swipeable scenarios logic
+  const scenarioEntries = Object.entries(presetScenarios);
+  const scenariosPerPage = 2;
+  const totalPages = Math.ceil(scenarioEntries.length / scenariosPerPage);
+  const currentScenarios = scenarioEntries.slice(
+    currentScenarioPage * scenariosPerPage,
+    (currentScenarioPage + 1) * scenariosPerPage
+  );
+  
+  const nextScenarioPage = () => {
+    setCurrentScenarioPage((prev) => (prev + 1) % totalPages);
+  };
+  
+  const prevScenarioPage = () => {
+    setCurrentScenarioPage((prev) => (prev - 1 + totalPages) % totalPages);
+  };
   const monthsToGoal = monthlySavings > 0 ? Math.ceil(goalAmount / monthlySavings) : Infinity;
 
   const handleValueChange = <T,>(setter: React.Dispatch<React.SetStateAction<T>>) => (value: T) => {
@@ -288,13 +308,48 @@ export const WhatIfSimulator = () => {
                       </CardDescription>
                     </CardHeader>
                     <CardContent>
-                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 md:gap-4">
-                        {Object.entries(presetScenarios).map(([key, {name, icon: Icon}]) => (
-                            <Button key={key} variant="outline" className="flex flex-col items-center justify-center h-20 md:h-24 p-3 md:p-4 text-center" onClick={() => loadPreset(key as keyof typeof presetScenarios)}>
-                                <Icon className="h-5 w-5 md:h-6 md:w-6 mb-1 md:mb-2 text-primary" />
-                                <span className="text-xs md:text-sm text-wrap leading-tight">{name}</span>
-                            </Button>
-                        ))}
+                      <div className="hidden md:block">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 md:gap-4">
+                          {Object.entries(presetScenarios).map(([key, {name, icon: Icon}]) => (
+                              <Button key={key} variant="outline" className="flex flex-col items-center justify-center h-20 md:h-24 p-3 md:p-4 text-center" onClick={() => loadPreset(key as keyof typeof presetScenarios)}>
+                                  <Icon className="h-5 w-5 md:h-6 md:w-6 mb-1 md:mb-2 text-primary" />
+                                  <span className="text-xs md:text-sm text-wrap leading-tight">{name}</span>
+                              </Button>
+                          ))}
+                        </div>
+                      </div>
+                      
+                      {/* Mobile swipeable view */}
+                      <div className="md:hidden">
+                        <div className="flex items-center justify-between mb-4">
+                          <Button 
+                            variant="ghost" 
+                            size="sm" 
+                            onClick={prevScenarioPage}
+                            className="p-2"
+                          >
+                            <ChevronLeft className="h-4 w-4" />
+                          </Button>
+                          <span className="text-xs text-muted-foreground">
+                            {currentScenarioPage + 1} of {totalPages}
+                          </span>
+                          <Button 
+                            variant="ghost" 
+                            size="sm" 
+                            onClick={nextScenarioPage}
+                            className="p-2"
+                          >
+                            <ChevronRight className="h-4 w-4" />
+                          </Button>
+                        </div>
+                        <div className="grid grid-cols-2 gap-3">
+                          {currentScenarios.map(([key, {name, icon: Icon}]) => (
+                              <Button key={key} variant="outline" className="flex flex-col items-center justify-center h-24 p-3 text-center" onClick={() => loadPreset(key as keyof typeof presetScenarios)}>
+                                  <Icon className="h-6 w-6 mb-2 text-primary" />
+                                  <span className="text-xs text-wrap leading-tight">{name}</span>
+                              </Button>
+                          ))}
+                        </div>
                       </div>
                     </CardContent>
                   </Card>

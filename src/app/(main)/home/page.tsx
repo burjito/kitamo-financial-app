@@ -91,7 +91,7 @@ export default function HomePage() {
                 </p>
             </CardContent>
             </Card>
-             <Card>
+             <Card className="col-span-2 md:col-span-1 lg:col-span-1">
                 <CardHeader className="flex flex-row items-center justify-between pb-2">
                     <CardTitle className="text-xs md:text-sm font-medium">Risk Profile</CardTitle>
                     <Shield className="h-3 w-3 md:h-4 md:w-4 text-muted-foreground" />

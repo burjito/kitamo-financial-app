@@ -105,9 +105,8 @@ const SettingsNav = ({ activeTab, setActiveTab }: { activeTab: string, setActive
       <div className="md:hidden">
         <Sheet>
           <SheetTrigger asChild>
-            <Button variant="outline" size="sm" className="w-full">
-              <Menu className="mr-2 h-4 w-4" />
-              Menu
+            <Button variant="outline" size="sm">
+              <Menu className="h-4 w-4" />
             </Button>
           </SheetTrigger>
           <SheetContent side="left" className="w-64">

@@ -33,7 +33,6 @@ const StatCard = ({ icon, value, label }: { icon: React.ReactNode, value: string
 export default function LandingPage() {
     return (
         <div className="flex flex-col min-h-screen bg-background">
-            <LandingHeader />
             <main className="flex-1">
                 {/* Hero Section */}
                 <section className="relative w-full min-h-screen">
@@ -88,7 +87,7 @@ export default function LandingPage() {
                     {/* Mobile - Content Above, Image Below */}
                     <div className="md:hidden bg-gradient-to-b from-orange-50 to-orange-100 min-h-screen flex flex-col">
                         {/* Mobile Content */}
-                        <div className="flex-1 container mx-auto px-4 pt-8 pb-6">
+                        <div className="flex-1 container mx-auto px-4 pt-16 pb-6">
                             <div className="text-center space-y-6">
                                 <h1 className="text-4xl font-extrabold tracking-tighter leading-tight text-foreground">
                                     Basta may <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">kita</span>,<br />
@@ -115,12 +114,12 @@ export default function LandingPage() {
                         </div>
 
                         {/* Mobile Image - Below Content */}
-                        <div className="relative h-80 w-full">
+                        <div className="relative h-96 w-full overflow-hidden">
                             <Image
                                 src="/mobile_cover.png"
                                 alt="KitaMo Financial Simulator mobile illustration"
                                 fill
-                                className="object-cover object-bottom"
+                                className="object-contain object-center"
                                 priority
                             />
                         </div>

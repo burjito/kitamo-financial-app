@@ -85,7 +85,7 @@ export default function LandingPage() {
                         {/* Mobile Content */}
                         <div className="px-4 pt-0 pb-1 -mt-2">
                             <div className="text-center space-y-4">
-                                <h1 className="text-4xl font-extrabold tracking-tighter leading-tight text-foreground">
+                                <h1 className="text-[2.75rem] font-extrabold tracking-tighter leading-tight text-foreground">
                                     Basta may <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">kita</span>,<br />
                                     may <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">matatamo.</span>
                                 </h1>
@@ -104,8 +104,8 @@ export default function LandingPage() {
                             </div>
                         </div>
 
-                        {/* Mobile Image - Not Cut */}
-                        <div className="relative h-80 w-full overflow-hidden mt-6">
+                        {/* Mobile Image - Moved Lower */}
+                        <div className="relative h-80 w-full overflow-hidden mt-10">
                             <Image
                                 src="/mobile_cover.png"
                                 alt="KitaMo Financial Simulator mobile illustration"

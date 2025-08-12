@@ -89,7 +89,7 @@ export default function LandingPage() {
                                     Basta may <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">kita</span>,<br />
                                     may <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">matatamo.</span>
                                 </h1>
-                                <p className="text-sm text-muted-foreground leading-relaxed max-w-sm mx-auto">
+                                <p className="text-base text-muted-foreground leading-relaxed max-w-sm mx-auto">
                                    Make smarter money decisions with<br />AI-powered what-if scenarios.
                                 </p>
 

@@ -318,12 +318,12 @@ export const WhatIfSimulator = () => {
               </div>
               <Button variant="outline" onClick={() => setShowScenarios(!showScenarios)} className="w-full md:w-auto">
                 <Archive className="mr-2 h-4 w-4" />
-                Saved Scenarios
+                {showScenarios ? 'Hide' : 'Show'} Saved Scenarios
               </Button>
             </CardHeader>
             <CardContent className="space-y-4 md:space-y-6">
-              <div className={`grid grid-cols-1 ${showScenarios ? 'lg:grid-cols-4' : ''} gap-4 md:gap-8 items-start`}>
-                <div className={`${showScenarios ? 'lg:col-span-3' : 'lg:col-span-4'} space-y-4 md:space-y-8 transition-all duration-300`}>
+              <div className={`grid grid-cols-1 ${showScenarios ? 'md:grid-cols-3' : ''} gap-4 md:gap-8 items-start`}>
+                <div className={`${showScenarios ? 'md:col-span-2' : 'md:col-span-3'} space-y-4 md:space-y-8 transition-all duration-300`}>
                   <Card>
                     <CardHeader>
                       <CardTitle className="text-base md:text-lg flex items-center gap-2">
@@ -548,8 +548,8 @@ export const WhatIfSimulator = () => {
                 </div>
                 
                 {showScenarios && (
-                  <div className="lg:col-span-1 space-y-8 animate-in fade-in-0 slide-in-from-right-5 duration-500">
-                    <Card>
+                  <div className="md:col-span-1 space-y-4 animate-in fade-in-0 slide-in-from-right-5 duration-500">
+                    <Card className="border-primary/20">
                       <CardHeader>
                         <CardTitle className="flex items-center gap-2 text-lg">
                           <Target className="h-5 w-5 text-primary" />
@@ -560,8 +560,15 @@ export const WhatIfSimulator = () => {
                         </CardDescription>
                       </CardHeader>
                       <CardContent>
-                        <div className="grid grid-cols-1 gap-4">
-                          {scenarios.map((scenario) => (
+                        {scenarios.length === 0 ? (
+                          <div className="text-center py-8 space-y-2">
+                            <Archive className="h-12 w-12 text-muted-foreground mx-auto" />
+                            <p className="text-sm text-muted-foreground">No saved scenarios yet.</p>
+                            <p className="text-xs text-muted-foreground">Create and save a scenario to see it here.</p>
+                          </div>
+                        ) : (
+                          <div className="grid grid-cols-1 gap-4">
+                            {scenarios.map((scenario) => (
                             <Card key={scenario.id} className="bg-secondary/30">
                               <CardHeader className="p-4 pb-2 flex-row items-center justify-between">
                                 <CardTitle className="text-base">{scenario.name}</CardTitle>
@@ -610,10 +617,8 @@ export const WhatIfSimulator = () => {
                               </CardContent>
                             </Card>
                           ))}
-                          {scenarios.length === 0 && (
-                            <p className="text-sm text-muted-foreground text-center py-4">No saved scenarios yet.</p>
-                          )}
-                        </div>
+                          </div>
+                        )}
                       </CardContent>
                     </Card>
                   </div>

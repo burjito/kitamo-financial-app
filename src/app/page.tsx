@@ -83,9 +83,9 @@ export default function LandingPage() {
                     {/* Mobile View - New Layout */}
                     <div className="md:hidden w-full min-h-screen bg-white flex flex-col">
                         {/* Mobile Content */}
-                        <div className="flex-1 px-4 pt-1 pb-2">
-                            <div className="text-center space-y-3">
-                                <h1 className="text-5xl font-extrabold tracking-tighter leading-tight text-foreground">
+                        <div className="px-4 pt-0 pb-1 mt-4">
+                            <div className="text-center space-y-2">
+                                <h1 className="text-4xl font-extrabold tracking-tighter leading-tight text-foreground">
                                     Basta may <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">kita</span>,<br />
                                     may <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">matatamo.</span>
                                 </h1>
@@ -94,7 +94,7 @@ export default function LandingPage() {
                                 </p>
 
                                 {/* Mobile Stats - Slightly Larger */}
-                                <div className="grid grid-cols-3 gap-2 py-2">
+                                <div className="grid grid-cols-3 gap-2 py-1">
                                      <div className="relative p-0.5 rounded-lg bg-gradient-to-r from-primary to-yellow-400 shadow-md">
                                         <div className="bg-white rounded-lg p-3 h-full flex flex-col items-center justify-center text-center">
                                             <div className="flex items-center gap-1 mb-1">
@@ -130,17 +130,19 @@ export default function LandingPage() {
                                     </div>
                                 </div>
 
-                                <Button asChild size="lg" className="bg-gradient-to-r from-primary to-yellow-400 text-primary-foreground shadow-xl transition-all duration-300 hover:scale-105 hover:shadow-2xl w-full max-w-sm">
-                                    <Link href="/login" className="text-center">
-                                        Start Your Financial Journey
-                                        <ArrowRight className="ml-2 h-5 w-5" />
-                                    </Link>
-                                </Button>
+                                <div className="pt-2">
+                                    <Button asChild size="lg" className="bg-gradient-to-r from-primary to-yellow-400 text-primary-foreground shadow-xl transition-all duration-300 hover:scale-105 hover:shadow-2xl w-full max-w-sm">
+                                        <Link href="/login" className="text-center">
+                                            Start Your Financial Journey
+                                            <ArrowRight className="ml-2 h-5 w-5" />
+                                        </Link>
+                                    </Button>
+                                </div>
                             </div>
                         </div>
 
-                        {/* Mobile Image - Full Width */}
-                        <div className="relative h-96 w-full -mt-4 -mx-4">
+                        {/* Mobile Image - Full Width, No Right Space */}
+                        <div className="relative flex-1 w-screen -ml-4">
                             <Image
                                 src="/mobile_cover.png"
                                 alt="KitaMo Financial Simulator mobile illustration"

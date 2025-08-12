@@ -83,21 +83,51 @@ export default function LandingPage() {
                     {/* Mobile View - New Layout */}
                     <div className="md:hidden w-full min-h-screen bg-white flex flex-col">
                         {/* Mobile Content */}
-                        <div className="flex-1 px-4 pt-4 pb-6">
-                            <div className="text-center space-y-4">
-                                <h1 className="text-4xl font-extrabold tracking-tighter leading-tight text-foreground">
+                        <div className="flex-1 px-4 pt-4 pb-2">
+                            <div className="text-center space-y-3">
+                                <h1 className="text-5xl font-extrabold tracking-tighter leading-tight text-foreground">
                                     Basta may <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">kita</span>,<br />
                                     may <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">matatamo.</span>
                                 </h1>
-                                <p className="text-base text-muted-foreground leading-relaxed max-w-sm mx-auto">
+                                <p className="text-sm text-muted-foreground leading-relaxed max-w-sm mx-auto">
                                    Make smarter money decisions with AI-powered what-if scenarios.
                                 </p>
 
-                                {/* Mobile Stats */}
-                                <div className="grid grid-cols-3 gap-3 py-4">
-                                     <StatCard icon={<CheckCircle className="w-5 h-5" />} value="10k+" label="Scenarios Simulated" />
-                                     <StatCard icon={<TrendingUp className="w-5 h-5" />} value="50M+" label="Goals Achieved" />
-                                     <StatCard icon={<Smile className="w-5 h-5" />} value="95%" label="Satisfaction Rate" />
+                                {/* Mobile Stats - Smaller */}
+                                <div className="grid grid-cols-3 gap-2 py-2">
+                                     <div className="relative p-0.5 rounded-lg bg-gradient-to-r from-primary to-yellow-400 shadow-md">
+                                        <div className="bg-white rounded-lg p-2 h-full flex flex-col items-center justify-center text-center">
+                                            <div className="flex items-center gap-1 mb-1">
+                                                <div className="text-yellow-500 flex-shrink-0">
+                                                    <CheckCircle className="w-4 h-4" />
+                                                </div>
+                                                <div className="text-sm font-bold text-red-900">10k+</div>
+                                            </div>
+                                            <div className="text-xs text-red-700">Scenarios Simulated</div>
+                                        </div>
+                                    </div>
+                                     <div className="relative p-0.5 rounded-lg bg-gradient-to-r from-primary to-yellow-400 shadow-md">
+                                        <div className="bg-white rounded-lg p-2 h-full flex flex-col items-center justify-center text-center">
+                                            <div className="flex items-center gap-1 mb-1">
+                                                <div className="text-yellow-500 flex-shrink-0">
+                                                    <TrendingUp className="w-4 h-4" />
+                                                </div>
+                                                <div className="text-sm font-bold text-red-900">50M+</div>
+                                            </div>
+                                            <div className="text-xs text-red-700">Goals Achieved</div>
+                                        </div>
+                                    </div>
+                                     <div className="relative p-0.5 rounded-lg bg-gradient-to-r from-primary to-yellow-400 shadow-md">
+                                        <div className="bg-white rounded-lg p-2 h-full flex flex-col items-center justify-center text-center">
+                                            <div className="flex items-center gap-1 mb-1">
+                                                <div className="text-yellow-500 flex-shrink-0">
+                                                    <Smile className="w-4 h-4" />
+                                                </div>
+                                                <div className="text-sm font-bold text-red-900">95%</div>
+                                            </div>
+                                            <div className="text-xs text-red-700">Satisfaction Rate</div>
+                                        </div>
+                                    </div>
                                 </div>
 
                                 <Button asChild size="lg" className="bg-gradient-to-r from-primary to-yellow-400 text-primary-foreground shadow-xl transition-all duration-300 hover:scale-105 hover:shadow-2xl w-full max-w-sm">
@@ -109,8 +139,8 @@ export default function LandingPage() {
                             </div>
                         </div>
 
-                        {/* Mobile Image - Extended Below */}
-                        <div className="relative h-screen w-full -mb-32">
+                        {/* Mobile Image - Closer to button */}
+                        <div className="relative h-96 w-full -mt-4">
                             <Image
                                 src="/mobile_cover.png"
                                 alt="KitaMo Financial Simulator mobile illustration"

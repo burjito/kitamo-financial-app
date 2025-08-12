@@ -317,9 +317,9 @@ export default function KitaMoBotPage() {
             <CardTitle className="text-xl md:text-3xl">Kita Bot</CardTitle>
           </div>
           <CardDescription className="text-sm md:text-base">
-            <div className="space-y-1">
-              <div>Your AI financial assistant.</div>
-              <div>Ask me in Taglish!</div>
+            <div className="md:space-y-0 space-y-1">
+              <div className="md:inline md:mr-1">Your AI financial assistant.</div>
+              <div className="md:inline">Ask me in Taglish!</div>
             </div>
           </CardDescription>
         </CardHeader>

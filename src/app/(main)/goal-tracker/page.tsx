@@ -379,10 +379,7 @@ export default function GoalTrackerPage() {
                                     <Card key={goal.id}>
                                         <CardContent className="p-6 space-y-6">
                                             <div className="flex justify-between items-start">
-                                                <div className="flex items-center gap-4">
-                                                    <div className="bg-red-50 p-3 rounded-full border border-red-100">
-                                                        <Shield className="h-6 w-6 text-red-600" />
-                                                    </div>
+                                                <div className="flex-1">
                                                     <div>
                                                         <h2 className="font-bold text-lg text-foreground">{goal.title}</h2>
                                                         <div className="flex items-center gap-2 mt-1">

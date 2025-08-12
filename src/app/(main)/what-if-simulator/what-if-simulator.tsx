@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -29,8 +29,6 @@ import {
   Rocket,
   GraduationCap,
   Shield,
-  ChevronLeft,
-  ChevronRight,
 } from "lucide-react";
 import { useAppContext } from '@/contexts/app-context';
 import { useToast } from '@/hooks/use-toast';
@@ -146,6 +144,11 @@ export const WhatIfSimulator = () => {
   const [detectedGoalType, setDetectedGoalType] = useState('general');
   const [currentScenarioPage, setCurrentScenarioPage] = useState(0);
   
+  // Touch/swipe handling
+  const touchStartX = useRef<number>(0);
+  const touchEndX = useRef<number>(0);
+  const swipeContainerRef = useRef<HTMLDivElement>(null);
+  
   const timeframe = timeframeYears * 12 + timeframeMonths;
   const monthlySavings = Math.max(0, monthlyIncome - monthlyExpenses);
   const projectedSavings = monthlySavings * timeframe;
@@ -167,6 +170,30 @@ export const WhatIfSimulator = () => {
   
   const prevScenarioPage = () => {
     setCurrentScenarioPage((prev) => (prev - 1 + totalPages) % totalPages);
+  };
+
+  // Touch event handlers for swipe functionality
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX;
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    touchEndX.current = e.touches[0].clientX;
+  };
+
+  const handleTouchEnd = () => {
+    if (!touchStartX.current || !touchEndX.current) return;
+    
+    const distance = touchStartX.current - touchEndX.current;
+    const isLeftSwipe = distance > 50;
+    const isRightSwipe = distance < -50;
+
+    if (isLeftSwipe && currentScenarioPage < totalPages - 1) {
+      nextScenarioPage();
+    }
+    if (isRightSwipe && currentScenarioPage > 0) {
+      prevScenarioPage();
+    }
   };
   const monthsToGoal = monthlySavings > 0 ? Math.ceil(goalAmount / monthlySavings) : Infinity;
 
@@ -321,33 +348,43 @@ export const WhatIfSimulator = () => {
                       
                       {/* Mobile swipeable view */}
                       <div className="md:hidden">
-                        <div className="flex items-center justify-between mb-4">
-                          <Button 
-                            variant="ghost" 
-                            size="sm" 
-                            onClick={prevScenarioPage}
-                            className="p-2"
-                          >
-                            <ChevronLeft className="h-4 w-4" />
-                          </Button>
+                        <div className="text-center mb-4">
                           <span className="text-xs text-muted-foreground">
-                            {currentScenarioPage + 1} of {totalPages}
+                            Swipe to browse scenarios • {currentScenarioPage + 1} of {totalPages}
                           </span>
-                          <Button 
-                            variant="ghost" 
-                            size="sm" 
-                            onClick={nextScenarioPage}
-                            className="p-2"
-                          >
-                            <ChevronRight className="h-4 w-4" />
-                          </Button>
                         </div>
-                        <div className="grid grid-cols-2 gap-3">
-                          {currentScenarios.map(([key, {name, icon: Icon}]) => (
-                              <Button key={key} variant="outline" className="flex flex-col items-center justify-center h-24 p-3 text-center" onClick={() => loadPreset(key as keyof typeof presetScenarios)}>
-                                  <Icon className="h-6 w-6 mb-2 text-primary" />
-                                  <span className="text-xs text-wrap leading-tight">{name}</span>
-                              </Button>
+                        <div 
+                          ref={swipeContainerRef}
+                          className="overflow-hidden"
+                          onTouchStart={handleTouchStart}
+                          onTouchMove={handleTouchMove}
+                          onTouchEnd={handleTouchEnd}
+                        >
+                          <div 
+                            className="grid grid-cols-2 gap-3 transition-transform duration-300 ease-out"
+                            style={{ 
+                              transform: `translateX(-${currentScenarioPage * 100}%)`,
+                              width: `${totalPages * 100}%`,
+                              display: 'grid',
+                              gridTemplateColumns: `repeat(${totalPages * 2}, 1fr)`
+                            }}
+                          >
+                            {scenarioEntries.map(([key, {name, icon: Icon}]) => (
+                                <Button key={key} variant="outline" className="flex flex-col items-center justify-center h-24 p-3 text-center" onClick={() => loadPreset(key as keyof typeof presetScenarios)}>
+                                    <Icon className="h-6 w-6 mb-2 text-primary" />
+                                    <span className="text-xs text-wrap leading-tight">{name}</span>
+                                </Button>
+                            ))}
+                          </div>
+                        </div>
+                        <div className="flex justify-center mt-4 space-x-1">
+                          {Array.from({ length: totalPages }).map((_, index) => (
+                            <div
+                              key={index}
+                              className={`h-2 w-2 rounded-full transition-colors ${
+                                index === currentScenarioPage ? 'bg-primary' : 'bg-muted'
+                              }`}
+                            />
                           ))}
                         </div>
                       </div>

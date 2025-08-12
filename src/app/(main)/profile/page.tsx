@@ -355,17 +355,19 @@ export default function ProfilePage() {
         <div className="space-y-4 md:space-y-8 animate-in fade-in-0 duration-500">
             <div className="flex flex-col space-y-3 md:flex-row md:justify-between md:items-center md:space-y-0">
                 <div className="space-y-1 md:space-y-2">
-                    <h1 className="text-xl md:text-3xl font-bold tracking-tight text-foreground">
-                        Settings
-                    </h1>
+                    <div className="flex items-center justify-between">
+                        <h1 className="text-xl md:text-3xl font-bold tracking-tight text-foreground">
+                            Settings
+                        </h1>
+                        
+                        {/* Mobile Menu Button aligned with header */}
+                        <div className="md:hidden">
+                            <SettingsNav activeTab={activeTab} setActiveTab={setActiveTab} />
+                        </div>
+                    </div>
                     <p className="text-sm md:text-base text-muted-foreground">
                         Manage your account settings and preferences.
                     </p>
-                </div>
-                
-                {/* Mobile Menu Button */}
-                <div className="md:hidden">
-                    <SettingsNav activeTab={activeTab} setActiveTab={setActiveTab} />
                 </div>
             </div>
 

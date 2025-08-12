@@ -305,29 +305,29 @@ export default function KitaMoBotPage() {
 
   return (
     <div className="animate-in fade-in-0 duration-500 flex justify-center items-start h-full">
-      <Card className="w-full max-w-4xl h-[calc(100vh-10rem)] flex flex-col">
-        <CardHeader className="text-center flex-shrink-0">
+      <Card className="w-full max-w-4xl h-[calc(100vh-8rem)] md:h-[calc(100vh-10rem)] flex flex-col">
+        <CardHeader className="text-center flex-shrink-0 pb-3 md:pb-6">
           <div className="flex justify-center items-center gap-2">
-            <BrainCircuit className="h-8 w-8 text-primary" />
-            <CardTitle className="text-3xl">Kita Bot</CardTitle>
+            <BrainCircuit className="h-6 w-6 md:h-8 md:w-8 text-primary" />
+            <CardTitle className="text-xl md:text-3xl">Kita Bot</CardTitle>
           </div>
-          <CardDescription>Your AI financial assistant. Ask me in Taglish!</CardDescription>
+          <CardDescription className="text-sm md:text-base">Your AI financial assistant. Ask me in Taglish!</CardDescription>
         </CardHeader>
-        <CardContent className="flex-grow flex flex-col p-4 overflow-hidden min-h-0">
+        <CardContent className="flex-grow flex flex-col p-3 md:p-4 overflow-hidden min-h-0">
           {/* Chat Messages Area - Hidden when history is shown */}
           {!showHistory && (
             <div className="flex-grow flex flex-col min-h-0">
-              <ScrollArea className="flex-grow mb-4 pr-4" viewportRef={scrollViewportRef}>
-                <div className="space-y-6">
+              <ScrollArea className="flex-grow mb-3 md:mb-4 pr-2 md:pr-4" viewportRef={scrollViewportRef}>
+                <div className="space-y-3 md:space-y-6">
                   {messages.map((message) => (
-                    <div key={message.id} className={`flex items-start gap-3 ${message.sender === 'user' ? 'justify-end' : ''}`}>
+                    <div key={message.id} className={`flex items-start gap-2 md:gap-3 ${message.sender === 'user' ? 'justify-end' : ''}`}>
                       {message.sender === 'bot' && (
-                        <Avatar className="h-8 w-8">
+                        <Avatar className="h-6 w-6 md:h-8 md:w-8 flex-shrink-0">
                           <AvatarImage src="/bot-avatar.png" alt="Bot" />
                           <AvatarFallback><Bot /></AvatarFallback>
                         </Avatar>
                       )}
-                      <div className={`rounded-lg px-4 py-3 max-w-lg ${message.sender === 'user' ? 'bg-primary text-primary-foreground' : 'bg-muted'}`}>
+                      <div className={`rounded-lg px-3 md:px-4 py-2 md:py-3 max-w-[85%] md:max-w-lg ${message.sender === 'user' ? 'bg-primary text-primary-foreground' : 'bg-muted'}`}>
                         {message.sender === 'bot' ? (
                           <div className="[&>*:first-child]:mt-0 [&>*:last-child]:mb-0">
                             <ReactMarkdown 
@@ -342,7 +342,7 @@ export default function KitaMoBotPage() {
                         )}
                       </div>
                        {message.sender === 'user' && (
-                        <Avatar className="h-8 w-8">
+                        <Avatar className="h-6 w-6 md:h-8 md:w-8 flex-shrink-0">
                            <AvatarImage src="https://placehold.co/100x100.png" alt="@alex" data-ai-hint="person" />
                           <AvatarFallback><User /></AvatarFallback>
                         </Avatar>
@@ -511,7 +511,7 @@ export default function KitaMoBotPage() {
             )}
 
             {/* Action Buttons - Always Visible */}
-            <div className="flex items-center gap-2 mb-3 flex-wrap">
+            <div className="flex items-center gap-1 md:gap-2 mb-2 md:mb-3 flex-wrap">
               <Button
                 variant="secondary"
                 size="sm"
@@ -519,7 +519,7 @@ export default function KitaMoBotPage() {
                 className="flex items-center gap-1 text-xs"
               >
                 <MessageSquare className="h-3 w-3" />
-                {showPredefinedQuestions ? "Hide Questions" : "Browse Questions"}
+                <span className="hidden sm:inline">{showPredefinedQuestions ? "Hide" : "Browse"}</span> Questions
               </Button>
               
               <Button
@@ -529,7 +529,7 @@ export default function KitaMoBotPage() {
                 className="flex items-center gap-1 text-xs"
               >
                 <History className="h-3 w-3" />
-                {showHistory ? "Hide History" : "Chat History"}
+                <span className="hidden sm:inline">{showHistory ? "Hide" : "Chat"}</span> History
                 {chatHistory.length > 0 && (
                   <span className="bg-primary text-primary-foreground text-xs rounded-full px-1.5 py-0.5 ml-1">
                     {chatHistory.length}
@@ -538,7 +538,7 @@ export default function KitaMoBotPage() {
               </Button>
 
               {(showPredefinedQuestions || showHistory) && (
-                <span className="text-xs text-muted-foreground hidden md:inline">
+                <span className="text-xs text-muted-foreground hidden lg:inline">
                   {showPredefinedQuestions && "Click any question to ask it instantly!"}
                   {showHistory && "Click any conversation to continue it!"}
                 </span>

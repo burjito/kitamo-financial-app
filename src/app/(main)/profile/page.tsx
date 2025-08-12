@@ -323,17 +323,17 @@ export default function ProfilePage() {
     const [activeTab, setActiveTab] = useState('account');
 
     return (
-        <div className="space-y-8 animate-in fade-in-0 duration-500">
-            <div className="space-y-2">
-                <h1 className="text-3xl font-bold tracking-tight text-foreground">
+        <div className="space-y-4 md:space-y-8 animate-in fade-in-0 duration-500">
+            <div className="space-y-1 md:space-y-2">
+                <h1 className="text-xl md:text-3xl font-bold tracking-tight text-foreground">
                     Settings
                 </h1>
-                <p className="text-muted-foreground">
+                <p className="text-sm md:text-base text-muted-foreground">
                     Manage your account settings and preferences.
                 </p>
             </div>
 
-            <div className="grid md:grid-cols-4 gap-8">
+            <div className="grid md:grid-cols-4 gap-4 md:gap-8">
                 <div className="md:col-span-1">
                    <SettingsNav activeTab={activeTab} setActiveTab={setActiveTab} />
                 </div>

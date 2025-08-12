@@ -65,16 +65,16 @@ export default function HomePage() {
     const monthlySavings = (monthlyIncome || 0) - (monthlyExpenses || 0);
 
     return (
-        <div className="space-y-6 md:space-y-8">
-        <div className="grid gap-3 md:gap-4 md:grid-cols-2 lg:grid-cols-4">
+        <div className="space-y-4 md:space-y-8">
+        <div className="grid gap-3 md:gap-4 grid-cols-2 md:grid-cols-2 lg:grid-cols-4">
             <Card>
             <CardHeader className="flex flex-row items-center justify-between pb-2">
                 <CardTitle className="text-xs md:text-sm font-medium">Total Saved</CardTitle>
                 <PiggyBank className="h-3 w-3 md:h-4 md:w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-                <div className="text-lg md:text-2xl font-bold">₱{totalCurrent.toLocaleString('en-US', { minimumFractionDigits: 2 })}</div>
-                <p className="text-xs text-muted-foreground">Across all your goals</p>
+                <div className="text-base md:text-2xl font-bold">₱{totalCurrent.toLocaleString('en-US', { minimumFractionDigits: 2 })}</div>
+                <p className="text-xs text-muted-foreground">Across all goals</p>
             </CardContent>
             </Card>
             <Card>
@@ -85,9 +85,9 @@ export default function HomePage() {
                 <Target className="h-3 w-3 md:h-4 md:w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-                <div className="text-lg md:text-2xl font-bold">+₱{monthlySavings.toLocaleString('en-US', { minimumFractionDigits: 2 })}</div>
+                <div className="text-base md:text-2xl font-bold">+₱{monthlySavings.toLocaleString('en-US', { minimumFractionDigits: 2 })}</div>
                 <p className="text-xs text-muted-foreground">
-                Available to fund your goals
+                Available to fund goals
                 </p>
             </CardContent>
             </Card>
@@ -100,23 +100,23 @@ export default function HomePage() {
                     <Badge variant={profile?.risk_profile === "Aggressive" ? "destructive" : "secondary"} className="text-xs">
                         {profile?.risk_profile || 'N/A'}
                     </Badge>
-                    <p className="text-xs text-muted-foreground mt-2">Based on your assessment</p>
+                    <p className="text-xs text-muted-foreground mt-2">Your assessment</p>
                 </CardContent>
             </Card>
-            <Card className="bg-primary text-primary-foreground md:col-span-1 lg:col-span-1">
+            <Card className="bg-primary text-primary-foreground col-span-2 md:col-span-1 lg:col-span-1">
             <CardHeader className="flex flex-row items-center justify-between pb-2">
                 <CardTitle className="text-xs md:text-sm font-medium">
-                Explore Possibilities
+                Explore Ideas
                 </CardTitle>
                 <Lightbulb className="h-3 w-3 md:h-4 md:w-4 text-primary-foreground/80" />
             </CardHeader>
             <CardContent>
-                <p className="text-xs md:text-sm text-primary-foreground/90 mb-3 md:mb-4">
-                What if you saved for a new car? Or a trip abroad?
+                <p className="text-xs md:text-sm text-primary-foreground/90 mb-2 md:mb-4">
+                What if you saved for a car or trip?
                 </p>
                 <Button asChild variant="secondary" size="sm" className="bg-primary-foreground text-primary hover:bg-primary-foreground/90 w-full md:w-auto">
                     <Link href="/what-if-simulator">
-                        Run a Simulation
+                        Run Simulation
                         <ArrowUpRight className="h-3 w-3 md:h-4 md:w-4 ml-2" />
                     </Link>
                 </Button>
@@ -124,7 +124,7 @@ export default function HomePage() {
             </Card>
         </div>
 
-        <div className="grid gap-6 md:gap-8 md:grid-cols-2">
+        <div className="grid gap-4 md:gap-8 md:grid-cols-2">
             <Card>
             <CardHeader>
                 <CardTitle className="text-lg md:text-xl">Active Goals</CardTitle>
@@ -132,7 +132,7 @@ export default function HomePage() {
                 Your next milestones are just around the corner.
                 </CardDescription>
             </CardHeader>
-            <CardContent className="space-y-4 md:space-y-6">
+            <CardContent className="space-y-3 md:space-y-6">
                 {goals.slice(0, 2).map(goal => (
                      <div className="space-y-2" key={goal.id}>
                         <div className="flex justify-between items-center">
@@ -143,7 +143,7 @@ export default function HomePage() {
                     </div>
                 ))}
                  {goals.length === 0 && (
-                  <div className="text-center py-8 md:py-10 border-2 border-dashed rounded-lg">
+                  <div className="text-center py-6 md:py-10 border-2 border-dashed rounded-lg">
                     <h3 className="text-base md:text-lg font-semibold text-muted-foreground">No Goals Yet!</h3>
                     <p className="text-sm text-muted-foreground mt-1">Start by adding a financial goal.</p>
                     <Button asChild variant="link" className="mt-2">
@@ -162,9 +162,9 @@ export default function HomePage() {
             </Card>
             <Card>
             <CardHeader>
-                <CardTitle className="text-lg md:text-xl">Personalized Insights</CardTitle>
+                <CardTitle className="text-lg md:text-xl">AI Insights</CardTitle>
                 <CardDescription className="text-sm">
-                AI-powered suggestions based on your {profile?.risk_profile} profile.
+                Personalized suggestions for your {profile?.risk_profile} profile.
                 </CardDescription>
             </CardHeader>
             <CardContent className="space-y-3 md:space-y-4">
@@ -197,9 +197,9 @@ export default function HomePage() {
       isOpen={isSetupModalOpen}
       onClose={() => setIsSetupModalOpen(false)}
     />
-    <div className="space-y-6 md:space-y-8 animate-in fade-in-0 duration-500">
+    <div className="space-y-4 md:space-y-8 animate-in fade-in-0 duration-500">
       <div className="space-y-1 md:space-y-2">
-        <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-foreground">
+        <h1 className="text-xl md:text-3xl font-bold tracking-tight text-foreground">
           Welcome back, {welcomeName}!
         </h1>
         <p className="text-sm md:text-base text-muted-foreground">

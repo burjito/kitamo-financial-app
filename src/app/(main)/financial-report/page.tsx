@@ -296,16 +296,16 @@ export default function FinancialReportPage() {
             }
         `}</style>
 
-            <div className="animate-in fade-in-0 duration-500 space-y-6 max-w-4xl mx-auto print-container">
-                <div className="flex justify-between items-center print:hidden">
-                     <Button variant="outline" onClick={() => router.back()}>
+            <div className="animate-in fade-in-0 duration-500 space-y-4 md:space-y-6 max-w-4xl mx-auto print-container">
+                <div className="flex flex-col space-y-3 md:flex-row md:justify-between md:items-center md:space-y-0 print:hidden">
+                     <Button variant="outline" onClick={() => router.back()} className="md:w-auto">
                         <ArrowLeft className="mr-2 h-4 w-4" />
                         Back to Goals
                     </Button>
-                    <h1 className="text-3xl font-bold tracking-tight text-foreground text-center">
+                    <h1 className="text-xl md:text-3xl font-bold tracking-tight text-foreground text-center">
                         Financial Goals Report
                     </h1>
-                    <Button onClick={handlePrint}>
+                    <Button onClick={handlePrint} className="md:w-auto">
                         <Printer className="mr-2 h-4 w-4" />
                         Print Report
                     </Button>
@@ -325,29 +325,29 @@ export default function FinancialReportPage() {
                 {/* Screen Version */}
                 <Card className="print:hidden">
                     <CardHeader>
-                        <CardTitle>Overall Summary</CardTitle>
-                        <CardDescription>A high-level overview of your financial goals.</CardDescription>
+                        <CardTitle className="text-lg md:text-xl">Overall Summary</CardTitle>
+                        <CardDescription className="text-sm">A high-level overview of your financial goals.</CardDescription>
                     </CardHeader>
-                    <CardContent className="grid md:grid-cols-3 gap-4">
-                        <Card className="p-4">
-                            <p className="text-sm text-muted-foreground">Total Goal Amount</p>
-                            <p className="text-2xl font-bold">₱{totalTarget.toLocaleString()}</p>
+                    <CardContent className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4">
+                        <Card className="p-3 md:p-4">
+                            <p className="text-xs md:text-sm text-muted-foreground">Total Goal Amount</p>
+                            <p className="text-lg md:text-2xl font-bold">₱{totalTarget.toLocaleString()}</p>
                         </Card>
-                        <Card className="p-4">
-                            <p className="text-sm text-muted-foreground">Amount Saved</p>
-                            <p className="text-2xl font-bold text-green-600">₱{totalCurrent.toLocaleString()}</p>
+                        <Card className="p-3 md:p-4">
+                            <p className="text-xs md:text-sm text-muted-foreground">Amount Saved</p>
+                            <p className="text-lg md:text-2xl font-bold text-green-600">₱{totalCurrent.toLocaleString()}</p>
                         </Card>
-                        <Card className="p-4">
-                            <p className="text-sm text-muted-foreground">Remaining Amount</p>
-                            <p className="text-2xl font-bold text-red-600">₱{totalRemaining.toLocaleString()}</p>
+                        <Card className="p-3 md:p-4">
+                            <p className="text-xs md:text-sm text-muted-foreground">Remaining Amount</p>
+                            <p className="text-lg md:text-2xl font-bold text-red-600">₱{totalRemaining.toLocaleString()}</p>
                         </Card>
-                         <Card className="p-4">
-                            <p className="text-sm text-muted-foreground">Monthly Goal Funding</p>
-                            <p className="text-2xl font-bold">₱{totalMonthlyTarget.toLocaleString()}</p>
+                         <Card className="p-3 md:p-4">
+                            <p className="text-xs md:text-sm text-muted-foreground">Monthly Goal Funding</p>
+                            <p className="text-lg md:text-2xl font-bold">₱{totalMonthlyTarget.toLocaleString()}</p>
                         </Card>
-                         <Card className="p-4">
-                            <p className="text-sm text-muted-foreground">Monthly Income</p>
-                            <p className="text-2xl font-bold">₱{monthlyIncome.toLocaleString()}</p>
+                         <Card className="p-3 md:p-4">
+                            <p className="text-xs md:text-sm text-muted-foreground">Monthly Income</p>
+                            <p className="text-lg md:text-2xl font-bold">₱{monthlyIncome.toLocaleString()}</p>
                         </Card>
                          <Card className={cn("p-4", surplus >= 0 ? "bg-green-500/10" : "bg-red-500/10")}>
                             <p className="text-sm text-muted-foreground">Monthly Surplus/Shortfall</p>

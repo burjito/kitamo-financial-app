@@ -83,58 +83,58 @@ export default function LandingPage() {
                     {/* Mobile View - New Layout */}
                     <div className="md:hidden w-full min-h-screen bg-white flex flex-col">
                         {/* Mobile Content */}
-                        <div className="px-4 pt-0 pb-1 mt-4">
-                            <div className="text-center space-y-2">
+                        <div className="px-4 pt-0 pb-1 -mt-2">
+                            <div className="text-center space-y-1">
                                 <h1 className="text-4xl font-extrabold tracking-tighter leading-tight text-foreground">
                                     Basta may <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">kita</span>,<br />
                                     may <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">matatamo.</span>
                                 </h1>
-                                <p className="text-base text-muted-foreground leading-relaxed max-w-sm mx-auto">
+                                <p className="text-sm text-muted-foreground leading-relaxed max-w-sm mx-auto">
                                    Make smarter money decisions with AI-powered what-if scenarios.
                                 </p>
 
-                                {/* Mobile Stats - Slightly Larger */}
-                                <div className="grid grid-cols-3 gap-2 py-1">
-                                     <div className="relative p-0.5 rounded-lg bg-gradient-to-r from-primary to-yellow-400 shadow-md">
-                                        <div className="bg-white rounded-lg p-3 h-full flex flex-col items-center justify-center text-center">
-                                            <div className="flex items-center gap-1 mb-1">
+                                {/* Mobile Stats - Smaller */}
+                                <div className="grid grid-cols-3 gap-1.5 py-1">
+                                     <div className="relative p-0.5 rounded-lg bg-gradient-to-r from-primary to-yellow-400 shadow-sm">
+                                        <div className="bg-white rounded-lg p-2 h-full flex flex-col items-center justify-center text-center">
+                                            <div className="flex items-center gap-1 mb-0.5">
                                                 <div className="text-yellow-500 flex-shrink-0">
-                                                    <CheckCircle className="w-5 h-5" />
+                                                    <CheckCircle className="w-4 h-4" />
                                                 </div>
-                                                <div className="text-base font-bold text-red-900">10k+</div>
+                                                <div className="text-sm font-bold text-red-900">10k+</div>
                                             </div>
                                             <div className="text-xs text-red-700">Scenarios Simulated</div>
                                         </div>
                                     </div>
-                                     <div className="relative p-0.5 rounded-lg bg-gradient-to-r from-primary to-yellow-400 shadow-md">
-                                        <div className="bg-white rounded-lg p-3 h-full flex flex-col items-center justify-center text-center">
-                                            <div className="flex items-center gap-1 mb-1">
+                                     <div className="relative p-0.5 rounded-lg bg-gradient-to-r from-primary to-yellow-400 shadow-sm">
+                                        <div className="bg-white rounded-lg p-2 h-full flex flex-col items-center justify-center text-center">
+                                            <div className="flex items-center gap-1 mb-0.5">
                                                 <div className="text-yellow-500 flex-shrink-0">
-                                                    <TrendingUp className="w-5 h-5" />
+                                                    <TrendingUp className="w-4 h-4" />
                                                 </div>
-                                                <div className="text-base font-bold text-red-900">50M+</div>
+                                                <div className="text-sm font-bold text-red-900">50M+</div>
                                             </div>
                                             <div className="text-xs text-red-700">Goals Achieved</div>
                                         </div>
                                     </div>
-                                     <div className="relative p-0.5 rounded-lg bg-gradient-to-r from-primary to-yellow-400 shadow-md">
-                                        <div className="bg-white rounded-lg p-3 h-full flex flex-col items-center justify-center text-center">
-                                            <div className="flex items-center gap-1 mb-1">
+                                     <div className="relative p-0.5 rounded-lg bg-gradient-to-r from-primary to-yellow-400 shadow-sm">
+                                        <div className="bg-white rounded-lg p-2 h-full flex flex-col items-center justify-center text-center">
+                                            <div className="flex items-center gap-1 mb-0.5">
                                                 <div className="text-yellow-500 flex-shrink-0">
-                                                    <Smile className="w-5 h-5" />
+                                                    <Smile className="w-4 h-4" />
                                                 </div>
-                                                <div className="text-base font-bold text-red-900">95%</div>
+                                                <div className="text-sm font-bold text-red-900">95%</div>
                                             </div>
                                             <div className="text-xs text-red-700">Satisfaction Rate</div>
                                         </div>
                                     </div>
                                 </div>
 
-                                <div className="pt-2">
-                                    <Button asChild size="lg" className="bg-gradient-to-r from-primary to-yellow-400 text-primary-foreground shadow-xl transition-all duration-300 hover:scale-105 hover:shadow-2xl w-full max-w-sm">
+                                <div className="pt-1">
+                                    <Button asChild size="default" className="bg-gradient-to-r from-primary to-yellow-400 text-primary-foreground shadow-xl transition-all duration-300 hover:scale-105 hover:shadow-2xl w-full max-w-xs">
                                         <Link href="/login" className="text-center">
                                             Start Your Financial Journey
-                                            <ArrowRight className="ml-2 h-5 w-5" />
+                                            <ArrowRight className="ml-2 h-4 w-4" />
                                         </Link>
                                     </Button>
                                 </div>
@@ -142,12 +142,12 @@ export default function LandingPage() {
                         </div>
 
                         {/* Mobile Image - Full Width, No Right Space */}
-                        <div className="relative flex-1 w-screen -ml-4">
+                        <div className="relative flex-1 w-full overflow-hidden">
                             <Image
                                 src="/mobile_cover.png"
                                 alt="KitaMo Financial Simulator mobile illustration"
                                 fill
-                                className="object-contain object-center"
+                                className="object-cover object-center scale-110"
                                 priority
                             />
                         </div>

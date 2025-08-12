@@ -81,10 +81,10 @@ export default function LandingPage() {
                     </div>
 
                     {/* Mobile View - New Layout */}
-                    <div className="md:hidden w-full min-h-screen bg-gradient-to-b from-orange-50 to-orange-100 flex flex-col">
+                    <div className="md:hidden w-full min-h-screen bg-white flex flex-col">
                         {/* Mobile Content */}
-                        <div className="flex-1 px-4 pt-8 pb-6">
-                            <div className="text-center space-y-6">
+                        <div className="flex-1 px-4 pt-4 pb-6">
+                            <div className="text-center space-y-4">
                                 <h1 className="text-4xl font-extrabold tracking-tighter leading-tight text-foreground">
                                     Basta may <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">kita</span>,<br />
                                     may <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">matatamo.</span>
@@ -109,8 +109,8 @@ export default function LandingPage() {
                             </div>
                         </div>
 
-                        {/* Mobile Image - Bottom */}
-                        <div className="relative h-80 w-full">
+                        {/* Mobile Image - Extended Below */}
+                        <div className="relative h-screen w-full -mb-32">
                             <Image
                                 src="/mobile_cover.png"
                                 alt="KitaMo Financial Simulator mobile illustration"

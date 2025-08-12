@@ -20,12 +20,6 @@ export default function LandingHeader() {
           </span>
         </Link>
         <div className="ml-auto flex items-center space-x-4">
-           <nav className="hidden md:flex items-center space-x-6 text-sm font-medium">
-                <Link href="#features" className="text-muted-foreground hover:text-primary transition-colors">Features</Link>
-           </nav>
-            <Button asChild variant="secondary" className="hidden md:inline-flex bg-gradient-to-r from-primary to-yellow-400 text-primary-foreground hover:opacity-90 transition-opacity">
-                <Link href="/login">Get Started</Link>
-            </Button>
         </div>
       </div>
     </header>

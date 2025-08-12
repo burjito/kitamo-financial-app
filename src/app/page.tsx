@@ -56,12 +56,19 @@ export default function LandingPage() {
                                 <p className="max-w-lg mx-auto md:mx-0 text-lg md:text-xl text-muted-foreground">
                                    Make smarter money decisions with AI-powered what-if scenarios.
                                 </p>
-                                <Button asChild size="lg" className="bg-gradient-to-r from-primary to-yellow-400 text-primary-foreground shadow-xl transition-transform hover:scale-105">
-                                    <Link href="/login">
-                                        Start Your Financial Journey
-                                        <ArrowRight className="ml-2 h-5 w-5" />
-                                    </Link>
-                                </Button>
+                                <div className="flex flex-col sm:flex-row gap-4">
+                                    <Button asChild size="lg" className="bg-gradient-to-r from-primary to-yellow-400 text-primary-foreground shadow-xl transition-transform hover:scale-105">
+                                        <Link href="/login">
+                                            Start Your Financial Journey
+                                            <ArrowRight className="ml-2 h-5 w-5" />
+                                        </Link>
+                                    </Button>
+                                    <Button asChild variant="outline" size="lg" className="border-2 hover:bg-muted/50">
+                                        <Link href="#features">
+                                            Learn More
+                                        </Link>
+                                    </Button>
+                                </div>
 
                                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-6 text-left">
                                      <StatCard icon={<CheckCircle className="w-6 h-6" />} value="10k+" label="Scenarios Simulated" />

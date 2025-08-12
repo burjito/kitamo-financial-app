@@ -361,19 +361,23 @@ export const WhatIfSimulator = () => {
                           onTouchEnd={handleTouchEnd}
                         >
                           <div 
-                            className="grid grid-cols-2 gap-3 transition-transform duration-300 ease-out"
+                            className="flex transition-transform duration-300 ease-out"
                             style={{ 
                               transform: `translateX(-${currentScenarioPage * 100}%)`,
-                              width: `${totalPages * 100}%`,
-                              display: 'grid',
-                              gridTemplateColumns: `repeat(${totalPages * 2}, 1fr)`
+                              width: `${totalPages * 100}%`
                             }}
                           >
-                            {scenarioEntries.map(([key, {name, icon: Icon}]) => (
-                                <Button key={key} variant="outline" className="flex flex-col items-center justify-center h-24 p-3 text-center" onClick={() => loadPreset(key as keyof typeof presetScenarios)}>
-                                    <Icon className="h-6 w-6 mb-2 text-primary" />
-                                    <span className="text-xs text-wrap leading-tight">{name}</span>
-                                </Button>
+                            {Array.from({ length: totalPages }).map((_, pageIndex) => (
+                              <div key={pageIndex} className="grid grid-cols-2 gap-3 w-full flex-shrink-0">
+                                {scenarioEntries
+                                  .slice(pageIndex * scenariosPerPage, (pageIndex + 1) * scenariosPerPage)
+                                  .map(([key, {name, icon: Icon}]) => (
+                                    <Button key={key} variant="outline" className="flex flex-col items-center justify-center h-24 p-3 text-center" onClick={() => loadPreset(key as keyof typeof presetScenarios)}>
+                                        <Icon className="h-6 w-6 mb-2 text-primary" />
+                                        <span className="text-xs text-wrap leading-tight">{name}</span>
+                                    </Button>
+                                  ))}
+                              </div>
                             ))}
                           </div>
                         </div>

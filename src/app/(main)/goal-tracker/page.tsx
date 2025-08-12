@@ -378,21 +378,8 @@ export default function GoalTrackerPage() {
                                 return (
                                     <Card key={goal.id}>
                                         <CardContent className="p-6 space-y-6">
-                                            <div className="flex justify-between items-start">
-                                                <div className="flex-1">
-                                                    <div>
-                                                        <h2 className="font-bold text-lg text-foreground">{goal.title}</h2>
-                                                        <div className="flex items-center gap-2 mt-1">
-                                                            <Badge className={cn("capitalize", getPriorityStyles(goal.priority))}>
-                                                                {goal.priority} priority
-                                                            </Badge>
-                                                            <Badge className={cn("capitalize", getStatusStyles(goal.status))}>
-                                                                <BadgeCheck className="mr-1 h-3 w-3" />
-                                                                {goal.status}
-                                                            </Badge>
-                                                        </div>
-                                                    </div>
-                                                </div>
+                                            <div className="flex justify-between items-center">
+                                                <h2 className="font-bold text-lg text-foreground flex-1">{goal.title}</h2>
                                                 <div className="flex items-center">
                                                     <Button variant="ghost" size="icon" onClick={() => handleOpenDialog(goal)}>
                                                         <Settings className="h-5 w-5 text-muted-foreground" />
@@ -418,6 +405,16 @@ export default function GoalTrackerPage() {
                                                         </AlertDialogContent>
                                                     </AlertDialog>
                                                 </div>
+                                            </div>
+                                            
+                                            <div className="flex items-center gap-2 flex-wrap">
+                                                <Badge className={cn("capitalize", getPriorityStyles(goal.priority))}>
+                                                    {goal.priority} priority
+                                                </Badge>
+                                                <Badge className={cn("capitalize", getStatusStyles(goal.status))}>
+                                                    <BadgeCheck className="mr-1 h-3 w-3" />
+                                                    {goal.status}
+                                                </Badge>
                                             </div>
 
                                             <div className="space-y-2">

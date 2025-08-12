@@ -84,17 +84,17 @@ export default function LandingPage() {
                     <div className="md:hidden w-full min-h-screen bg-white flex flex-col">
                         {/* Mobile Content */}
                         <div className="px-4 pt-0 pb-1 -mt-2">
-                            <div className="text-center space-y-1">
+                            <div className="text-center space-y-2">
                                 <h1 className="text-4xl font-extrabold tracking-tighter leading-tight text-foreground">
                                     Basta may <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">kita</span>,<br />
                                     may <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">matatamo.</span>
                                 </h1>
                                 <p className="text-sm text-muted-foreground leading-relaxed max-w-sm mx-auto">
-                                   Make smarter money decisions with AI-powered what-if scenarios.
+                                   Make smarter money decisions with<br />AI-powered what-if scenarios.
                                 </p>
 
                                 {/* Mobile Stats - Smaller */}
-                                <div className="grid grid-cols-3 gap-1.5 py-1">
+                                <div className="grid grid-cols-3 gap-1.5 py-2">
                                      <div className="relative p-0.5 rounded-lg bg-gradient-to-r from-primary to-yellow-400 shadow-sm">
                                         <div className="bg-white rounded-lg p-2 h-full flex flex-col items-center justify-center text-center">
                                             <div className="flex items-center gap-1 mb-0.5">
@@ -130,7 +130,7 @@ export default function LandingPage() {
                                     </div>
                                 </div>
 
-                                <div className="pt-1">
+                                <div className="pt-4">
                                     <Button asChild size="default" className="bg-gradient-to-r from-primary to-yellow-400 text-primary-foreground shadow-xl transition-all duration-300 hover:scale-105 hover:shadow-2xl w-full max-w-xs">
                                         <Link href="/login" className="text-center">
                                             Start Your Financial Journey
@@ -141,8 +141,8 @@ export default function LandingPage() {
                             </div>
                         </div>
 
-                        {/* Mobile Image - Full Width, No Right Space */}
-                        <div className="relative flex-1 w-full overflow-hidden">
+                        {/* Mobile Image - Smaller */}
+                        <div className="relative h-72 w-full overflow-hidden mt-4">
                             <Image
                                 src="/mobile_cover.png"
                                 alt="KitaMo Financial Simulator mobile illustration"

@@ -36,61 +36,94 @@ export default function LandingPage() {
             <LandingHeader />
             <main className="flex-1">
                 {/* Hero Section */}
-                <section className="relative w-full min-h-screen flex items-center">
-                    {/* Background Images - Responsive */}
-                    <div className="absolute inset-0 w-full h-full">
-                        {/* Desktop Image */}
-                        <Image
-                            src="/final_cover.png"
-                            alt="KitaMo Financial Simulator background"
-                            fill
-                            className="object-cover object-center hidden md:block"
-                            priority
-                        />
-                        {/* Mobile Image */}
-                        <Image
-                            src="/mobile_cover.png"
-                            alt="KitaMo Financial Simulator mobile background"
-                            fill
-                            className="object-cover object-center block md:hidden"
-                            priority
-                        />
-                        {/* Overlay for better text readability */}
-                        <div className="absolute inset-0 bg-black/20 md:bg-black/10"></div>
+                <section className="relative w-full min-h-screen">
+                    {/* Desktop - Full Background Image */}
+                    <div className="hidden md:flex md:min-h-screen md:items-center md:relative">
+                        <div className="absolute inset-0 w-full h-full">
+                            <Image
+                                src="/final_cover.png"
+                                alt="KitaMo Financial Simulator background"
+                                fill
+                                className="object-cover object-center"
+                                priority
+                            />
+                            <div className="absolute inset-0 bg-black/10"></div>
+                        </div>
+                        
+                        <div className="relative container max-w-7xl mx-auto px-4 md:px-6 z-10">
+                            <div className="max-w-2xl text-left">
+                                <div className="space-y-6 md:space-y-8">
+                                    <h1 className="text-6xl lg:text-7xl font-extrabold tracking-tighter leading-tight text-foreground">
+                                        Basta may <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">kita</span>,<br />
+                                        may <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">matatamo.</span>
+                                    </h1>
+                                    <p className="text-lg lg:text-xl text-muted-foreground leading-relaxed max-w-lg">
+                                       Make smarter money decisions with AI-powered what-if scenarios and achieve your financial dreams.
+                                    </p>
+                                    <div className="flex flex-row gap-4">
+                                        <Button asChild size="lg" className="bg-gradient-to-r from-primary to-yellow-400 text-primary-foreground shadow-xl transition-all duration-300 hover:scale-105 hover:shadow-2xl">
+                                            <Link href="/login">
+                                                Start Your Financial Journey
+                                                <ArrowRight className="ml-2 h-5 w-5" />
+                                            </Link>
+                                        </Button>
+                                        <Button asChild variant="outline" size="lg" className="bg-white/80 backdrop-blur-sm border-white/50 hover:bg-white/90">
+                                            <Link href="#features">
+                                                Learn More
+                                            </Link>
+                                        </Button>
+                                    </div>
+
+                                    {/* Desktop Stats */}
+                                    <div className="grid grid-cols-3 gap-4 pt-8">
+                                         <StatCard icon={<CheckCircle className="w-6 md:h-6" />} value="10k+" label="Scenarios Simulated" />
+                                         <StatCard icon={<TrendingUp className="w-6 md:h-6" />} value="50M+" label="Goals Achieved" />
+                                         <StatCard icon={<Smile className="w-6 md:h-6" />} value="95%" label="Satisfaction Rate" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    
-                    <div className="relative container max-w-7xl mx-auto px-4 md:px-6 z-10">
-                       <div className="max-w-2xl mx-auto md:mx-0 text-center md:text-left">
-                           <div className="space-y-6 md:space-y-8">
-                                <h1 className="text-4xl md:text-6xl lg:text-7xl font-extrabold tracking-tighter leading-tight text-foreground">
+
+                    {/* Mobile - Content Above, Image Below */}
+                    <div className="md:hidden bg-gradient-to-b from-orange-50 to-orange-100 min-h-screen flex flex-col">
+                        {/* Mobile Content */}
+                        <div className="flex-1 container mx-auto px-4 pt-8 pb-6">
+                            <div className="text-center space-y-6">
+                                <h1 className="text-4xl font-extrabold tracking-tighter leading-tight text-foreground">
                                     Basta may <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">kita</span>,<br />
                                     may <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">matatamo.</span>
                                 </h1>
-                                <p className="text-base md:text-lg lg:text-xl text-muted-foreground leading-relaxed max-w-lg mx-auto md:mx-0">
-                                   Make smarter money decisions with AI-powered what-if scenarios and achieve your financial dreams.
+                                <p className="text-base text-muted-foreground leading-relaxed max-w-sm mx-auto">
+                                   Make smarter money decisions with AI-powered what-if scenarios.
                                 </p>
-                                <div className="flex flex-col sm:flex-row gap-4 items-center md:items-start">
-                                    <Button asChild size="lg" className="bg-gradient-to-r from-primary to-yellow-400 text-primary-foreground shadow-xl transition-all duration-300 hover:scale-105 hover:shadow-2xl w-full sm:w-auto">
-                                        <Link href="/login" className="text-center">
-                                            Start Your Financial Journey
-                                            <ArrowRight className="ml-2 h-5 w-5" />
-                                        </Link>
-                                    </Button>
-                                    <Button asChild variant="outline" size="lg" className="bg-white/80 backdrop-blur-sm border-white/50 hover:bg-white/90 w-full sm:w-auto">
-                                        <Link href="#features" className="text-center">
-                                            Learn More
-                                        </Link>
-                                    </Button>
+
+                                {/* Mobile Stats */}
+                                <div className="grid grid-cols-3 gap-3 py-4">
+                                     <StatCard icon={<CheckCircle className="w-5 h-5" />} value="10k+" label="Scenarios Simulated" />
+                                     <StatCard icon={<TrendingUp className="w-5 h-5" />} value="50M+" label="Goals Achieved" />
+                                     <StatCard icon={<Smile className="w-5 h-5" />} value="95%" label="Satisfaction Rate" />
                                 </div>
 
-                                {/* Stats Section */}
-                                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-8">
-                                     <StatCard icon={<CheckCircle className="w-5 h-5 md:w-6 md:h-6" />} value="10k+" label="Scenarios Simulated" />
-                                     <StatCard icon={<TrendingUp className="w-5 h-5 md:w-6 md:h-6" />} value="50M+" label="Goals Achieved" />
-                                     <StatCard icon={<Smile className="w-5 h-5 md:w-6 md:h-6" />} value="95%" label="Satisfaction Rate" />
-                                </div>
-                           </div>
-                       </div>
+                                <Button asChild size="lg" className="bg-gradient-to-r from-primary to-yellow-400 text-primary-foreground shadow-xl transition-all duration-300 hover:scale-105 hover:shadow-2xl w-full max-w-sm">
+                                    <Link href="/login" className="text-center">
+                                        Start Your Financial Journey
+                                        <ArrowRight className="ml-2 h-5 w-5" />
+                                    </Link>
+                                </Button>
+                            </div>
+                        </div>
+
+                        {/* Mobile Image - Below Content */}
+                        <div className="relative h-80 w-full">
+                            <Image
+                                src="/mobile_cover.png"
+                                alt="KitaMo Financial Simulator mobile illustration"
+                                fill
+                                className="object-cover object-bottom"
+                                priority
+                            />
+                        </div>
                     </div>
                 </section>
 

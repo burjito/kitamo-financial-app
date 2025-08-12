@@ -63,7 +63,7 @@ export default function LandingPage() {
                                             <ArrowRight className="ml-2 h-5 w-5" />
                                         </Link>
                                     </Button>
-                                    <Button asChild variant="outline" size="lg" className="border-2 hover:bg-muted/50">
+                                    <Button asChild variant="outline" size="lg" className="border-2 border-primary/20 bg-white/80 backdrop-blur-sm shadow-lg hover:shadow-xl hover:bg-white/90 transition-all duration-300 hover:scale-105">
                                         <Link href="#features">
                                             Learn More
                                         </Link>

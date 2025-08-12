@@ -161,11 +161,12 @@ const AccountSettings = () => {
     };
 
     return (
-        <Card>
-            <CardHeader>
-                <CardTitle className="text-xl md:text-2xl font-bold tracking-tight text-foreground">Account Information</CardTitle>
-                <CardDescription className="text-sm md:text-base">Update your personal details here.</CardDescription>
-            </CardHeader>
+        <div className="mx-2 md:mx-0">
+            <Card>
+                <CardHeader>
+                    <CardTitle className="text-base md:text-lg">Account Information</CardTitle>
+                    <CardDescription className="text-sm">Update your personal details here.</CardDescription>
+                </CardHeader>
             <form onSubmit={handleSubmit(onSubmit)}>
                 <CardContent className="space-y-6">
                     <div className="flex items-center gap-4">
@@ -198,6 +199,7 @@ const AccountSettings = () => {
                 </CardContent>
             </form>
         </Card>
+        </div>
     );
 };
 
@@ -236,11 +238,11 @@ const FinancialSettings = () => {
     }
     
     return (
-        <div className="space-y-8">
+        <div className="space-y-6 md:space-y-8 mx-2 md:mx-0">
             <Card>
                 <CardHeader>
-                    <CardTitle className="text-xl md:text-2xl font-bold tracking-tight text-foreground">Risk Profile</CardTitle>
-                    <CardDescription className="text-sm md:text-base">Your risk profile helps us tailor financial advice for you.</CardDescription>
+                    <CardTitle className="text-base md:text-lg">Risk Profile</CardTitle>
+                    <CardDescription className="text-sm">Your risk profile helps us tailor financial advice for you.</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
                    {profile?.risk_profile ? (
@@ -272,8 +274,8 @@ const FinancialSettings = () => {
 
             <Card>
                 <CardHeader>
-                    <CardTitle className="text-xl md:text-2xl font-bold tracking-tight text-foreground">Financial Information</CardTitle>
-                    <CardDescription className="text-sm md:text-base">Manage your core financial information to personalize your app experience.</CardDescription>
+                    <CardTitle className="text-base md:text-lg">Financial Information</CardTitle>
+                    <CardDescription className="text-sm">Manage your core financial information to personalize your app experience.</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-6">
                     <div className="space-y-2">
@@ -314,10 +316,11 @@ const SecuritySettings = () => {
     };
     
     return (
-         <Card>
-            <CardHeader>
-                <CardTitle className="text-xl md:text-2xl font-bold tracking-tight text-foreground">Password</CardTitle>
-                <CardDescription className="text-sm md:text-base">Change your password here. It's a good practice to use a strong password.</CardDescription>
+        <div className="mx-2 md:mx-0">
+            <Card>
+                <CardHeader>
+                    <CardTitle className="text-base md:text-lg">Password</CardTitle>
+                    <CardDescription className="text-sm">Change your password here. It's a good practice to use a strong password.</CardDescription>
             </CardHeader>
             <form onSubmit={handleSubmit(onSubmit)}>
                  <CardContent className="space-y-4">
@@ -344,7 +347,8 @@ const SecuritySettings = () => {
                 </CardContent>
             </form>
         </Card>
-    )
+        </div>
+    );
 };
 
 

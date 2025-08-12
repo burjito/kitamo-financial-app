@@ -37,7 +37,8 @@ export default function LandingPage() {
             <main className="flex-1">
                 {/* Hero Section */}
                 <section className="relative w-full min-h-[120vh] flex items-start pt-36">
-                    <div className="absolute inset-0 w-full h-full">
+                    {/* Desktop View - Unchanged */}
+                    <div className="hidden md:block absolute inset-0 w-full h-full">
                         <Image
                             src="/final_cover.png"
                             alt="KitaMo Financial Simulator background"
@@ -46,7 +47,7 @@ export default function LandingPage() {
                             priority
                         />
                     </div>
-                    <div className="relative container max-w-7xl mx-auto px-4 z-10">
+                    <div className="hidden md:block relative container max-w-7xl mx-auto px-4 z-10">
                        <div className="max-w-xl text-center md:text-left">
                            <div className="space-y-6">
                                 <h1 className="text-5xl md:text-7xl font-extrabold tracking-tighter leading-tight text-foreground">
@@ -77,6 +78,47 @@ export default function LandingPage() {
                                 </div>
                            </div>
                        </div>
+                    </div>
+
+                    {/* Mobile View - New Layout */}
+                    <div className="md:hidden w-full min-h-screen bg-gradient-to-b from-orange-50 to-orange-100 flex flex-col">
+                        {/* Mobile Content */}
+                        <div className="flex-1 px-4 pt-8 pb-6">
+                            <div className="text-center space-y-6">
+                                <h1 className="text-4xl font-extrabold tracking-tighter leading-tight text-foreground">
+                                    Basta may <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">kita</span>,<br />
+                                    may <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">matatamo.</span>
+                                </h1>
+                                <p className="text-base text-muted-foreground leading-relaxed max-w-sm mx-auto">
+                                   Make smarter money decisions with AI-powered what-if scenarios.
+                                </p>
+
+                                {/* Mobile Stats */}
+                                <div className="grid grid-cols-3 gap-3 py-4">
+                                     <StatCard icon={<CheckCircle className="w-5 h-5" />} value="10k+" label="Scenarios Simulated" />
+                                     <StatCard icon={<TrendingUp className="w-5 h-5" />} value="50M+" label="Goals Achieved" />
+                                     <StatCard icon={<Smile className="w-5 h-5" />} value="95%" label="Satisfaction Rate" />
+                                </div>
+
+                                <Button asChild size="lg" className="bg-gradient-to-r from-primary to-yellow-400 text-primary-foreground shadow-xl transition-all duration-300 hover:scale-105 hover:shadow-2xl w-full max-w-sm">
+                                    <Link href="/login" className="text-center">
+                                        Start Your Financial Journey
+                                        <ArrowRight className="ml-2 h-5 w-5" />
+                                    </Link>
+                                </Button>
+                            </div>
+                        </div>
+
+                        {/* Mobile Image - Bottom */}
+                        <div className="relative h-80 w-full">
+                            <Image
+                                src="/mobile_cover.png"
+                                alt="KitaMo Financial Simulator mobile illustration"
+                                fill
+                                className="object-contain object-center"
+                                priority
+                            />
+                        </div>
                     </div>
                 </section>
 

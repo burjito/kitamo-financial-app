@@ -161,12 +161,11 @@ const AccountSettings = () => {
     };
 
     return (
-        <div className="mx-2 md:mx-0">
-            <Card>
-                <CardHeader>
-                    <CardTitle className="text-base md:text-lg">Account Information</CardTitle>
-                    <CardDescription className="text-sm">Update your personal details here.</CardDescription>
-                </CardHeader>
+        <Card>
+            <CardHeader>
+                <CardTitle className="text-base md:text-lg">Account Information</CardTitle>
+                <CardDescription className="text-sm">Update your personal details here.</CardDescription>
+            </CardHeader>
             <form onSubmit={handleSubmit(onSubmit)}>
                 <CardContent className="space-y-6">
                     <div className="flex items-center gap-4">
@@ -199,7 +198,6 @@ const AccountSettings = () => {
                 </CardContent>
             </form>
         </Card>
-        </div>
     );
 };
 
@@ -238,7 +236,7 @@ const FinancialSettings = () => {
     }
     
     return (
-        <div className="space-y-6 md:space-y-8 mx-2 md:mx-0">
+        <div className="space-y-6">
             <Card>
                 <CardHeader>
                     <CardTitle className="text-base md:text-lg">Risk Profile</CardTitle>
@@ -316,11 +314,10 @@ const SecuritySettings = () => {
     };
     
     return (
-        <div className="mx-2 md:mx-0">
-            <Card>
-                <CardHeader>
-                    <CardTitle className="text-base md:text-lg">Password</CardTitle>
-                    <CardDescription className="text-sm">Change your password here. It's a good practice to use a strong password.</CardDescription>
+        <Card>
+            <CardHeader>
+                <CardTitle className="text-base md:text-lg">Password</CardTitle>
+                <CardDescription className="text-sm">Change your password here. It's a good practice to use a strong password.</CardDescription>
             </CardHeader>
             <form onSubmit={handleSubmit(onSubmit)}>
                  <CardContent className="space-y-4">
@@ -347,7 +344,6 @@ const SecuritySettings = () => {
                 </CardContent>
             </form>
         </Card>
-        </div>
     );
 };
 
@@ -357,7 +353,7 @@ export default function ProfilePage() {
 
     return (
         <div className="space-y-4 md:space-y-8 animate-in fade-in-0 duration-500">
-            <div className="flex flex-col space-y-3 md:flex-row md:justify-between md:items-center md:space-y-0">
+            <div className="flex flex-col space-y-3 md:flex-row md:justify-between md:items-center md:space-y-0 mx-2 md:mx-0">
                 <div className="space-y-1 md:space-y-2">
                     <div className="flex items-center justify-between">
                         <h1 className="text-xl md:text-2xl font-bold tracking-tight text-foreground">
@@ -375,7 +371,7 @@ export default function ProfilePage() {
                 </div>
             </div>
 
-            <div className="grid md:grid-cols-4 gap-4 md:gap-8">
+            <div className="grid md:grid-cols-4 gap-4 md:gap-8 mx-2 md:mx-0">
                 <div className="hidden md:block md:col-span-1">
                    <SettingsNav activeTab={activeTab} setActiveTab={setActiveTab} />
                 </div>

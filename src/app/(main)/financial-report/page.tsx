@@ -298,10 +298,7 @@ export default function FinancialReportPage() {
 
             <div className="animate-in fade-in-0 duration-500 space-y-4 md:space-y-6 max-w-4xl mx-auto print-container">
                 <div className="flex flex-col space-y-3 md:flex-row md:justify-between md:items-center md:space-y-0 print:hidden">
-                     <Button variant="outline" onClick={() => router.back()} className="md:w-auto">
-                        <ArrowLeft className="mr-2 h-4 w-4" />
-                        Back to Goals
-                    </Button>
+                    <div></div>
                     <h1 className="text-xl md:text-3xl font-bold tracking-tight text-foreground text-center">
                         Financial Goals Report
                     </h1>
@@ -324,9 +321,15 @@ export default function FinancialReportPage() {
 
                 {/* Screen Version */}
                 <Card className="print:hidden">
-                    <CardHeader>
-                        <CardTitle className="text-lg md:text-xl">Overall Summary</CardTitle>
-                        <CardDescription className="text-sm">A high-level overview of your financial goals.</CardDescription>
+                    <CardHeader className="flex-col space-y-3 md:flex-row md:items-center md:justify-between md:space-y-0">
+                        <div>
+                            <CardTitle className="text-lg md:text-xl">Overall Summary</CardTitle>
+                            <CardDescription className="text-sm">A high-level overview of your financial goals.</CardDescription>
+                        </div>
+                        <Button variant="outline" onClick={() => router.back()} className="w-full md:w-auto">
+                            <ArrowLeft className="mr-2 h-4 w-4" />
+                            Back to Goals
+                        </Button>
                     </CardHeader>
                     <CardContent className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4">
                         <Card className="p-3 md:p-4">
@@ -391,7 +394,7 @@ export default function FinancialReportPage() {
                 {/* Screen Version Table */}
                 <Card className="print:hidden">
                     <CardHeader>
-                        <CardTitle>Detailed Goal Breakdown</CardTitle>
+                        <CardTitle className="text-lg md:text-xl">Detailed Goal Breakdown</CardTitle>
                     </CardHeader>
                     <CardContent>
                         <Table>

@@ -259,40 +259,40 @@ export const WhatIfSimulator = () => {
           }}
       />
         <Card>
-            <CardHeader className="flex-row items-start justify-between">
+            <CardHeader className="flex-col space-y-3 md:flex-row md:items-center md:justify-between md:space-y-0">
               <div>
-                <CardTitle className="text-2xl font-bold tracking-tight text-foreground flex items-center gap-2">
-                  <Calculator className="h-6 w-6 text-primary" />
+                <CardTitle className="text-xl md:text-2xl font-bold tracking-tight text-foreground flex items-center gap-2">
+                  <Calculator className="h-5 w-5 md:h-6 md:w-6 text-primary" />
                   Financial Simulator
                 </CardTitle>
-                <CardDescription>
-                  Adjust your financial parameters and see real-time projections for your goals.
+                <CardDescription className="text-sm">
+                  Adjust your financial parameters and see real-time projections.
                 </CardDescription>
               </div>
-              <Button variant="outline" onClick={() => setShowScenarios(!showScenarios)}>
-                <Archive className="mr-0 md:mr-2 h-4 w-4" />
-                <span className="hidden md:inline">Saved Scenarios</span>
+              <Button variant="outline" onClick={() => setShowScenarios(!showScenarios)} className="w-full md:w-auto">
+                <Archive className="mr-2 h-4 w-4" />
+                Saved Scenarios
               </Button>
             </CardHeader>
-            <CardContent className="space-y-6">
-              <div className={`grid grid-cols-1 ${showScenarios ? 'lg:grid-cols-4' : ''} gap-8 items-start`}>
-                <div className={`${showScenarios ? 'lg:col-span-3' : 'lg:col-span-4'} space-y-8 transition-all duration-300`}>
+            <CardContent className="space-y-4 md:space-y-6">
+              <div className={`grid grid-cols-1 ${showScenarios ? 'lg:grid-cols-4' : ''} gap-4 md:gap-8 items-start`}>
+                <div className={`${showScenarios ? 'lg:col-span-3' : 'lg:col-span-4'} space-y-4 md:space-y-8 transition-all duration-300`}>
                   <Card>
                     <CardHeader>
-                      <CardTitle className="text-lg flex items-center gap-2">
-                        <Rocket className="h-5 w-5 text-primary" />
+                      <CardTitle className="text-base md:text-lg flex items-center gap-2">
+                        <Rocket className="h-4 w-4 md:h-5 md:w-5 text-primary" />
                         Try a Common Scenario
                       </CardTitle>
-                      <CardDescription>
+                      <CardDescription className="text-sm">
                         Get a head start by loading a preset goal that matches BPI products.
                       </CardDescription>
                     </CardHeader>
                     <CardContent>
-                      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 md:gap-4">
                         {Object.entries(presetScenarios).map(([key, {name, icon: Icon}]) => (
-                            <Button key={key} variant="outline" className="flex flex-row items-center justify-start h-auto p-4" onClick={() => loadPreset(key as keyof typeof presetScenarios)}>
-                                <Icon className="h-6 w-6 mr-2 text-primary" />
-                                <span className="text-left text-sm text-wrap">{name}</span>
+                            <Button key={key} variant="outline" className="flex flex-col items-center justify-center h-20 md:h-24 p-3 md:p-4 text-center" onClick={() => loadPreset(key as keyof typeof presetScenarios)}>
+                                <Icon className="h-5 w-5 md:h-6 md:w-6 mb-1 md:mb-2 text-primary" />
+                                <span className="text-xs md:text-sm text-wrap leading-tight">{name}</span>
                             </Button>
                         ))}
                       </div>

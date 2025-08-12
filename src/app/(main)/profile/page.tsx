@@ -12,12 +12,13 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/hooks/use-toast";
-import { Shield, User, LogOut, DollarSign, ShieldQuestion } from "lucide-react";
+import { Shield, User, LogOut, DollarSign, ShieldQuestion, Menu, X } from "lucide-react";
 import { useAppContext } from "@/contexts/app-context";
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import supabase from "@/lib/supabase-client";
 import { Badge } from "@/components/ui/badge";
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 
 
 const accountSchema = z.object({
@@ -51,7 +52,7 @@ const SettingsNav = ({ activeTab, setActiveTab }: { activeTab: string, setActive
     router.push('/login');
   };
 
-  return (
+  const NavContent = () => (
     <nav className="flex flex-col gap-1">
       <Button
         variant="ghost"
@@ -91,6 +92,35 @@ const SettingsNav = ({ activeTab, setActiveTab }: { activeTab: string, setActive
         Log Out
       </Button>
     </nav>
+  );
+
+  return (
+    <>
+      {/* Desktop Navigation */}
+      <div className="hidden md:block">
+        <NavContent />
+      </div>
+      
+      {/* Mobile Navigation Sheet */}
+      <div className="md:hidden">
+        <Sheet>
+          <SheetTrigger asChild>
+            <Button variant="outline" size="sm" className="w-full">
+              <Menu className="mr-2 h-4 w-4" />
+              Menu
+            </Button>
+          </SheetTrigger>
+          <SheetContent side="left" className="w-64">
+            <SheetHeader>
+              <SheetTitle>Settings Menu</SheetTitle>
+            </SheetHeader>
+            <div className="mt-6">
+              <NavContent />
+            </div>
+          </SheetContent>
+        </Sheet>
+      </div>
+    </>
   )
 }
 
@@ -324,17 +354,24 @@ export default function ProfilePage() {
 
     return (
         <div className="space-y-4 md:space-y-8 animate-in fade-in-0 duration-500">
-            <div className="space-y-1 md:space-y-2">
-                <h1 className="text-xl md:text-3xl font-bold tracking-tight text-foreground">
-                    Settings
-                </h1>
-                <p className="text-sm md:text-base text-muted-foreground">
-                    Manage your account settings and preferences.
-                </p>
+            <div className="flex flex-col space-y-3 md:flex-row md:justify-between md:items-center md:space-y-0">
+                <div className="space-y-1 md:space-y-2">
+                    <h1 className="text-xl md:text-3xl font-bold tracking-tight text-foreground">
+                        Settings
+                    </h1>
+                    <p className="text-sm md:text-base text-muted-foreground">
+                        Manage your account settings and preferences.
+                    </p>
+                </div>
+                
+                {/* Mobile Menu Button */}
+                <div className="md:hidden">
+                    <SettingsNav activeTab={activeTab} setActiveTab={setActiveTab} />
+                </div>
             </div>
 
             <div className="grid md:grid-cols-4 gap-4 md:gap-8">
-                <div className="md:col-span-1">
+                <div className="hidden md:block md:col-span-1">
                    <SettingsNav activeTab={activeTab} setActiveTab={setActiveTab} />
                 </div>
                 <div className="md:col-span-3">

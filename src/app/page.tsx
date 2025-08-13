@@ -85,7 +85,7 @@ export default function LandingPage() {
                         {/* Mobile Content */}
                         <div className="px-4 pt-0 pb-1 -mt-2">
                             <div className="text-center space-y-4">
-                                <h1 className="text-[2.75rem] font-extrabold tracking-tighter leading-tight text-foreground">
+                                <h1 className="text-[2.70rem] font-extrabold tracking-tighter leading-tight text-foreground">
                                     Basta may <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">kita</span>,<br />
                                     may <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">matatamo.</span>
                                 </h1>

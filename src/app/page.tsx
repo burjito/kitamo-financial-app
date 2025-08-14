@@ -1,6 +1,7 @@
 
 "use client";
 
+import React from "react";
 import LandingHeader from "@/components/layout/landing-header";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Bot, FlaskConical, Target, TrendingUp, Smile, CheckCircle, ShoppingBag } from "lucide-react";
@@ -157,8 +158,8 @@ export default function LandingPage() {
                             {/* Right Side - Features Content in Card (Narrower) */}
                             <div className="bg-white rounded-2xl p-6 lg:p-8 shadow-2xl border border-gray-100 max-w-md ml-auto">
                                 <div className="space-y-4">
-                                        {/* Kitabot Feature */}
-                                        <div className="flex items-start gap-3 p-3 rounded-xl cursor-pointer transition-all duration-300 hover:bg-gradient-to-r hover:from-red-50 hover:to-yellow-50 hover:shadow-lg group">
+                                    {/* Kitabot Feature */}
+                                    <div className="flex items-start gap-3 p-3 rounded-xl cursor-pointer transition-all duration-300 hover:bg-gradient-to-r hover:from-red-50 hover:to-yellow-50 hover:shadow-lg group">
                                             <div className="bg-red-100 text-red-700 w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 mt-1 transition-all duration-300 group-hover:scale-110 group-hover:shadow-md group-hover:bg-red-200">
                                                 <Bot className="w-4 h-4 transition-transform duration-300 group-hover:scale-110" />
                                             </div>

@@ -159,40 +159,40 @@ export default function LandingPage() {
                                         </p>
                                     </div>
                                     
-                                    <div className="space-y-5">
+                                    <div className="space-y-4">
                                         {/* Kitabot Feature */}
-                                        <div className="flex items-start gap-4 p-4 rounded-xl cursor-pointer transition-all duration-300 hover:bg-gradient-to-r hover:from-red-50 hover:to-yellow-50 hover:shadow-lg group">
-                                            <div className="bg-red-100 text-red-700 w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 mt-1 transition-all duration-300 group-hover:scale-110 group-hover:shadow-md group-hover:bg-red-200">
-                                                <Bot className="w-5 h-5 transition-transform duration-300 group-hover:scale-110" />
+                                        <div className="flex items-start gap-3 p-3 rounded-xl cursor-pointer transition-all duration-300 hover:bg-gradient-to-r hover:from-red-50 hover:to-yellow-50 hover:shadow-lg group">
+                                            <div className="bg-red-100 text-red-700 w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 mt-1 transition-all duration-300 group-hover:scale-110 group-hover:shadow-md group-hover:bg-red-200">
+                                                <Bot className="w-4 h-4 transition-transform duration-300 group-hover:scale-110" />
                                             </div>
                                             <div>
-                                                <h3 className="text-xl font-bold text-foreground mb-1 transition-colors duration-300 group-hover:text-red-800">Kitabot</h3>
-                                                <p className="text-sm text-muted-foreground leading-relaxed">
+                                                <h3 className="text-lg font-bold text-foreground mb-1 transition-colors duration-300 group-hover:text-red-800">Kitabot</h3>
+                                                <p className="text-xs text-muted-foreground leading-relaxed">
                                                     Chat with your finance companion. Get instant answers, personalized guidance, and tips based on your financial goals.
                                                 </p>
                                             </div>
                                         </div>
                                         
                                         {/* What-If Simulator Feature */}
-                                        <div className="flex items-start gap-4 p-4 rounded-xl cursor-pointer transition-all duration-300 hover:bg-gradient-to-r hover:from-red-50 hover:to-yellow-50 hover:shadow-lg group">
-                                            <div className="bg-red-100 text-red-700 w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 mt-1 transition-all duration-300 group-hover:scale-110 group-hover:shadow-md group-hover:bg-red-200">
-                                                <FlaskConical className="w-5 h-5 transition-transform duration-300 group-hover:scale-110" />
+                                        <div className="flex items-start gap-3 p-3 rounded-xl cursor-pointer transition-all duration-300 hover:bg-gradient-to-r hover:from-red-50 hover:to-yellow-50 hover:shadow-lg group">
+                                            <div className="bg-red-100 text-red-700 w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 mt-1 transition-all duration-300 group-hover:scale-110 group-hover:shadow-md group-hover:bg-red-200">
+                                                <FlaskConical className="w-4 h-4 transition-transform duration-300 group-hover:scale-110" />
                                             </div>
                                             <div>
-                                                <h3 className="text-xl font-bold text-foreground mb-1 transition-colors duration-300 group-hover:text-red-800">What-If Simulator</h3>
-                                                <p className="text-sm text-muted-foreground leading-relaxed">
-                                                    Experiment with different financial scenarios. See how changing your income, expenses, or timeline impacts your ability to reach your goals.
+                                                <h3 className="text-lg font-bold text-foreground mb-1 transition-colors duration-300 group-hover:text-red-800">What-If Simulator</h3>
+                                                <p className="text-xs text-muted-foreground leading-relaxed">
+                                                    Experiment with scenarios. See how changes in income, expenses, or timelines affect your goals.
                                                 </p>
                                             </div>
                                         </div>
                                         
                                         {/* Goal Tracker Feature */}
-                                        <div className="flex items-start gap-4 p-4 rounded-xl cursor-pointer transition-all duration-300 hover:bg-gradient-to-r hover:from-red-50 hover:to-yellow-50 hover:shadow-lg group">
-                                            <div className="bg-red-100 text-red-700 w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 mt-1 transition-all duration-300 group-hover:scale-110 group-hover:shadow-md group-hover:bg-red-200">
-                                                <Target className="w-5 h-5 transition-transform duration-300 group-hover:scale-110" />
+                                        <div className="flex items-start gap-3 p-3 rounded-xl cursor-pointer transition-all duration-300 hover:bg-gradient-to-r hover:from-red-50 hover:to-yellow-50 hover:shadow-lg group">
+                                            <div className="bg-red-100 text-red-700 w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 mt-1 transition-all duration-300 group-hover:scale-110 group-hover:shadow-md group-hover:bg-red-200">
+                                                <Target className="w-4 h-4 transition-transform duration-300 group-hover:scale-110" />
                                             </div>
                                             <div>
-                                                <h3 className="text-xl font-bold text-foreground mb-1 transition-colors duration-300 group-hover:text-red-800">Goal Tracker</h3>
+                                                <h3 className="text-lg font-bold text-foreground mb-1 transition-colors duration-300 group-hover:text-red-800">Goal Tracker</h3>
                                                 <p className="text-sm text-muted-foreground leading-relaxed">
                                                     Create, manage, and prioritize your financial goals. Visualize your progress and get AI-powered insights to stay on track.
                                                 </p>
@@ -200,14 +200,14 @@ export default function LandingPage() {
                                         </div>
                                         
                                         {/* AI-Powered Insights Feature */}
-                                        <div className="flex items-start gap-4 p-4 rounded-xl cursor-pointer transition-all duration-300 hover:bg-gradient-to-r hover:from-red-50 hover:to-yellow-50 hover:shadow-lg group">
-                                            <div className="bg-red-100 text-red-700 w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 mt-1 transition-all duration-300 group-hover:scale-110 group-hover:shadow-md group-hover:bg-red-200">
-                                                <TrendingUp className="w-5 h-5 transition-transform duration-300 group-hover:scale-110" />
+                                        <div className="flex items-start gap-3 p-3 rounded-xl cursor-pointer transition-all duration-300 hover:bg-gradient-to-r hover:from-red-50 hover:to-yellow-50 hover:shadow-lg group">
+                                            <div className="bg-red-100 text-red-700 w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 mt-1 transition-all duration-300 group-hover:scale-110 group-hover:shadow-md group-hover:bg-red-200">
+                                                <TrendingUp className="w-4 h-4 transition-transform duration-300 group-hover:scale-110" />
                                             </div>
                                             <div>
-                                                <h3 className="text-xl font-bold text-foreground mb-1 transition-colors duration-300 group-hover:text-red-800">AI-Powered Insights</h3>
-                                                <p className="text-sm text-muted-foreground leading-relaxed">
-                                                    Receive personalized suggestions and product recommendations from BPI to accelerate your journey to financial freedom.
+                                                <h3 className="text-lg font-bold text-foreground mb-1 transition-colors duration-300 group-hover:text-red-800">AI-Powered Insights</h3>
+                                                <p className="text-xs text-muted-foreground leading-relaxed">
+                                                    Get personalized BPI tips and recommendations to reach financial freedom faster.
                                                 </p>
                                             </div>
                                         </div>

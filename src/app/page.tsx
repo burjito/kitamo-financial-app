@@ -126,34 +126,34 @@ export default function LandingPage() {
                                 <Image
                                     src="/phone.png"
                                     alt="KitaMo Financial App Phone Mockup"
-                                    width={700}
-                                    height={800}
-                                    className="w-full h-auto max-w-lg mx-auto lg:max-w-full"
+                                    width={800}
+                                    height={900}
+                                    className="w-full h-auto max-w-xl mx-auto lg:max-w-full"
                                     priority
                                 />
                             </div>
                             
                             {/* Right Side - Features Content in Card */}
                             <div className="bg-white rounded-2xl p-8 lg:p-10 shadow-2xl border border-gray-100">
-                                <div className="space-y-8">
+                                <div className="space-y-6">
                                     <div>
-                                        <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-6">
+                                        <h2 className="text-xl md:text-2xl lg:text-3xl font-bold mb-4">
                                             <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">A Future You Can See</span>
                                         </h2>
-                                        <p className="text-lg text-muted-foreground leading-relaxed max-w-lg">
+                                        <p className="text-base text-muted-foreground leading-relaxed max-w-lg">
                                             KitaMo is more than just a financial app. It's your personal planning partner for life's most important financial decisions.
                                         </p>
                                     </div>
                                     
-                                    <div className="space-y-6">
+                                    <div className="space-y-5">
                                         {/* Kitabot Feature */}
                                         <div className="flex items-start gap-4">
-                                            <div className="bg-red-100 text-red-600 w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0 mt-1">
-                                                <Bot className="w-6 h-6" />
+                                            <div className="bg-red-100 text-red-600 w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 mt-1">
+                                                <Bot className="w-5 h-5" />
                                             </div>
                                             <div>
-                                                <h3 className="text-xl font-bold text-foreground mb-2">Kitabot</h3>
-                                                <p className="text-muted-foreground leading-relaxed">
+                                                <h3 className="text-lg font-bold text-foreground mb-1">Kitabot</h3>
+                                                <p className="text-sm text-muted-foreground leading-relaxed">
                                                     Chat with your finance companion. Get instant answers, personalized guidance, and tips based on your financial goals.
                                                 </p>
                                             </div>
@@ -161,12 +161,12 @@ export default function LandingPage() {
                                         
                                         {/* What-If Simulator Feature */}
                                         <div className="flex items-start gap-4">
-                                            <div className="bg-red-100 text-red-600 w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0 mt-1">
-                                                <FlaskConical className="w-6 h-6" />
+                                            <div className="bg-red-100 text-red-600 w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 mt-1">
+                                                <FlaskConical className="w-5 h-5" />
                                             </div>
                                             <div>
-                                                <h3 className="text-xl font-bold text-foreground mb-2">What-If Simulator</h3>
-                                                <p className="text-muted-foreground leading-relaxed">
+                                                <h3 className="text-lg font-bold text-foreground mb-1">What-If Simulator</h3>
+                                                <p className="text-sm text-muted-foreground leading-relaxed">
                                                     Experiment with different financial scenarios. See how changing your income, expenses, or timeline impacts your ability to reach your goals.
                                                 </p>
                                             </div>
@@ -174,12 +174,12 @@ export default function LandingPage() {
                                         
                                         {/* Goal Tracker Feature */}
                                         <div className="flex items-start gap-4">
-                                            <div className="bg-red-100 text-red-600 w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0 mt-1">
-                                                <Target className="w-6 h-6" />
+                                            <div className="bg-red-100 text-red-600 w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 mt-1">
+                                                <Target className="w-5 h-5" />
                                             </div>
                                             <div>
-                                                <h3 className="text-xl font-bold text-foreground mb-2">Goal Tracker</h3>
-                                                <p className="text-muted-foreground leading-relaxed">
+                                                <h3 className="text-lg font-bold text-foreground mb-1">Goal Tracker</h3>
+                                                <p className="text-sm text-muted-foreground leading-relaxed">
                                                     Create, manage, and prioritize your financial goals. Visualize your progress and get AI-powered insights to stay on track.
                                                 </p>
                                             </div>
@@ -187,12 +187,12 @@ export default function LandingPage() {
                                         
                                         {/* AI-Powered Insights Feature */}
                                         <div className="flex items-start gap-4">
-                                            <div className="bg-red-100 text-red-600 w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0 mt-1">
-                                                <TrendingUp className="w-6 h-6" />
+                                            <div className="bg-red-100 text-red-600 w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 mt-1">
+                                                <TrendingUp className="w-5 h-5" />
                                             </div>
                                             <div>
-                                                <h3 className="text-xl font-bold text-foreground mb-2">AI-Powered Insights</h3>
-                                                <p className="text-muted-foreground leading-relaxed">
+                                                <h3 className="text-lg font-bold text-foreground mb-1">AI-Powered Insights</h3>
+                                                <p className="text-sm text-muted-foreground leading-relaxed">
                                                     Receive personalized suggestions and product recommendations from BPI to accelerate your journey to financial freedom.
                                                 </p>
                                             </div>

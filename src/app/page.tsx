@@ -140,8 +140,8 @@ export default function LandingPage() {
                                 <Image
                                     src="/phone.png"
                                     alt="KitaMo Financial App Phone Mockup"
-                                    width={1400}
-                                    height={1200}
+                                    width={1700}
+                                    height={1600}
                                     className="w-full h-auto max-w-2xl mx-auto lg:max-w-none lg:w-[120%] lg:-ml-[10%]"
                                     priority
                                 />
@@ -150,11 +150,11 @@ export default function LandingPage() {
                             {/* Right Side - Features Content in Card */}
                             <div className="bg-white rounded-2xl p-8 lg:p-10 shadow-2xl border border-gray-100">
                                 <div className="space-y-6">
-                                    <div>
+                                    <div className="text-center">
                                         <h2 className="text-xl md:text-2xl lg:text-3xl font-bold mb-4">
                                             <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">A Future You Can See</span>
                                         </h2>
-                                        <p className="text-base text-muted-foreground leading-relaxed max-w-lg">
+                                        <p className="text-base text-muted-foreground leading-relaxed max-w-lg mx-auto">
                                             KitaMo is more than just a financial app. It's your personal planning partner for life's most important financial decisions.
                                         </p>
                                     </div>
@@ -166,7 +166,7 @@ export default function LandingPage() {
                                                 <Bot className="w-5 h-5" />
                                             </div>
                                             <div>
-                                                <h3 className="text-lg font-bold text-foreground mb-1">Kitabot</h3>
+                                                <h3 className="text-xl font-bold text-foreground mb-1">Kitabot</h3>
                                                 <p className="text-sm text-muted-foreground leading-relaxed">
                                                     Chat with your finance companion. Get instant answers, personalized guidance, and tips based on your financial goals.
                                                 </p>
@@ -179,7 +179,7 @@ export default function LandingPage() {
                                                 <FlaskConical className="w-5 h-5" />
                                             </div>
                                             <div>
-                                                <h3 className="text-lg font-bold text-foreground mb-1">What-If Simulator</h3>
+                                                <h3 className="text-xl font-bold text-foreground mb-1">What-If Simulator</h3>
                                                 <p className="text-sm text-muted-foreground leading-relaxed">
                                                     Experiment with different financial scenarios. See how changing your income, expenses, or timeline impacts your ability to reach your goals.
                                                 </p>
@@ -192,7 +192,7 @@ export default function LandingPage() {
                                                 <Target className="w-5 h-5" />
                                             </div>
                                             <div>
-                                                <h3 className="text-lg font-bold text-foreground mb-1">Goal Tracker</h3>
+                                                <h3 className="text-xl font-bold text-foreground mb-1">Goal Tracker</h3>
                                                 <p className="text-sm text-muted-foreground leading-relaxed">
                                                     Create, manage, and prioritize your financial goals. Visualize your progress and get AI-powered insights to stay on track.
                                                 </p>
@@ -205,7 +205,7 @@ export default function LandingPage() {
                                                 <TrendingUp className="w-5 h-5" />
                                             </div>
                                             <div>
-                                                <h3 className="text-lg font-bold text-foreground mb-1">AI-Powered Insights</h3>
+                                                <h3 className="text-xl font-bold text-foreground mb-1">AI-Powered Insights</h3>
                                                 <p className="text-sm text-muted-foreground leading-relaxed">
                                                     Receive personalized suggestions and product recommendations from BPI to accelerate your journey to financial freedom.
                                                 </p>

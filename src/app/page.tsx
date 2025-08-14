@@ -73,7 +73,7 @@ export default function LandingPage() {
                                         onClick={() => {
                                             const featuresSection = document.getElementById('features');
                                             if (featuresSection) {
-                                                const offsetTop = featuresSection.offsetTop - 200; // Center the section with equal spacing
+                                                const offsetTop = featuresSection.offsetTop - -80; // Center the section with equal spacing
                                                 window.scrollTo({
                                                     top: offsetTop,
                                                     behavior: 'smooth'

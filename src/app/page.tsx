@@ -64,10 +64,22 @@ export default function LandingPage() {
                                             <ArrowRight className="ml-2 h-5 w-5" />
                                         </Link>
                                     </Button>
-                                    <Button asChild variant="outline" size="lg" className="border-2 border-primary/20 bg-white/80 backdrop-blur-sm shadow-lg hover:shadow-xl hover:bg-white/90 transition-all duration-300 hover:scale-105">
-                                        <Link href="#features">
-                                            Learn More
-                                        </Link>
+                                    <Button 
+                                        variant="outline" 
+                                        size="lg" 
+                                        className="border-2 border-primary/20 bg-white/80 backdrop-blur-sm shadow-lg hover:shadow-xl hover:bg-white/90 transition-all duration-300 hover:scale-105"
+                                        onClick={() => {
+                                            const featuresSection = document.getElementById('features');
+                                            if (featuresSection) {
+                                                const offsetTop = featuresSection.offsetTop - 80; // Adjust this value as needed
+                                                window.scrollTo({
+                                                    top: offsetTop,
+                                                    behavior: 'smooth'
+                                                });
+                                            }
+                                        }}
+                                    >
+                                        Learn More
                                     </Button>
                                 </div>
 
@@ -118,7 +130,7 @@ export default function LandingPage() {
                 </section>
 
                 {/* Features Section */}
-                <section id="features" className="relative py-16 md:py-24 pb-48 md:pb-64 bg-white scroll-mt-20 md:scroll-mt-32">
+                <section id="features" className="relative py-16 md:py-24 pb-48 md:pb-64 bg-white">
                     <div className="container max-w-7xl mx-auto px-4 relative z-10">
                         <div className="grid lg:grid-cols-2 gap-8 lg:gap-16 items-center">
                             {/* Left Side - Phone Mockup */}

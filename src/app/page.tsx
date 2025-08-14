@@ -135,7 +135,7 @@ export default function LandingPage() {
                 <section id="features" className="relative py-16 md:py-24 pb-48 md:pb-64 bg-white">
                     <div className="container max-w-7xl mx-auto px-4 relative z-10">
                         <div className="grid lg:grid-cols-2 gap-8 lg:gap-16 items-center">
-                            {/* Left Side - Phone Mockup */}
+                            {/* Left Side - Phone Mockup with Title */}
                             <div className="relative">
                                 <Image
                                     src="/phone.png"
@@ -145,21 +145,18 @@ export default function LandingPage() {
                                     className="w-full h-auto max-w-2xl mx-auto lg:max-w-none lg:w-[120%] lg:-ml-[10%]"
                                     priority
                                 />
+                                {/* Title positioned over phone mockup */}
+                                <div className="absolute top-8 right-0 lg:right-[-20%] z-10">
+                                    <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-tighter leading-tight text-right">
+                                        <span className="text-foreground">a future</span><br />
+                                        <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">you can see.</span>
+                                    </h2>
+                                </div>
                             </div>
                             
-                            {/* Right Side - Features Content in Card */}
-                            <div className="bg-white rounded-2xl p-8 lg:p-10 shadow-2xl border border-gray-100">
-                                <div className="space-y-6">
-                                    <div className="text-center">
-                                        <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-tighter leading-tight mb-4">
-                                            <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">A Future You Can See</span>
-                                        </h2>
-                                        <p className="text-base text-muted-foreground leading-relaxed max-w-lg mx-auto">
-                                            KitaMo is more than just a financial app. It's your personal planning partner for life's most important financial decisions.
-                                        </p>
-                                    </div>
-                                    
-                                    <div className="space-y-4">
+                            {/* Right Side - Features Content in Card (Narrower) */}
+                            <div className="bg-white rounded-2xl p-6 lg:p-8 shadow-2xl border border-gray-100 max-w-md ml-auto">
+                                <div className="space-y-4">
                                         {/* Kitabot Feature */}
                                         <div className="flex items-start gap-3 p-3 rounded-xl cursor-pointer transition-all duration-300 hover:bg-gradient-to-r hover:from-red-50 hover:to-yellow-50 hover:shadow-lg group">
                                             <div className="bg-red-100 text-red-700 w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 mt-1 transition-all duration-300 group-hover:scale-110 group-hover:shadow-md group-hover:bg-red-200">
@@ -206,7 +203,7 @@ export default function LandingPage() {
                                             </div>
                                             <div>
                                                 <h3 className="text-lg font-bold text-foreground mb-1 transition-colors duration-300 group-hover:text-red-800">Goal Tracker</h3>
-                                                <p className="text-sm text-muted-foreground leading-relaxed">
+                                                <p className="text-xs text-muted-foreground leading-relaxed">
                                                     Create, manage, and prioritize your financial goals. Visualize your progress and get AI-powered insights to stay on track.
                                                 </p>
                                             </div>

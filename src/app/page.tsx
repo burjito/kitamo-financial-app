@@ -118,9 +118,9 @@ export default function LandingPage() {
                 </section>
 
                 {/* Features Section */}
-                <section id="features" className="relative py-20 md:py-32 bg-white">
+                <section id="features" className="relative py-16 md:py-24 bg-white">
                     <div className="container max-w-7xl mx-auto px-4 relative z-10">
-                        <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+                        <div className="grid lg:grid-cols-2 gap-8 lg:gap-16 items-center">
                             {/* Left Side - Phone Mockup */}
                             <div className="relative">
                                 <Image
@@ -137,7 +137,7 @@ export default function LandingPage() {
                             <div className="bg-white rounded-2xl p-8 lg:p-10 shadow-2xl border border-gray-100">
                                 <div className="space-y-8">
                                     <div>
-                                        <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6">
+                                        <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-6">
                                             <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">A Future You Can See</span>
                                         </h2>
                                         <p className="text-lg text-muted-foreground leading-relaxed max-w-lg">

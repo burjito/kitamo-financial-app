@@ -118,30 +118,86 @@ export default function LandingPage() {
                 </section>
 
                 {/* Features Section */}
-                <section id="features" className="relative py-20 md:py-32 bg-gradient-to-b from-transparent via-background/80 to-background">
-                    <div className="container max-w-6xl mx-auto px-4 relative z-10">
-                        <div className="text-center mb-16">
-                            <h2 className="text-3xl md:text-4xl font-bold text-foreground">A Future You Can See</h2>
-                            <p className="max-w-2xl mx-auto text-lg text-muted-foreground mt-4">
-                                KitaMo is more than just a financial app. It's your personal planning partner for life's most important financial decisions.
-                            </p>
-                        </div>
-                        <div className="grid md:grid-cols-3 gap-8">
-                            <FeatureCard 
-                                icon={<FlaskConical className="w-8 h-8"/>}
-                                title="What-If Simulator"
-                                description="Experiment with different financial scenarios. See how changing your income, expenses, or timeline impacts your ability to reach your goals."
-                            />
-                             <FeatureCard 
-                                icon={<Target className="w-8 h-8"/>}
-                                title="Goal Tracker"
-                                description="Create, manage, and prioritize your financial goals. Visualize your progress and get AI-powered insights to stay on track."
-                            />
-                             <FeatureCard 
-                                icon={<Bot className="w-8 h-8"/>}
-                                title="AI-Powered Insights"
-                                description="Receive personalized suggestions and product recommendations from BPI to accelerate your journey to financial freedom."
-                            />
+                <section id="features" className="relative py-20 md:py-32 bg-white">
+                    <div className="container max-w-7xl mx-auto px-4 relative z-10">
+                        <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+                            {/* Left Side - Phone Mockup */}
+                            <div className="relative">
+                                <Image
+                                    src="/phone.png"
+                                    alt="KitaMo Financial App Phone Mockup"
+                                    width={600}
+                                    height={700}
+                                    className="w-full h-auto max-w-md mx-auto lg:max-w-full"
+                                    priority
+                                />
+                            </div>
+                            
+                            {/* Right Side - Features Content */}
+                            <div className="space-y-8">
+                                <div>
+                                    <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-6">
+                                        A Future You Can See
+                                    </h2>
+                                    <p className="text-lg text-muted-foreground leading-relaxed max-w-lg">
+                                        KitaMo is more than just a financial app. It's your personal planning partner for life's most important financial decisions.
+                                    </p>
+                                </div>
+                                
+                                <div className="space-y-6">
+                                    {/* Kitabot Feature */}
+                                    <div className="flex items-start gap-4">
+                                        <div className="bg-red-100 text-red-600 w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0 mt-1">
+                                            <Bot className="w-6 h-6" />
+                                        </div>
+                                        <div>
+                                            <h3 className="text-xl font-bold text-foreground mb-2">Kitabot</h3>
+                                            <p className="text-muted-foreground leading-relaxed">
+                                                Chat with your finance companion. Get instant answers, personalized guidance, and tips based on your financial goals.
+                                            </p>
+                                        </div>
+                                    </div>
+                                    
+                                    {/* What-If Simulator Feature */}
+                                    <div className="flex items-start gap-4">
+                                        <div className="bg-red-100 text-red-600 w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0 mt-1">
+                                            <FlaskConical className="w-6 h-6" />
+                                        </div>
+                                        <div>
+                                            <h3 className="text-xl font-bold text-foreground mb-2">What-If Simulator</h3>
+                                            <p className="text-muted-foreground leading-relaxed">
+                                                Experiment with different financial scenarios. See how changing your income, expenses, or timeline impacts your ability to reach your goals.
+                                            </p>
+                                        </div>
+                                    </div>
+                                    
+                                    {/* Goal Tracker Feature */}
+                                    <div className="flex items-start gap-4">
+                                        <div className="bg-red-100 text-red-600 w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0 mt-1">
+                                            <Target className="w-6 h-6" />
+                                        </div>
+                                        <div>
+                                            <h3 className="text-xl font-bold text-foreground mb-2">Goal Tracker</h3>
+                                            <p className="text-muted-foreground leading-relaxed">
+                                                Create, manage, and prioritize your financial goals. Visualize your progress and get AI-powered insights to stay on track.
+                                            </p>
+                                        </div>
+                                    </div>
+                                    
+                                    {/* AI-Powered Insights Feature */}
+                                    <div className="flex items-start gap-4">
+                                        <div className="bg-red-100 text-red-600 w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0 mt-1">
+                                            <TrendingUp className="w-6 h-6" />
+                                        </div>
+                                        <div>
+                                            <h3 className="text-xl font-bold text-foreground mb-2">AI-Powered Insights</h3>
+                                            <p className="text-muted-foreground leading-relaxed">
+                                                Receive personalized suggestions and product recommendations from BPI to accelerate your journey to financial freedom.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </section>

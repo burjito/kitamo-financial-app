@@ -162,7 +162,7 @@ export default function LandingPage() {
                                     <div className="space-y-5">
                                         {/* Kitabot Feature */}
                                         <div className="flex items-start gap-4">
-                                            <div className="bg-red-100 text-red-600 w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 mt-1">
+                                            <div className="bg-red-100 text-red-900 w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 mt-1">
                                                 <Bot className="w-5 h-5" />
                                             </div>
                                             <div>
@@ -175,7 +175,7 @@ export default function LandingPage() {
                                         
                                         {/* What-If Simulator Feature */}
                                         <div className="flex items-start gap-4">
-                                            <div className="bg-red-100 text-red-600 w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 mt-1">
+                                            <div className="bg-red-100 text-red-900 w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 mt-1">
                                                 <FlaskConical className="w-5 h-5" />
                                             </div>
                                             <div>
@@ -188,7 +188,7 @@ export default function LandingPage() {
                                         
                                         {/* Goal Tracker Feature */}
                                         <div className="flex items-start gap-4">
-                                            <div className="bg-red-100 text-red-600 w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 mt-1">
+                                            <div className="bg-red-100 text-red-900 w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 mt-1">
                                                 <Target className="w-5 h-5" />
                                             </div>
                                             <div>
@@ -201,7 +201,7 @@ export default function LandingPage() {
                                         
                                         {/* AI-Powered Insights Feature */}
                                         <div className="flex items-start gap-4">
-                                            <div className="bg-red-100 text-red-600 w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 mt-1">
+                                            <div className="bg-red-100 text-red-900 w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 mt-1">
                                                 <TrendingUp className="w-5 h-5" />
                                             </div>
                                             <div>

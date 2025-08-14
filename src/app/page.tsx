@@ -126,9 +126,9 @@ export default function LandingPage() {
                                 <Image
                                     src="/phone.png"
                                     alt="KitaMo Financial App Phone Mockup"
-                                    width={800}
-                                    height={900}
-                                    className="w-full h-auto max-w-xl mx-auto lg:max-w-full"
+                                    width={1400}
+                                    height={1200}
+                                    className="w-full h-auto max-w-2xl mx-auto lg:max-w-none lg:w-[120%] lg:-ml-[10%]"
                                     priority
                                 />
                             </div>

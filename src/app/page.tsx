@@ -3,7 +3,7 @@
 
 import LandingHeader from "@/components/layout/landing-header";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Bot, FlaskConical, Target, TrendingUp, Smile, CheckCircle } from "lucide-react";
+import { ArrowRight, Bot, FlaskConical, Target, TrendingUp, Smile, CheckCircle, ShoppingBag } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
@@ -151,7 +151,7 @@ export default function LandingPage() {
                             <div className="bg-white rounded-2xl p-8 lg:p-10 shadow-2xl border border-gray-100">
                                 <div className="space-y-6">
                                     <div className="text-center">
-                                        <h2 className="text-xl md:text-2xl lg:text-3xl font-bold mb-4">
+                                        <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-tighter leading-tight mb-4">
                                             <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">A Future You Can See</span>
                                         </h2>
                                         <p className="text-base text-muted-foreground leading-relaxed max-w-lg mx-auto">
@@ -182,6 +182,19 @@ export default function LandingPage() {
                                                 <h3 className="text-lg font-bold text-foreground mb-1 transition-colors duration-300 group-hover:text-red-800">What-If Simulator</h3>
                                                 <p className="text-xs text-muted-foreground leading-relaxed">
                                                     Experiment with scenarios. See how changes in income, expenses, or timelines affect your goals.
+                                                </p>
+                                            </div>
+                                        </div>
+                                        
+                                        {/* BPI Product Recommender Feature */}
+                                        <div className="flex items-start gap-3 p-3 rounded-xl cursor-pointer transition-all duration-300 hover:bg-gradient-to-r hover:from-red-50 hover:to-yellow-50 hover:shadow-lg group">
+                                            <div className="bg-red-100 text-red-700 w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 mt-1 transition-all duration-300 group-hover:scale-110 group-hover:shadow-md group-hover:bg-red-200">
+                                                <ShoppingBag className="w-4 h-4 transition-transform duration-300 group-hover:scale-110" />
+                                            </div>
+                                            <div>
+                                                <h3 className="text-lg font-bold text-foreground mb-1 transition-colors duration-300 group-hover:text-red-800">BPI Product Recommender</h3>
+                                                <p className="text-xs text-muted-foreground leading-relaxed">
+                                                    View BPI products tailored to your simulated goals to help you achieve them faster.
                                                 </p>
                                             </div>
                                         </div>

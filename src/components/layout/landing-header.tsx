@@ -20,7 +20,7 @@ export default function LandingHeader() {
           </span>
         </Link>
         <div className="ml-auto flex items-center space-x-4">
-          <Button asChild variant="outline" size="sm" className="border-primary text-primary hover:bg-primary hover:text-primary-foreground">
+          <Button asChild size="sm" className="bg-gradient-to-r from-primary to-yellow-400 text-primary-foreground shadow-lg transition-transform hover:scale-105">
             <Link href="/login">
               Sign In
             </Link>

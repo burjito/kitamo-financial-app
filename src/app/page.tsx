@@ -1,4 +1,6 @@
 
+"use client";
+
 import LandingHeader from "@/components/layout/landing-header";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Bot, FlaskConical, Target, TrendingUp, Smile, CheckCircle } from "lucide-react";

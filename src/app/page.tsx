@@ -118,7 +118,7 @@ export default function LandingPage() {
                 </section>
 
                 {/* Features Section */}
-                <section id="features" className="relative py-16 md:py-24 bg-white">
+                <section id="features" className="relative py-16 md:py-24 pb-32 md:pb-40 bg-white">
                     <div className="container max-w-7xl mx-auto px-4 relative z-10">
                         <div className="grid lg:grid-cols-2 gap-8 lg:gap-16 items-center">
                             {/* Left Side - Phone Mockup */}

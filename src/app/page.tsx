@@ -135,30 +135,28 @@ export default function LandingPage() {
                 <section id="features" className="relative py-16 md:py-24 pb-48 md:pb-64 bg-white">
                     <div className="container max-w-7xl mx-auto px-4 relative z-10">
                         <div className="grid lg:grid-cols-2 gap-8 lg:gap-16 items-center">
-                            {/* Left Side - Phone Mockup */}
+                            {/* Left Side - Phone Mockup with Title */}
                             <div className="relative">
                                 <Image
                                     src="/phone.png"
                                     alt="KitaMo Financial App Phone Mockup"
                                     width={1700}
                                     height={1600}
-                                    className="w-full h-auto max-w-2xl mx-auto lg:max-w-none lg:w-[120%] lg:-ml-[10%]"
+                                    className="w-full h-auto max-w-2xl mx-auto lg:max-w-none lg:w-[110%] lg:-ml-[15%]"
                                     priority
                                 />
-                            </div>
-                            
-                            {/* Right Side - Title and Features */}
-                            <div className="relative">
-                                {/* Title positioned above the card */}
-                                <div className="mb-8 text-right">
-                                    <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-tighter leading-tight">
+                                {/* Title positioned absolutely over phone mockup */}
+                                <div className="absolute top-0 right-0 lg:right-[-10%] z-10">
+                                    <h2 className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-extrabold tracking-tighter leading-tight text-right">
                                         <span className="text-foreground">a future</span><br />
                                         <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">you can see.</span>
                                     </h2>
                                 </div>
-                                
-                                {/* Features Content in Card */}
-                                <div className="bg-white rounded-2xl p-8 lg:p-10 shadow-2xl border border-gray-100">
+                            </div>
+                            
+                            {/* Right Side - Features Card (Narrower and More Right) */}
+                            <div className="relative lg:ml-8">
+                                <div className="bg-white rounded-2xl p-6 lg:p-8 shadow-2xl border border-gray-100 max-w-sm ml-auto">
                                 <div className="space-y-4">
                                         {/* Kitabot Feature */}
                                         <div className="flex items-start gap-3 p-3 rounded-xl cursor-pointer transition-all duration-300 hover:bg-gradient-to-r hover:from-red-50 hover:to-yellow-50 hover:shadow-lg group">

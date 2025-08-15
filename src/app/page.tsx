@@ -145,7 +145,7 @@ export default function LandingPage() {
                                     className="w-full h-auto max-w-2xl mx-auto lg:max-w-none lg:w-[120%] lg:-ml-[15%]"
                                     priority
                                 />
-                                {/* Title positioned to align with top of features card */}
+                                {/* Title Positioning */}
                                 <div className="absolute top-14 lg:top-19 right-0 lg:right-[-10%] z-10">
                                     <h2 className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-extrabold tracking-tighter leading-tight text-right">
                                         <span className="text-foreground">A future</span><br />
@@ -155,10 +155,15 @@ export default function LandingPage() {
                                 </div>
                             </div>
                             
-                            {/* Right Side - Features Card (Wider, Shorter, Aligned with Tagline) */}
+                            {/* Right Side - Features Card */}
                             <div className="relative lg:ml-8">
                                 <div className="bg-white rounded-2xl p-6 lg:p-6 shadow-2xl border border-gray-100 max-w-lg ml-auto">
-                                <div className="space-y-3">
+                                    {/* Features Header */}
+                                    <div className="mb-4 pb-3 border-b border-gray-100">
+                                        <h3 className="text-xl font-bold text-foreground tracking-tight">Features</h3>
+                                    </div>
+                                    
+                                    <div className="space-y-3">
                                         {/* Kitabot Feature */}
                                         <div className="flex items-start gap-3 p-3 rounded-xl cursor-pointer transition-all duration-300 hover:bg-gradient-to-r hover:from-red-50 hover:to-yellow-50 hover:shadow-lg group">
                                             <div className="bg-red-100 text-red-700 w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 mt-1 transition-all duration-300 group-hover:scale-110 group-hover:shadow-md group-hover:bg-red-200">

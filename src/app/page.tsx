@@ -142,14 +142,14 @@ export default function LandingPage() {
                                     alt="KitaMo Financial App Phone Mockup"
                                     width={1700}
                                     height={1600}
-                                    className="w-full h-auto max-w-2xl mx-auto lg:max-w-none lg:w-[110%] lg:-ml-[15%]"
+                                    className="w-full h-auto max-w-2xl mx-auto lg:max-w-none lg:w-[120%] lg:-ml-[15%]"
                                     priority
                                 />
-                                {/* Title positioned absolutely over phone mockup */}
-                                <div className="absolute top-0 right-0 lg:right-[-10%] z-10">
+                                {/* Title positioned to align with top of features card */}
+                                <div className="absolute top-16 lg:top-20 right-0 lg:right-[-10%] z-10">
                                     <h2 className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-extrabold tracking-tighter leading-tight text-right">
                                         <span className="text-foreground">a future</span><br />
-                                        <span className="text-foreground">you can</span><br />
+                                        <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">you can</span><br />
                                         <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">see.</span>
                                     </h2>
                                 </div>

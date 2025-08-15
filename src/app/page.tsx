@@ -166,7 +166,7 @@ export default function LandingPage() {
                             
                             {/* Right Side - Features Card */}
                             <div className="relative lg:-ml-[5%]">
-                                <div className="bg-gradient-to-br from-red-800 to-yellow-400 rounded-2xl p-1 max-w-lg ml-auto">
+                                <div className="bg-gradient-to-br from-red-800 to-yellow-400 rounded-2xl p-0.5 max-w-lg ml-auto">
                                     <div className="bg-white rounded-2xl p-6 lg:p-6 h-full">
                                         {/* Features Header */}
                                         <div className="mb-4 -m-6 mb-6 p-4 px-6 bg-gradient-to-r from-primary to-yellow-400 rounded-t-2xl">
@@ -271,11 +271,11 @@ export default function LandingPage() {
                         
                         {/* Cards positioned over gradient */}
                         <div className="relative grid md:grid-cols-3 gap-8 lg:gap-12">
-                            {/* Benefit Card 1 - Smarter Financial Decisions */}
+                            {/* Benefit Card 1 - Clarity on your goals */}
                             <div className="shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 rounded-xl overflow-hidden bg-white max-w-xs mx-auto">
                                 <div className="mb-0">
                                     <Image
-                                        src="/benefit_1.png"
+                                        src="/benefit_1.jpg"
                                         alt="Smarter Financial Decisions"
                                         width={300}
                                         height={400}
@@ -284,15 +284,15 @@ export default function LandingPage() {
                                 </div>
                                 <div className="bg-white p-4">
                                     <h3 className="text-lg font-bold text-gray-900 mb-2 text-center">
-                                        Smarter Financial Decisions
+                                        Clarity on Your Goals
                                     </h3>
                                     <p className="text-gray-600 text-xs leading-relaxed text-center">
-                                        Get AI-powered insights and personalized recommendations to help you choose the best financial path for your goals.
+                                        Know exactly how much you need, how long it will take, and the trade-offs to get there—no more guessing.
                                     </p>
                                 </div>
                             </div>
 
-                            {/* Benefit Card 2 - Clearer Goal Tracking */}
+                            {/* Benefit Card 2 - Guidance that fits you*/}
                             <div className="shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 rounded-xl overflow-hidden bg-white max-w-xs mx-auto">
                                 <div className="mb-0">
                                     <Image
@@ -305,19 +305,19 @@ export default function LandingPage() {
                                 </div>
                                 <div className="bg-white p-4">
                                     <h3 className="text-lg font-bold text-gray-900 mb-2 text-center">
-                                        Clearer Goal Tracking
+                                        Guidance that Fits You
                                     </h3>
                                     <p className="text-gray-600 text-xs leading-relaxed text-center">
-                                        Easily monitor your progress toward savings, investments, or debt reduction with intuitive visual tools.
+                                        Get savings and spending tips built around your real income, expenses, and priorities—not generic advice.
                                     </p>
                                 </div>
                             </div>
 
-                            {/* Benefit Card 3 - Confidence in Your Future */}
+                            {/* Benefit Card 3 - Confidence in Your Choices */}
                             <div className="shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 rounded-xl overflow-hidden bg-white max-w-xs mx-auto">
                                 <div className="mb-0">
                                     <Image
-                                        src="/benefit_3.png"
+                                        src="/benefit_3.jpg"
                                         alt="Confidence in Your Future"
                                         width={300}
                                         height={400}
@@ -326,10 +326,10 @@ export default function LandingPage() {
                                 </div>
                                 <div className="bg-white p-4">
                                     <h3 className="text-lg font-bold text-gray-900 mb-2 text-center">
-                                        Confidence in Your Future
+                                        Confidence in Your Choices
                                     </h3>
                                     <p className="text-gray-600 text-xs leading-relaxed text-center">
-                                        Plan ahead with simulations and guidance that keep you on track. No more guesswork!
+                                        Simulate big decisions—starting a business, buying a car, or taking a career break—and see the impact before you commit.
                                     </p>
                                 </div>
                             </div>

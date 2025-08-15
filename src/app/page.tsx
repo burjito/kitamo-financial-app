@@ -149,15 +149,16 @@ export default function LandingPage() {
                                 <div className="absolute top-0 right-0 lg:right-[-10%] z-10">
                                     <h2 className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-extrabold tracking-tighter leading-tight text-right">
                                         <span className="text-foreground">a future</span><br />
-                                        <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">you can see.</span>
+                                        <span className="text-foreground">you can</span><br />
+                                        <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">see.</span>
                                     </h2>
                                 </div>
                             </div>
                             
-                            {/* Right Side - Features Card (Narrower and More Right) */}
-                            <div className="relative lg:ml-8">
-                                <div className="bg-white rounded-2xl p-6 lg:p-8 shadow-2xl border border-gray-100 max-w-sm ml-auto">
-                                <div className="space-y-4">
+                            {/* Right Side - Features Card (Wider, Shorter, Aligned with Tagline) */}
+                            <div className="relative lg:ml-16">
+                                <div className="bg-white rounded-2xl p-6 lg:p-6 shadow-2xl border border-gray-100 max-w-lg ml-auto">
+                                <div className="space-y-3">
                                         {/* Kitabot Feature */}
                                         <div className="flex items-start gap-3 p-3 rounded-xl cursor-pointer transition-all duration-300 hover:bg-gradient-to-r hover:from-red-50 hover:to-yellow-50 hover:shadow-lg group">
                                             <div className="bg-red-100 text-red-700 w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 mt-1 transition-all duration-300 group-hover:scale-110 group-hover:shadow-md group-hover:bg-red-200">

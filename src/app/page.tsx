@@ -159,8 +159,8 @@ export default function LandingPage() {
                             <div className="relative lg:ml-8">
                                 <div className="bg-white rounded-2xl p-6 lg:p-6 shadow-2xl border border-gray-100 max-w-lg ml-auto">
                                     {/* Features Header */}
-                                    <div className="mb-4 pb-3 border-b border-gray-100">
-                                        <h3 className="text-xl font-bold text-foreground tracking-tight">Features</h3>
+                                    <div className="mb-4 -m-6 mb-6 p-4 px-6 bg-gradient-to-r from-primary to-yellow-400 rounded-t-2xl">
+                                        <h3 className="text-xl font-bold text-white tracking-tight">Features</h3>
                                     </div>
                                     
                                     <div className="space-y-3">

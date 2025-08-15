@@ -248,29 +248,20 @@ export default function LandingPage() {
             </main>            {/* Third Screen - Why use KitaMo? */}
             <section className="pt-0 md:pt-2 pb-20 md:pb-48 bg-white">
                 <div className="container max-w-6xl mx-auto px-4">
-                    {/* Title */}
-                    <div className="text-center mb-8">
-                        <h2 className="text-5xl md:text-7xl font-extrabold tracking-tighter leading-tight text-foreground">
+                    {/* Title - Size similar to "Mula ngayon" */}
+                    <div className="text-center mb-4">
+                        <h2 className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-extrabold tracking-tighter leading-tight text-foreground">
                             Why use <span className="bg-gradient-to-r from-red-800 to-yellow-400 bg-clip-text text-transparent">KitaMo</span>?
                         </h2>
                     </div>
 
-                    {/* Benefits Cards with Gradient Background */}
-                    <div className="relative">
-                        {/* Gradient background matching second screen full width */}
-                        <div className="absolute inset-0 top-32 bottom-16">
-                            <div className="container max-w-7xl mx-auto px-4">
-                                <div className="grid lg:grid-cols-2 gap-8 lg:gap-16 items-center h-full">
-                                    {/* Left side starting from "Mula ngayon" position */}
-                                    <div className="bg-gradient-to-br from-red-800 to-yellow-400 rounded-3xl h-full lg:-mr-4"></div>
-                                    {/* Right side ending at features card edge */}
-                                    <div className="bg-gradient-to-br from-red-800 to-yellow-400 rounded-3xl h-full lg:-ml-[5%]"></div>
-                                </div>
-                            </div>
-                        </div>
+                    {/* Benefits Cards with Red Gradient Background */}
+                    <div className="relative py-8">
+                        {/* Red gradient background - extended to show below cards */}
+                        <div className="absolute left-1/2 transform -translate-x-1/2 top-1/3 bottom-0 w-full max-w-none bg-gradient-to-br from-red-800 to-red-600 rounded-3xl shadow-2xl" style={{width: 'calc(100vw - 18rem)'}}></div>
                         
-                        {/* Cards positioned over gradient */}
-                        <div className="relative grid md:grid-cols-3 gap-8 lg:gap-12">
+                        {/* Cards positioned over red gradient */}
+                        <div className="relative grid md:grid-cols-3 gap-8 lg:gap-12 px-4 z-10">
                             {/* Benefit Card 1 - Clarity on your goals */}
                             <div className="shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 rounded-xl overflow-hidden bg-white max-w-xs mx-auto">
                                 <div className="mb-0">

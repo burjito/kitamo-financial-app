@@ -142,29 +142,29 @@ export default function LandingPage() {
                                     alt="KitaMo Financial App Phone Mockup"
                                     width={1700}
                                     height={2000}
-                                    className="w-full h-auto max-w-2xl mx-auto lg:max-w-none lg:w-[120%] lg:-ml-[15%]"
+                                    className="w-full h-auto max-w-2xl mx-auto lg:max-w-none lg:w-[120%] lg:-ml-[8%]"
                                     priority
                                 />
-                                {/* Title Positioning */}
-                                <div className="absolute top-12 lg:top-18 right-0 lg:right-[-14%] z-10">
-                                    <h2 className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-extrabold tracking-tighter leading-tight text-right">
-                                        <span className="text-foreground">KitaMo ang</span><br />
+                                {/* Upper Right Text */}
+                                <div className="absolute top-12 lg:top-18 right-0 lg:right-[-18%] z-10">
+                                    <h2 className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-extrabold tracking-tighter leading-tight text-right">
+                                        <span className="text-foreground">Kita mo</span><br />
+                                        <span className="text-foreground">ang </span>
                                         <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">bukas.</span><br />
                                     </h2>
                                 </div>
                                 
-                                {/* "May gabay ngayon" text at bottom left */}
+                                {/* Bottom Left Text */}
                                 <div className="absolute bottom-8 lg:bottom-12 left-0 lg:left-[-5%] z-10">
-                                    <h3 className="text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-tighter leading-tight text-left">
-                                        <span className="text-foreground">May</span><br />
-                                        <span className="text-foreground">gabay</span><br />
-                                        <span className="text-foreground">ngayon</span>
-                                    </h3>
+                                    <h2 className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-extrabold tracking-tighter leading-tight text-left">
+                                        <span className="text-foreground">Mula</span><br />
+                                        <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">ngayon.</span>
+                                    </h2>
                                 </div>
                             </div>
                             
                             {/* Right Side - Features Card */}
-                            <div className="relative lg:ml-8">
+                            <div className="relative lg:-ml-[10%]">
                                 <div className="bg-white rounded-2xl p-6 lg:p-6 shadow-2xl border border-gray-100 max-w-lg ml-auto">
                                     {/* Features Header */}
                                     <div className="mb-4 -m-6 mb-6 p-4 px-6 bg-gradient-to-r from-primary to-yellow-400 rounded-t-2xl">

@@ -146,9 +146,9 @@ export default function LandingPage() {
                                     priority
                                 />
                                 {/* Title positioned to align with top of features card */}
-                                <div className="absolute top-16 lg:top-20 right-0 lg:right-[-10%] z-10">
+                                <div className="absolute top-14 lg:top-19 right-0 lg:right-[-10%] z-10">
                                     <h2 className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-extrabold tracking-tighter leading-tight text-right">
-                                        <span className="text-foreground">a future</span><br />
+                                        <span className="text-foreground">A future</span><br />
                                         <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">you can</span><br />
                                         <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">see.</span>
                                     </h2>
@@ -156,7 +156,7 @@ export default function LandingPage() {
                             </div>
                             
                             {/* Right Side - Features Card (Wider, Shorter, Aligned with Tagline) */}
-                            <div className="relative lg:ml-16">
+                            <div className="relative lg:ml-8">
                                 <div className="bg-white rounded-2xl p-6 lg:p-6 shadow-2xl border border-gray-100 max-w-lg ml-auto">
                                 <div className="space-y-3">
                                         {/* Kitabot Feature */}

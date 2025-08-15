@@ -141,17 +141,25 @@ export default function LandingPage() {
                                     src="/phone.png"
                                     alt="KitaMo Financial App Phone Mockup"
                                     width={1700}
-                                    height={1600}
+                                    height={2000}
                                     className="w-full h-auto max-w-2xl mx-auto lg:max-w-none lg:w-[120%] lg:-ml-[15%]"
                                     priority
                                 />
                                 {/* Title Positioning */}
-                                <div className="absolute top-14 lg:top-19 right-0 lg:right-[-10%] z-10">
+                                <div className="absolute top-12 lg:top-18 right-0 lg:right-[-14%] z-10">
                                     <h2 className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-extrabold tracking-tighter leading-tight text-right">
-                                        <span className="text-foreground">A future</span><br />
-                                        <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">you can</span><br />
-                                        <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">see.</span>
+                                        <span className="text-foreground">KitaMo ang</span><br />
+                                        <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">bukas.</span><br />
                                     </h2>
+                                </div>
+                                
+                                {/* "May gabay ngayon" text at bottom left */}
+                                <div className="absolute bottom-8 lg:bottom-12 left-0 lg:left-[-5%] z-10">
+                                    <h3 className="text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-tighter leading-tight text-left">
+                                        <span className="text-foreground">May</span><br />
+                                        <span className="text-foreground">gabay</span><br />
+                                        <span className="text-foreground">ngayon</span>
+                                    </h3>
                                 </div>
                             </div>
                             
@@ -160,7 +168,7 @@ export default function LandingPage() {
                                 <div className="bg-white rounded-2xl p-6 lg:p-6 shadow-2xl border border-gray-100 max-w-lg ml-auto">
                                     {/* Features Header */}
                                     <div className="mb-4 -m-6 mb-6 p-4 px-6 bg-gradient-to-r from-primary to-yellow-400 rounded-t-2xl">
-                                        <h3 className="text-xl font-bold text-white tracking-tight">Features</h3>
+                                        <h3 className="text-xl font-bold text-white tracking-tight">KitaMo Features</h3>
                                     </div>
                                     
                                     <div className="space-y-3">
@@ -224,7 +232,7 @@ export default function LandingPage() {
                                             <div>
                                                 <h3 className="text-lg font-bold text-foreground mb-1 transition-colors duration-300 group-hover:text-red-800">AI-Powered Insights</h3>
                                                 <p className="text-xs text-muted-foreground leading-relaxed">
-                                                    Get personalized BPI tips and recommendations to reach financial freedom faster.
+                                                    Get personalized tips and recommendations to reach financial freedom faster.
                                                 </p>
                                             </div>
                                         </div>

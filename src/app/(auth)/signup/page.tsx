@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -120,17 +121,14 @@ const Signup = () => {
     <div className="w-full space-y-6">
        <div className="text-center space-y-2">
         <div className="flex flex-col items-center">
-            <div className="flex items-center space-x-2">
-                <svg viewBox="0 0 64 64" fill="none" className="w-8 h-8">
-                <defs>
-                    <linearGradient id="eyeGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stopColor="hsl(var(--primary))" />
-                    <stop offset="100%" stopColor="hsl(var(--secondary))" />
-                    </linearGradient>
-                </defs>
-                <path d="M2 32 C2 32 10 12 32 12 C54 12 62 32 62 32 C62 32 54 52 32 52 C10 52 2 32 2 32 Z" stroke="url(#eyeGradient)" strokeWidth="4" fill="none"/>
-                <circle cx="32" cy="32" r="8" stroke="url(#eyeGradient)" strokeWidth="2" fill="url(#eyeGradient)"/>
-                </svg>
+            <div className="flex items-center space-x-3">
+                <Image
+                    src="/kitamo_logo.png"
+                    alt="KitaMo Logo"
+                    width={32}
+                    height={32}
+                    className="w-8 h-8"
+                />
                 <h1 className="text-3xl font-bold bg-gradient-to-br from-primary to-[hsl(var(--primary-glow))] bg-clip-text text-transparent">KitaMo</h1>
             </div>
             <p className="text-muted-foreground mt-1">Start Your Financial Journey</p>

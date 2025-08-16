@@ -8,8 +8,8 @@ export default function LandingHeader() {
     <header className="absolute top-0 z-50 w-full">
       <div className="container max-w-7xl mx-auto flex h-20 items-center">
         <Link href="/" className="flex items-center gap-3">
-          <Image 
-            src="/logo.png" 
+          <Image
+            src="/kitamo_logo.png"
             alt="KitaMo Logo" 
             width={32} 
             height={32} 

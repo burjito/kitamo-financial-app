@@ -331,29 +331,29 @@ export default function LandingPage() {
 
             <footer className="bg-gradient-to-r from-red-800 to-red-700 text-white relative overflow-visible">
                 {/* Get Started Card - Using existing image with text and arrow overlay */}
-                <div className="absolute -top-16 left-1/2 transform -translate-x-1/2 z-30">
+                <div className="absolute -top-20 left-1/2 transform -translate-x-1/2 z-30">
                     <div className="relative hover:scale-105 transition-transform duration-300">
                         {/* Background Card Image */}
                         <Image
                             src="/get_started.png"
                             alt="Get started with Kitamo"
-                            width={420}
-                            height={100}
+                            width={500}
+                            height={120}
                             className="drop-shadow-2xl shadow-2xl"
                         />
                         
                         {/* Text Overlay - Left Side */}
-                        <div className="absolute left-6 top-1/2 transform -translate-y-1/2">
-                            <h3 className="text-xl font-bold text-gray-800">Get started with</h3>
-                            <h3 className="text-xl font-bold bg-gradient-to-r from-red-800 to-yellow-400 bg-clip-text text-transparent">KitaMo</h3>
+                        <div className="absolute left-8 top-1/2 transform -translate-y-1/2">
+                            <h3 className="text-2xl font-bold text-gray-800">Get started with</h3>
+                            <h3 className="text-2xl font-bold bg-gradient-to-r from-red-800 to-yellow-400 bg-clip-text text-transparent">KitaMo</h3>
                         </div>
                         
                         {/* Arrow Button - Right Side */}
                         <Link 
                             href="/signup" 
-                            className="absolute right-6 top-1/2 transform -translate-y-1/2 bg-gradient-to-r from-red-800 to-yellow-400 text-white p-3 rounded-full hover:scale-110 transition-all duration-300 shadow-lg hover:shadow-xl"
+                            className="absolute right-8 top-1/2 transform -translate-y-1/2 bg-gradient-to-r from-red-800 to-yellow-400 text-white p-4 rounded-full hover:scale-110 transition-all duration-300 shadow-lg hover:shadow-xl"
                         >
-                            <ArrowRight className="w-6 h-6" />
+                            <ArrowRight className="w-7 h-7" />
                         </Link>
                     </div>
                 </div>

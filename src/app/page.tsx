@@ -351,9 +351,9 @@ export default function LandingPage() {
                         {/* Arrow Button - Right Side */}
                         <Link 
                             href="/signup" 
-                            className="absolute right-8 top-1/2 transform -translate-y-1/2 bg-gradient-to-r from-red-800 to-yellow-400 text-white p-4 rounded-full hover:scale-110 transition-all duration-300 shadow-lg hover:shadow-xl"
+                            className="absolute right-8 top-1/2 transform -translate-y-1/2 bg-gradient-to-r from-red-800 to-yellow-400 text-white p-3 rounded-full hover:scale-110 transition-all duration-300 shadow-lg hover:shadow-xl"
                         >
-                            <ArrowRight className="w-7 h-7" />
+                            <ArrowRight className="w-5 h-5" />
                         </Link>
                     </div>
                 </div>
@@ -429,7 +429,7 @@ export default function LandingPage() {
 
                     {/* Copyright */}
                     <div className="text-center mt-6 pt-4 border-t border-white/20">
-                        <p className="text-xs text-white/80">© Copyright 2025. All rights reserved. KitaMo.</p>
+                        <p className="text-xs text-white/80">© Copyright 2025. All rights reserved. KitaMo by Techtonix.</p>
                     </div>
                 </div>
             </footer>

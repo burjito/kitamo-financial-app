@@ -329,21 +329,36 @@ export default function LandingPage() {
                 </div>
             </section>
 
-            <footer className="bg-gradient-to-r from-red-800 to-red-700 text-white relative overflow-hidden">
-                {/* Get Started Card - With shadow, positioned above background */}
-                <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 z-20">
-                    <Link href="/signup" className="block hover:scale-105 transition-transform duration-300">
+            <footer className="bg-gradient-to-r from-red-800 to-red-700 text-white relative overflow-visible">
+                {/* Get Started Card - Using existing image with text and arrow overlay */}
+                <div className="absolute -top-16 left-1/2 transform -translate-x-1/2 z-30">
+                    <div className="relative hover:scale-105 transition-transform duration-300">
+                        {/* Background Card Image */}
                         <Image
                             src="/get_started.png"
                             alt="Get started with Kitamo"
-                            width={320}
-                            height={80}
+                            width={420}
+                            height={100}
                             className="drop-shadow-2xl shadow-2xl"
                         />
-                    </Link>
+                        
+                        {/* Text Overlay - Left Side */}
+                        <div className="absolute left-6 top-1/2 transform -translate-y-1/2">
+                            <h3 className="text-xl font-bold text-gray-800">Get started with</h3>
+                            <h3 className="text-xl font-bold bg-gradient-to-r from-red-800 to-yellow-400 bg-clip-text text-transparent">KitaMo</h3>
+                        </div>
+                        
+                        {/* Arrow Button - Right Side */}
+                        <Link 
+                            href="/signup" 
+                            className="absolute right-6 top-1/2 transform -translate-y-1/2 bg-gradient-to-r from-red-800 to-yellow-400 text-white p-3 rounded-full hover:scale-110 transition-all duration-300 shadow-lg hover:shadow-xl"
+                        >
+                            <ArrowRight className="w-6 h-6" />
+                        </Link>
+                    </div>
                 </div>
 
-                <div className="container max-w-6xl mx-auto px-4 py-8 pt-12">
+                <div className="container max-w-6xl mx-auto px-4 py-8 pt-20">
                     <div className="grid md:grid-cols-3 gap-6 items-center">
                         {/* Logo and Brand Section */}
                         <div className="flex flex-col items-center md:items-start">

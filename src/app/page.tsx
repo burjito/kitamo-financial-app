@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import LandingHeader from "@/components/layout/landing-header";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Bot, FlaskConical, Target, TrendingUp, Smile, CheckCircle, ShoppingBag } from "lucide-react";
+import { ArrowRight, Bot, FlaskConical, Target, TrendingUp, Smile, CheckCircle, ShoppingBag, ChevronLeft, ChevronRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
@@ -35,6 +35,9 @@ const StatCard = ({ icon, value, label }: { icon: React.ReactNode, value: string
 export default function LandingPage() {
     // Mobile features state
     const [currentFeatureIndex, setCurrentFeatureIndex] = useState(-1); // -1 means showing initial "Explore Features" card
+    
+    // Mobile benefits state
+    const [currentBenefitIndex, setCurrentBenefitIndex] = useState(0);
     
     const features = [
         { 
@@ -69,6 +72,24 @@ export default function LandingPage() {
         }
     ];
 
+    const benefits = [
+        {
+            image: "/benefit_1.jpg",
+            title: "Clarity on Your Goals",
+            description: "Know exactly how much you need, how long it will take, and the trade-offs to get there—no more guessing."
+        },
+        {
+            image: "/benefit_2.png", 
+            title: "Guidance that Fits You",
+            description: "Get savings and spending tips built around your real income, expenses, and priorities—not generic advice."
+        },
+        {
+            image: "/benefit_3.jpg",
+            title: "Confidence in Your Choices", 
+            description: "Simulate big decisions—starting a business, buying a car, or taking a career break—and see the impact before you commit."
+        }
+    ];
+
     const handleNextFeature = () => {
         if (currentFeatureIndex < features.length - 1) {
             setCurrentFeatureIndex(currentFeatureIndex + 1);
@@ -86,6 +107,18 @@ export default function LandingPage() {
 
     const startExploring = () => {
         setCurrentFeatureIndex(0);
+    };
+
+    const handleNextBenefit = () => {
+        if (currentBenefitIndex < benefits.length - 1) {
+            setCurrentBenefitIndex(currentBenefitIndex + 1);
+        }
+    };
+
+    const handlePrevBenefit = () => {
+        if (currentBenefitIndex > 0) {
+            setCurrentBenefitIndex(currentBenefitIndex - 1);
+        }
     };
 
     return (
@@ -320,27 +353,31 @@ export default function LandingPage() {
                             {/* Initial Explore Features Card */}
                             {currentFeatureIndex === -1 && (
                                 <div className="relative px-4">
-                                    <div className="relative cursor-pointer" onClick={startExploring}>
+                                    <div
+                                        className="relative cursor-pointer max-w-sm mx-auto h-64 flex items-center justify-center rounded-2xl shadow-lg shadow-black/10 bg-transparent"
+                                        onClick={startExploring}
+                                    >
                                         <Image
-                                            src="/get_started.png"
+                                            src="/mobile_card.png"
                                             alt="Explore Features Card"
-                                            width={500}
-                                            height={120}
-                                            className="w-full max-w-lg mx-auto"
+                                            width={384}
+                                            height={256}
+                                            className="w-full h-full object-cover rounded-2xl"
+                                            priority
                                         />
-                                        
-                                        {/* Updated Text overlay with proper colors */}
-                                        <div className="absolute inset-0 flex items-center justify-between px-6">
-                                            <div className="text-left">
-                                                <div className="text-foreground text-base sm:text-lg font-medium drop-shadow-lg">Explore the Features</div>
-                                                <div className="text-lg sm:text-xl font-bold drop-shadow-lg">
-                                                    <span className="text-foreground">of </span>
-                                                    <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">KitaMo</span>
-                                                </div>
+                                        {/* Text overlay at top center, visually balanced and tight line spacing */}
+                                        <div className="absolute top-8 left-0 right-0 text-center px-6">
+                                            <div className="text-lg font-semibold text-foreground mb-1" style={{ lineHeight: "1.05" }}>
+                                                Explore the Features<br />
+                                                <span className="text-xl font-normal">
+                                                    of <span className="font-extrabold bg-gradient-to-r from-red-700 to-yellow-400 bg-clip-text text-transparent">KitaMo</span>
+                                                </span>
                                             </div>
-                                            
-                                            <button className="bg-white bg-opacity-90 hover:bg-opacity-100 rounded-full p-3 shadow-lg transition-all duration-200 hover:scale-105">
-                                                <svg className="w-5 h-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        </div>
+                                        {/* Arrow button at bottom center, inside the card */}
+                                        <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2">
+                                            <button className="bg-white rounded-full p-4 shadow-lg shadow-black/10 transition-all duration-200 hover:scale-105 flex items-center justify-center">
+                                                <svg className="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                                                 </svg>
                                             </button>
@@ -349,27 +386,29 @@ export default function LandingPage() {
                                 </div>
                             )}
 
-                            {/* Feature Cards - Shown one by one */}
+                            {/* Feature Cards - Shown one by one with OPTIMIZED HEIGHT and breathing space */}
                             {currentFeatureIndex >= 0 && (
                                 <div className="px-4">
-                                    <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden max-w-sm mx-auto">
-                                        <div className="p-6">
+                                    <div className="bg-white rounded-2xl shadow-lg shadow-black/10 border border-gray-100 overflow-hidden max-w-sm mx-auto h-64">
+                                        <div className="p-6 h-48 flex flex-col">
                                             <div className="flex items-center space-x-3 mb-4">
-                                                <div className="w-12 h-12 bg-gradient-to-br from-red-500 to-red-600 rounded-xl flex items-center justify-center text-white">
+                                                <div className="w-12 h-12 bg-gradient-to-br from-red-500 to-red-600 rounded-xl flex items-center justify-center text-white flex-shrink-0">
                                                     {features[currentFeatureIndex].icon}
                                                 </div>
-                                                <div>
-                                                    <h3 className="text-xl font-bold text-gray-900">{features[currentFeatureIndex].title}</h3>
+                                                <div className="flex-1">
+                                                    <h3 className="text-xl font-bold text-gray-900 leading-tight">{features[currentFeatureIndex].title}</h3>
                                                 </div>
                                             </div>
                                             
-                                            <p className="text-gray-600 leading-relaxed text-sm">
-                                                {features[currentFeatureIndex].desc}
-                                            </p>
+                                            <div className="flex-1 flex items-start pb-2">
+                                                <p className="text-gray-600 leading-relaxed text-sm">
+                                                    {features[currentFeatureIndex].desc}
+                                                </p>
+                                            </div>
                                         </div>
                                         
-                                        {/* Updated Navigation - Allow going back to explore card */}
-                                        <div className="flex justify-between items-center px-6 py-4 bg-gray-50">
+                                        {/* Navigation area - FIXED HEIGHT */}
+                                        <div className="flex justify-between items-center px-6 py-4 bg-gray-50 h-16">
                                             <button 
                                                 onClick={handlePrevFeature}
                                                 className="p-2 rounded-full bg-white shadow-md transition-all hover:shadow-lg hover:scale-105"
@@ -426,68 +465,133 @@ export default function LandingPage() {
                             {/* Red gradient background - extended to show below cards */}
                             <div className="absolute left-1/2 transform -translate-x-1/2 top-1/3 bottom-0 w-full max-w-none bg-gradient-to-br from-red-800 to-red-600 rounded-3xl shadow-2xl" style={{width: 'calc(100vw - 18rem)'}}></div>
                             
-                            {/* Cards positioned over red gradient */}
-                            <div className="relative grid md:grid-cols-3 gap-8 lg:gap-12 px-4 z-10">
-                                {/* Benefit Card 1 - Clarity on your goals */}
-                                <div className="shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 rounded-xl overflow-hidden bg-white max-w-xs mx-auto">
-                                    <div className="mb-0">
-                                        <Image
-                                            src="/benefit_1.jpg"
-                                            alt="Smarter Financial Decisions"
-                                            width={300}
-                                            height={400}
-                                            className="w-full h-80 object-cover"
-                                        />
+                            {/* Desktop Cards positioned over red gradient */}
+                            <div className="hidden md:block relative">
+                                <div className="grid md:grid-cols-3 gap-8 lg:gap-12 px-4 z-10">
+                                    {/* Benefit Card 1 - Clarity on your goals */}
+                                    <div className="shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 rounded-xl overflow-hidden bg-white max-w-xs mx-auto">
+                                        <div className="mb-0">
+                                            <Image
+                                                src="/benefit_1.jpg"
+                                                alt="Smarter Financial Decisions"
+                                                width={300}
+                                                height={400}
+                                                className="w-full h-80 object-cover"
+                                            />
+                                        </div>
+                                        <div className="bg-white p-4">
+                                            <h3 className="text-lg font-bold text-gray-900 mb-2 text-center">
+                                                Clarity on Your Goals
+                                            </h3>
+                                            <p className="text-gray-600 text-xs leading-relaxed text-center">
+                                                Know exactly how much you need, how long it will take, and the trade-offs to get there—no more guessing.
+                                            </p>
+                                        </div>
                                     </div>
-                                    <div className="bg-white p-4">
-                                        <h3 className="text-lg font-bold text-gray-900 mb-2 text-center">
-                                            Clarity on Your Goals
-                                        </h3>
-                                        <p className="text-gray-600 text-xs leading-relaxed text-center">
-                                            Know exactly how much you need, how long it will take, and the trade-offs to get there—no more guessing.
-                                        </p>
+
+                                    {/* Benefit Card 2 - Guidance that fits you*/}
+                                    <div className="shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 rounded-xl overflow-hidden bg-white max-w-xs mx-auto">
+                                        <div className="mb-0">
+                                            <Image
+                                                src="/benefit_2.png"
+                                                alt="Clearer Goal Tracking"
+                                                width={300}
+                                                height={400}
+                                                className="w-full h-80 object-cover"
+                                            />
+                                        </div>
+                                        <div className="bg-white p-4">
+                                            <h3 className="text-lg font-bold text-gray-900 mb-2 text-center">
+                                                Guidance that Fits You
+                                            </h3>
+                                            <p className="text-gray-600 text-xs leading-relaxed text-center">
+                                                Get savings and spending tips built around your real income, expenses, and priorities—not generic advice.
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    {/* Benefit Card 3 - Confidence in Your Choices */}
+                                    <div className="shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 rounded-xl overflow-hidden bg-white max-w-xs mx-auto">
+                                        <div className="mb-0">
+                                            <Image
+                                                src="/benefit_3.jpg"
+                                                alt="Confidence in Your Future"
+                                                width={300}
+                                                height={400}
+                                                className="w-full h-80 object-cover"
+                                            />
+                                        </div>
+                                        <div className="bg-white p-4">
+                                            <h3 className="text-lg font-bold text-gray-900 mb-2 text-center">
+                                                Confidence in Your Choices
+                                            </h3>
+                                            <p className="text-gray-600 text-xs leading-relaxed text-center">
+                                                Simulate big decisions—starting a business, buying a car, or taking a career break—and see the impact before you commit.
+                                            </p>
+                                        </div>
                                     </div>
                                 </div>
+                            </div>
 
-                                {/* Benefit Card 2 - Guidance that fits you*/}
-                                <div className="shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 rounded-xl overflow-hidden bg-white max-w-xs mx-auto">
-                                    <div className="mb-0">
-                                        <Image
-                                            src="/benefit_2.png"
-                                            alt="Clearer Goal Tracking"
-                                            width={300}
-                                            height={400}
-                                            className="w-full h-80 object-cover"
-                                        />
-                                    </div>
-                                    <div className="bg-white p-4">
-                                        <h3 className="text-lg font-bold text-gray-900 mb-2 text-center">
-                                            Guidance that Fits You
-                                        </h3>
-                                        <p className="text-gray-600 text-xs leading-relaxed text-center">
-                                            Get savings and spending tips built around your real income, expenses, and priorities—not generic advice.
-                                        </p>
-                                    </div>
-                                </div>
-
-                                {/* Benefit Card 3 - Confidence in Your Choices */}
-                                <div className="shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 rounded-xl overflow-hidden bg-white max-w-xs mx-auto">
-                                    <div className="mb-0">
-                                        <Image
-                                            src="/benefit_3.jpg"
-                                            alt="Confidence in Your Future"
-                                            width={300}
-                                            height={400}
-                                            className="w-full h-80 object-cover"
-                                        />
-                                    </div>
-                                    <div className="bg-white p-4">
-                                        <h3 className="text-lg font-bold text-gray-900 mb-2 text-center">
-                                            Confidence in Your Choices
-                                        </h3>
-                                        <p className="text-gray-600 text-xs leading-relaxed text-center">
-                                            Simulate big decisions—starting a business, buying a car, or taking a career break—and see the impact before you commit.
-                                        </p>
+                            {/* Mobile Swipeable Benefits */}
+                            <div className="md:hidden relative z-10">
+                                <div className="px-4">
+                                    <div className="shadow-xl rounded-xl overflow-hidden bg-white max-w-sm mx-auto">
+                                        <div className="mb-0">
+                                            <Image
+                                                src={benefits[currentBenefitIndex].image}
+                                                alt={benefits[currentBenefitIndex].title}
+                                                width={300}
+                                                height={400}
+                                                className="w-full h-80 object-cover"
+                                            />
+                                        </div>
+                                        <div className="bg-white p-4">
+                                            <h3 className="text-lg font-bold text-gray-900 mb-2 text-center">
+                                                {benefits[currentBenefitIndex].title}
+                                            </h3>
+                                            <p className="text-gray-600 text-xs leading-relaxed text-center">
+                                                {benefits[currentBenefitIndex].description}
+                                            </p>
+                                        </div>
+                                        
+                                        {/* Mobile Navigation */}
+                                        <div className="flex justify-between items-center px-6 py-4 bg-gray-50">
+                                            <button 
+                                                onClick={handlePrevBenefit}
+                                                disabled={currentBenefitIndex === 0}
+                                                className={`p-2 rounded-full bg-white shadow-md transition-all ${
+                                                    currentBenefitIndex === 0 
+                                                        ? 'opacity-50 cursor-not-allowed' 
+                                                        : 'hover:shadow-lg hover:scale-105'
+                                                }`}
+                                            >
+                                                <ChevronLeft className="w-5 h-5 text-gray-600" />
+                                            </button>
+                                            
+                                            <div className="flex space-x-2">
+                                                {benefits.map((_, index) => (
+                                                    <div
+                                                        key={index}
+                                                        className={`w-2 h-2 rounded-full transition-colors ${
+                                                            index === currentBenefitIndex ? 'bg-red-500' : 'bg-gray-300'
+                                                        }`}
+                                                    ></div>
+                                                ))}
+                                            </div>
+                                            
+                                            <button 
+                                                onClick={handleNextBenefit}
+                                                disabled={currentBenefitIndex === benefits.length - 1}
+                                                className={`p-2 rounded-full bg-white shadow-md transition-all ${
+                                                    currentBenefitIndex === benefits.length - 1 
+                                                        ? 'opacity-50 cursor-not-allowed' 
+                                                        : 'hover:shadow-lg hover:scale-105'
+                                                }`}
+                                            >
+                                                <ChevronRight className="w-5 h-5 text-gray-600" />
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

@@ -1,7 +1,6 @@
-
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import LandingHeader from "@/components/layout/landing-header";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Bot, FlaskConical, Target, TrendingUp, Smile, CheckCircle, ShoppingBag } from "lucide-react";
@@ -34,6 +33,61 @@ const StatCard = ({ icon, value, label }: { icon: React.ReactNode, value: string
 );
 
 export default function LandingPage() {
+    // Mobile features state
+    const [currentFeatureIndex, setCurrentFeatureIndex] = useState(-1); // -1 means showing initial "Explore Features" card
+    
+    const features = [
+        { 
+            icon: <Bot className="w-6 h-6" />,
+            title: "Kitabot", 
+            desc: "Chat with your finance companion. Get instant answers, personalized guidance, and tips based on your financial data.",
+            mockup: "/phone.png"
+        },
+        { 
+            icon: <FlaskConical className="w-6 h-6" />,
+            title: "What-If Simulator", 
+            desc: "Experiment with scenarios. See how changes in income, expenses, or timelines affect your goals.",
+            mockup: "/phone.png"
+        },
+        { 
+            icon: <ShoppingBag className="w-6 h-6" />,
+            title: "BPI Product Recommender", 
+            desc: "View BPI products tailored to your simulated goals to help you achieve them faster.",
+            mockup: "/phone.png"
+        },
+        { 
+            icon: <Target className="w-6 h-6" />,
+            title: "Goal Tracker", 
+            desc: "Create, manage, and prioritize your financial goals. Visualize your progress and get AI-powered insights to stay on track.",
+            mockup: "/phone.png"
+        },
+        { 
+            icon: <TrendingUp className="w-6 h-6" />,
+            title: "AI-Powered Insights", 
+            desc: "Get personalized tips and recommendations to reach financial freedom faster.",
+            mockup: "/phone.png"
+        }
+    ];
+
+    const handleNextFeature = () => {
+        if (currentFeatureIndex < features.length - 1) {
+            setCurrentFeatureIndex(currentFeatureIndex + 1);
+        }
+    };
+
+    const handlePrevFeature = () => {
+        if (currentFeatureIndex > 0) {
+            setCurrentFeatureIndex(currentFeatureIndex - 1);
+        } else if (currentFeatureIndex === 0) {
+            // Go back to "Explore Features" card
+            setCurrentFeatureIndex(-1);
+        }
+    };
+
+    const startExploring = () => {
+        setCurrentFeatureIndex(0);
+    };
+
     return (
         <div className="flex flex-col min-h-screen bg-background">
             <LandingHeader />
@@ -95,10 +149,10 @@ export default function LandingPage() {
                        </div>
                     </div>
 
-                    {/* Mobile View - New Layout */}
-                    <div className="md:hidden w-full min-h-screen bg-white flex flex-col">
-                        {/* Mobile Content */}
-                        <div className="px-4 pt-0 pb-1 -mt-2">
+                    {/* Mobile View - Fixed image positioning */}
+                    <div className="md:hidden w-full bg-white flex flex-col pb-2">
+                        {/* Mobile Content - Minimal padding */}
+                        <div className="px-4 pt-0 pb-4 -mt-2">
                             <div className="text-center space-y-4">
                                 <h1 className="text-[2.70rem] font-extrabold tracking-tighter leading-tight text-foreground">
                                     Basta may <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">kita</span>,<br />
@@ -119,8 +173,8 @@ export default function LandingPage() {
                             </div>
                         </div>
 
-                        {/* Mobile Image - Moved Lower */}
-                        <div className="relative h-80 w-full overflow-hidden mt-10">
+                        {/* Mobile Image - Moved lower, removed negative margin */}
+                        <div className="relative h-80 w-full overflow-hidden mt-2">
                             <Image
                                 src="/mobile_cover.png"
                                 alt="KitaMo Financial Simulator mobile illustration"
@@ -132,10 +186,11 @@ export default function LandingPage() {
                     </div>
                 </section>
 
-                {/* Features Section */}
-                <section id="features" className="relative py-16 md:py-24 pb-16 md:pb-24 bg-white">
+                {/* Features Section - Reduced spacing between screens */}
+                <section id="features" className="relative -mt-8 py-2 md:py-24 pb-16 md:pb-24 bg-white">
                     <div className="container max-w-7xl mx-auto px-4 relative z-10">
-                        <div className="grid lg:grid-cols-2 gap-8 lg:gap-16 items-center">
+                        {/* Desktop View - Keep Unchanged */}
+                        <div className="hidden lg:grid lg:grid-cols-2 gap-8 lg:gap-16 items-center">
                             {/* Left Side - Phone Mockup with Title */}
                             <div className="relative">
                                 <Image
@@ -243,91 +298,203 @@ export default function LandingPage() {
                                 </div>
                             </div>
                         </div>
+
+                        {/* Mobile Layout - Interactive Feature Showcase */}
+                        <div className="lg:hidden">
+                            {/* Phone Mockup - Reduced margin */}
+                            <div className="relative mb-6">
+                                <div className="flex justify-center">
+                                    <div className="relative">
+                                        <Image
+                                            src={currentFeatureIndex >= 0 ? features[currentFeatureIndex].mockup : "/phone.png"}
+                                            alt="KitaMo App Preview"
+                                            width={300}
+                                            height={600}
+                                            className="w-full max-w-xs mx-auto drop-shadow-2xl relative z-10"
+                                            priority
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Initial Explore Features Card */}
+                            {currentFeatureIndex === -1 && (
+                                <div className="relative px-4">
+                                    <div className="relative cursor-pointer" onClick={startExploring}>
+                                        <Image
+                                            src="/get_started.png"
+                                            alt="Explore Features Card"
+                                            width={500}
+                                            height={120}
+                                            className="w-full max-w-lg mx-auto"
+                                        />
+                                        
+                                        {/* Updated Text overlay with proper colors */}
+                                        <div className="absolute inset-0 flex items-center justify-between px-6">
+                                            <div className="text-left">
+                                                <div className="text-foreground text-base sm:text-lg font-medium drop-shadow-lg">Explore the Features</div>
+                                                <div className="text-lg sm:text-xl font-bold drop-shadow-lg">
+                                                    <span className="text-foreground">of </span>
+                                                    <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">KitaMo</span>
+                                                </div>
+                                            </div>
+                                            
+                                            <button className="bg-white bg-opacity-90 hover:bg-opacity-100 rounded-full p-3 shadow-lg transition-all duration-200 hover:scale-105">
+                                                <svg className="w-5 h-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                                                </svg>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* Feature Cards - Shown one by one */}
+                            {currentFeatureIndex >= 0 && (
+                                <div className="px-4">
+                                    <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden max-w-sm mx-auto">
+                                        <div className="p-6">
+                                            <div className="flex items-center space-x-3 mb-4">
+                                                <div className="w-12 h-12 bg-gradient-to-br from-red-500 to-red-600 rounded-xl flex items-center justify-center text-white">
+                                                    {features[currentFeatureIndex].icon}
+                                                </div>
+                                                <div>
+                                                    <h3 className="text-xl font-bold text-gray-900">{features[currentFeatureIndex].title}</h3>
+                                                </div>
+                                            </div>
+                                            
+                                            <p className="text-gray-600 leading-relaxed text-sm">
+                                                {features[currentFeatureIndex].desc}
+                                            </p>
+                                        </div>
+                                        
+                                        {/* Updated Navigation - Allow going back to explore card */}
+                                        <div className="flex justify-between items-center px-6 py-4 bg-gray-50">
+                                            <button 
+                                                onClick={handlePrevFeature}
+                                                className="p-2 rounded-full bg-white shadow-md transition-all hover:shadow-lg hover:scale-105"
+                                            >
+                                                <svg className="w-5 h-5 text-gray-600 rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                                                </svg>
+                                            </button>
+                                            
+                                            <div className="flex space-x-2">
+                                                {features.map((_, index) => (
+                                                    <div
+                                                        key={index}
+                                                        className={`w-2 h-2 rounded-full transition-colors ${
+                                                            index === currentFeatureIndex ? 'bg-red-500' : 'bg-gray-300'
+                                                        }`}
+                                                    ></div>
+                                                ))}
+                                            </div>
+                                            
+                                            <button 
+                                                onClick={handleNextFeature}
+                                                disabled={currentFeatureIndex === features.length - 1}
+                                                className={`p-2 rounded-full bg-white shadow-md transition-all ${
+                                                    currentFeatureIndex === features.length - 1 
+                                                        ? 'opacity-50 cursor-not-allowed' 
+                                                        : 'hover:shadow-lg hover:scale-105'
+                                                }`}
+                                            >
+                                                <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                                                </svg>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+                        </div>
                     </div>
                 </section>
-            </main>            {/* Third Screen - Why use KitaMo? */}
-            <section className="pt-0 md:pt-2 pb-20 md:pb-48 bg-white">
-                <div className="container max-w-6xl mx-auto px-4">
-                    {/* Title - Size similar to "Mula ngayon" */}
-                    <div className="text-center mb-4">
-                        <h2 className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-extrabold tracking-tighter leading-tight text-foreground">
-                            Why use <span className="bg-gradient-to-r from-red-800 to-yellow-400 bg-clip-text text-transparent">KitaMo</span>?
-                        </h2>
-                    </div>
 
-                    {/* Benefits Cards with Red Gradient Background */}
-                    <div className="relative py-8">
-                        {/* Red gradient background - extended to show below cards */}
-                        <div className="absolute left-1/2 transform -translate-x-1/2 top-1/3 bottom-0 w-full max-w-none bg-gradient-to-br from-red-800 to-red-600 rounded-3xl shadow-2xl" style={{width: 'calc(100vw - 18rem)'}}></div>
-                        
-                        {/* Cards positioned over red gradient */}
-                        <div className="relative grid md:grid-cols-3 gap-8 lg:gap-12 px-4 z-10">
-                            {/* Benefit Card 1 - Clarity on your goals */}
-                            <div className="shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 rounded-xl overflow-hidden bg-white max-w-xs mx-auto">
-                                <div className="mb-0">
-                                    <Image
-                                        src="/benefit_1.jpg"
-                                        alt="Smarter Financial Decisions"
-                                        width={300}
-                                        height={400}
-                                        className="w-full h-80 object-cover"
-                                    />
-                                </div>
-                                <div className="bg-white p-4">
-                                    <h3 className="text-lg font-bold text-gray-900 mb-2 text-center">
-                                        Clarity on Your Goals
-                                    </h3>
-                                    <p className="text-gray-600 text-xs leading-relaxed text-center">
-                                        Know exactly how much you need, how long it will take, and the trade-offs to get there—no more guessing.
-                                    </p>
-                                </div>
-                            </div>
+                {/* Third Screen - Why use KitaMo? */}
+                <section className="pt-0 md:pt-2 pb-20 md:pb-48 bg-white">
+                    <div className="container max-w-6xl mx-auto px-4">
+                        {/* Title - Size similar to "Mula ngayon" */}
+                        <div className="text-center mb-4">
+                            <h2 className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-extrabold tracking-tighter leading-tight text-foreground">
+                                Why use <span className="bg-gradient-to-r from-red-800 to-yellow-400 bg-clip-text text-transparent">KitaMo</span>?
+                            </h2>
+                        </div>
 
-                            {/* Benefit Card 2 - Guidance that fits you*/}
-                            <div className="shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 rounded-xl overflow-hidden bg-white max-w-xs mx-auto">
-                                <div className="mb-0">
-                                    <Image
-                                        src="/benefit_2.png"
-                                        alt="Clearer Goal Tracking"
-                                        width={300}
-                                        height={400}
-                                        className="w-full h-80 object-cover"
-                                    />
+                        {/* Benefits Cards with Red Gradient Background */}
+                        <div className="relative py-8">
+                            {/* Red gradient background - extended to show below cards */}
+                            <div className="absolute left-1/2 transform -translate-x-1/2 top-1/3 bottom-0 w-full max-w-none bg-gradient-to-br from-red-800 to-red-600 rounded-3xl shadow-2xl" style={{width: 'calc(100vw - 18rem)'}}></div>
+                            
+                            {/* Cards positioned over red gradient */}
+                            <div className="relative grid md:grid-cols-3 gap-8 lg:gap-12 px-4 z-10">
+                                {/* Benefit Card 1 - Clarity on your goals */}
+                                <div className="shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 rounded-xl overflow-hidden bg-white max-w-xs mx-auto">
+                                    <div className="mb-0">
+                                        <Image
+                                            src="/benefit_1.jpg"
+                                            alt="Smarter Financial Decisions"
+                                            width={300}
+                                            height={400}
+                                            className="w-full h-80 object-cover"
+                                        />
+                                    </div>
+                                    <div className="bg-white p-4">
+                                        <h3 className="text-lg font-bold text-gray-900 mb-2 text-center">
+                                            Clarity on Your Goals
+                                        </h3>
+                                        <p className="text-gray-600 text-xs leading-relaxed text-center">
+                                            Know exactly how much you need, how long it will take, and the trade-offs to get there—no more guessing.
+                                        </p>
+                                    </div>
                                 </div>
-                                <div className="bg-white p-4">
-                                    <h3 className="text-lg font-bold text-gray-900 mb-2 text-center">
-                                        Guidance that Fits You
-                                    </h3>
-                                    <p className="text-gray-600 text-xs leading-relaxed text-center">
-                                        Get savings and spending tips built around your real income, expenses, and priorities—not generic advice.
-                                    </p>
-                                </div>
-                            </div>
 
-                            {/* Benefit Card 3 - Confidence in Your Choices */}
-                            <div className="shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 rounded-xl overflow-hidden bg-white max-w-xs mx-auto">
-                                <div className="mb-0">
-                                    <Image
-                                        src="/benefit_3.jpg"
-                                        alt="Confidence in Your Future"
-                                        width={300}
-                                        height={400}
-                                        className="w-full h-80 object-cover"
-                                    />
+                                {/* Benefit Card 2 - Guidance that fits you*/}
+                                <div className="shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 rounded-xl overflow-hidden bg-white max-w-xs mx-auto">
+                                    <div className="mb-0">
+                                        <Image
+                                            src="/benefit_2.png"
+                                            alt="Clearer Goal Tracking"
+                                            width={300}
+                                            height={400}
+                                            className="w-full h-80 object-cover"
+                                        />
+                                    </div>
+                                    <div className="bg-white p-4">
+                                        <h3 className="text-lg font-bold text-gray-900 mb-2 text-center">
+                                            Guidance that Fits You
+                                        </h3>
+                                        <p className="text-gray-600 text-xs leading-relaxed text-center">
+                                            Get savings and spending tips built around your real income, expenses, and priorities—not generic advice.
+                                        </p>
+                                    </div>
                                 </div>
-                                <div className="bg-white p-4">
-                                    <h3 className="text-lg font-bold text-gray-900 mb-2 text-center">
-                                        Confidence in Your Choices
-                                    </h3>
-                                    <p className="text-gray-600 text-xs leading-relaxed text-center">
-                                        Simulate big decisions—starting a business, buying a car, or taking a career break—and see the impact before you commit.
-                                    </p>
+
+                                {/* Benefit Card 3 - Confidence in Your Choices */}
+                                <div className="shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 rounded-xl overflow-hidden bg-white max-w-xs mx-auto">
+                                    <div className="mb-0">
+                                        <Image
+                                            src="/benefit_3.jpg"
+                                            alt="Confidence in Your Future"
+                                            width={300}
+                                            height={400}
+                                            className="w-full h-80 object-cover"
+                                        />
+                                    </div>
+                                    <div className="bg-white p-4">
+                                        <h3 className="text-lg font-bold text-gray-900 mb-2 text-center">
+                                            Confidence in Your Choices
+                                        </h3>
+                                        <p className="text-gray-600 text-xs leading-relaxed text-center">
+                                            Simulate big decisions—starting a business, buying a car, or taking a career break—and see the impact before you commit.
+                                        </p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </section>
+                </section>
+            </main>
 
             <footer className="bg-gradient-to-r from-red-800 to-red-700 text-white relative overflow-visible">
                 {/* Get Started Card - Using existing image with text and arrow overlay */}

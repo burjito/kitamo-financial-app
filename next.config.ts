@@ -37,9 +37,7 @@ const nextConfig: NextConfig = {
       '@genkit-ai/ai',
       '@genkit-ai/flow',
       '@genkit-ai/googleai',
-      'jaeger-client',
-      'firebase-admin',
-      'firebase-functions',
+      'jaeger-client'
     ];
 
     // Handle fallbacks for client-side

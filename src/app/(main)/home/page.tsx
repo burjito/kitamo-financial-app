@@ -17,6 +17,7 @@ import { FinancialSetupModal } from "./financial-setup-modal";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useRouter } from "next/navigation";
 import { Badge } from "@/components/ui/badge";
+import { CenteredModal, CenteredModalTrigger, CenteredModalContent } from "@/components/ui/centered-modal";
 
 export default function HomePage() {
   const { profile, goals, isLoading: isAppLoading, monthlyIncome, monthlyExpenses } = useAppContext();
@@ -97,10 +98,49 @@ export default function HomePage() {
                     <Shield className="h-3 w-3 md:h-4 md:w-4 text-muted-foreground" />
                 </CardHeader>
                 <CardContent>
-                    <Badge variant={profile?.risk_profile === "Aggressive" ? "destructive" : "secondary"} className="text-xs">
-                        {profile?.risk_profile || 'N/A'}
-                    </Badge>
-                    <p className="text-xs text-muted-foreground mt-2">Your assessment</p>
+                    {/* Centered Modal for Risk Profile */}
+                    <CenteredModal>
+                      <CenteredModalTrigger asChild>
+                        <div className="flex flex-col items-start gap-1">
+                          <Badge variant={profile?.risk_profile === "Aggressive" ? "destructive" : "secondary"} className="text-xs cursor-pointer">
+                            {profile?.risk_profile || 'N/A'}
+                          </Badge>
+                          <span className="text-xs text-muted-foreground mt-2 cursor-pointer hover:underline" tabIndex={0} role="button">
+                            Your assessment
+                          </span>
+                        </div>
+                      </CenteredModalTrigger>
+                      <CenteredModalContent>
+                        <div className="flex flex-col items-center justify-center w-full max-w-lg mx-auto">
+                          <h2 className="text-lg font-semibold mb-2">Risk Profile Assessment</h2>
+                          <p className="text-sm text-muted-foreground mb-4 text-center">Your risk profile helps us tailor financial advice and product recommendations to your comfort with investment risk. Understanding your profile ensures you get guidance that matches your goals and preferences.</p>
+                          {profile?.risk_profile === "Conservative" && (
+                            <div className="text-center">
+                              <span className="inline-block px-3 py-1 rounded-full bg-[#FFD700] text-[#800000] font-bold text-base mb-2 shadow">Conservative</span>
+                              <div className="text-muted-foreground">Prefers minimal risk and stable returns. Focuses on capital preservation and low-volatility investments.</div>
+                            </div>
+                          )}
+                          {profile?.risk_profile === "Moderately Conservative" && (
+                            <div className="text-center">
+                              <span className="inline-block px-3 py-1 rounded-full bg-[#FFD700] text-[#800000] font-bold text-base mb-2 shadow">Moderately Conservative</span>
+                              <div className="text-muted-foreground">Willing to accept some risk for slightly higher returns, but still prioritizes safety and steady growth.</div>
+                            </div>
+                          )}
+                          {profile?.risk_profile === "Moderate" && (
+                            <div className="text-center">
+                              <span className="inline-block px-3 py-1 rounded-full bg-[#FFD700] text-[#800000] font-bold text-base mb-2 shadow">Moderate</span>
+                              <div className="text-muted-foreground">Comfortable with a balanced approach, mixing growth and stability. Open to moderate market fluctuations for better returns.</div>
+                            </div>
+                          )}
+                          {profile?.risk_profile === "Aggressive" && (
+                            <div className="text-center">
+                              <span className="inline-block px-3 py-1 rounded-full bg-[#FFD700] text-[#800000] font-bold text-base mb-2 shadow">Aggressive</span>
+                              <div className="text-muted-foreground">Seeks high returns and is willing to accept significant risk and market volatility. Focuses on growth-oriented investments.</div>
+                            </div>
+                          )}
+                        </div>
+                      </CenteredModalContent>
+                    </CenteredModal>
                 </CardContent>
             </Card>
             <Card className="bg-primary text-primary-foreground col-span-2 md:col-span-1 lg:col-span-1">

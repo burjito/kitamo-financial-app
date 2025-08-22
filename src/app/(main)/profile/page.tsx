@@ -76,17 +76,7 @@ const SettingsNav = ({ activeTab, setActiveTab }: { activeTab: string, setActive
         <DollarSign className="mr-2 h-4 w-4" />
         Financials
       </Button>
-      <Button
-        variant="ghost"
-        className={cn(
-          "justify-start",
-          activeTab === 'security' && 'bg-accent text-accent-foreground'
-        )}
-        onClick={() => setActiveTab('security')}
-      >
-        <Shield className="mr-2 h-4 w-4" />
-        Security
-      </Button>
+    {/* Security tab removed as requested */}
       <Button variant="ghost" className="justify-start text-destructive hover:text-destructive" onClick={handleLogout}>
         <LogOut className="mr-2 h-4 w-4" />
         Log Out
@@ -299,53 +289,7 @@ const FinancialSettings = () => {
     )
 }
 
-const SecuritySettings = () => {
-    const { toast } = useToast();
-    const { register, handleSubmit, formState: { errors }, reset } = useForm<PasswordFormValues>({
-        resolver: zodResolver(passwordSchema)
-    });
-
-    const onSubmit: SubmitHandler<PasswordFormValues> = (data) => {
-        toast({
-            title: "Password Updated",
-            description: "Your password has been changed successfully.",
-        });
-        reset();
-    };
-    
-    return (
-        <Card>
-            <CardHeader>
-                <CardTitle className="text-base md:text-lg">Password</CardTitle>
-                <CardDescription className="text-sm">Change your password here. It's a good practice to use a strong password.</CardDescription>
-            </CardHeader>
-            <form onSubmit={handleSubmit(onSubmit)}>
-                 <CardContent className="space-y-4">
-                     <div className="space-y-2">
-                        <Label htmlFor="currentPassword">Current Password</Label>
-                        <Input id="currentPassword" type="password" {...register("currentPassword")} />
-                        {errors.currentPassword && <p className="text-sm text-destructive">{errors.currentPassword.message}</p>}
-                    </div>
-                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                         <div className="space-y-2">
-                            <Label htmlFor="newPassword">New Password</Label>
-                            <Input id="newPassword" type="password" {...register("newPassword")} />
-                             {errors.newPassword && <p className="text-sm text-destructive">{errors.newPassword.message}</p>}
-                        </div>
-                         <div className="space-y-2">
-                            <Label htmlFor="confirmPassword">Confirm New Password</Label>
-                            <Input id="confirmPassword" type="password" {...register("confirmPassword")} />
-                            {errors.confirmPassword && <p className="text-sm text-destructive">{errors.confirmPassword.message}</p>}
-                        </div>
-                    </div>
-                    <div className="flex justify-end pt-4">
-                        <Button type="submit">Update Password</Button>
-                    </div>
-                </CardContent>
-            </form>
-        </Card>
-    );
-};
+// SecuritySettings component removed as requested
 
 
 export default function ProfilePage() {
@@ -378,7 +322,6 @@ export default function ProfilePage() {
                 <div className="md:col-span-3">
                     {activeTab === 'account' && <AccountSettings />}
                     {activeTab === 'financials' && <FinancialSettings />}
-                    {activeTab === 'security' && <SecuritySettings />}
                 </div>
             </div>
         </div>

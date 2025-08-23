@@ -451,7 +451,7 @@ export default function LandingPage() {
                 </section>
 
                 {/* Third Screen - Why use KitaMo? */}
-                <section className="pt-0 md:pt-2 pb-20 md:pb-48 bg-white">
+                <section className="pt-0 md:pt-0 pb-20 md:pb-32 bg-white">
                     <div className="container max-w-6xl mx-auto px-4">
                         {/* Title - Size similar to "Mula ngayon" */}
                         <div className="text-center mb-4">
@@ -462,13 +462,11 @@ export default function LandingPage() {
 
                         {/* Benefits Cards with Red Gradient Background */}
                         <div className="relative py-8">
-                            {/* Red gradient background - extended to show below cards */}
                             {/* Desktop: original maroon background */}
                             <div className="hidden md:block absolute left-1/2 transform -translate-x-1/2 top-1/3 bottom-0 w-full max-w-none bg-gradient-to-br from-red-800 to-red-600 rounded-[2rem] shadow-2xl" style={{width: 'calc(100vw - 18rem)'}}></div>
                             {/* Mobile: maroon background covers 75% of card from bottom, 25% pops out from top, sides reach edge */}
                             <div className="md:hidden absolute left-0 right-0 bottom-0 bg-gradient-to-br from-red-800 to-red-600 rounded-[2rem] shadow-2xl" style={{height: '75%', zIndex: 1}}></div>
                             
-                            {/* Desktop Cards positioned over red gradient */}
                             <div className="hidden md:block relative">
                                 <div className="grid md:grid-cols-3 gap-8 lg:gap-12 px-4 z-10">
                                     {/* Benefit Card 1 - Clarity on your goals */}
@@ -601,15 +599,11 @@ export default function LandingPage() {
                         </div>
                     </div>
                 </section>
-
-                {/* Add extra space before the Get Started card above the footer */}
                 <div className="w-full h-16 md:h-24"></div>
             </main>
 
-            <footer className="bg-gradient-to-r from-red-800 to-red-700 text-white relative overflow-visible" style={{minHeight: '180px', paddingTop: '60px'}}>
-                {/* Get Started Card - Responsive for mobile and desktop */}
-                {/* Desktop/Web: show get_started.png at intersection */}
-                <div className="hidden md:block absolute left-1/2 transform -translate-x-1/2 z-30" style={{top: 'calc(-120px + 0.5 * 120px)'}}>
+            <footer className="bg-gradient-to-r from-red-800 to-red-700 text-white relative overflow-visible" style={{minHeight: '8px', paddingTop: '0px'}}>
+                <div className="hidden md:block absolute left-1/2 transform -translate-x-1/2 z-30" style={{top: 'calc(-60px)'}}>
                     <div className="relative hover:scale-105 transition-transform duration-300 flex items-center" style={{height: '140px', width: '360px', top: '-30px'}}>
                         <Image
                             src="/get_started.png"
@@ -634,8 +628,8 @@ export default function LandingPage() {
                 </div>
 
                 {/* Mobile: show mobile_card.png at intersection */}
-                <div className="md:hidden absolute left-1/2 transform -translate-x-1/2 z-30 w-full flex justify-center" style={{top: 'calc(-120px + 0.5 * 120px)'}}>
-                    <div className="relative w-full max-w-[300px] hover:scale-105 transition-transform duration-300" style={{height: '160px', top: '-50px'}}>
+                <div className="md:hidden w-full flex flex-col items-center" style={{marginTop: '32px', marginBottom: '16px'}}>
+                    <div className="relative w-full max-w-[300px] hover:scale-105 transition-transform duration-300" style={{height: '160px'}}>
                         <Image
                             src="/mobile_card.png"
                             alt="Get started with Kitamo (Mobile)"
@@ -719,7 +713,7 @@ export default function LandingPage() {
                         <div className="text-center md:text-right">
                             <div className="mb-3">
                                 <p className="text-xs font-semibold mb-1">PHONE NO.</p>
-                                <p className="text-white text-sm">+63 921 854 6737</p>
+                                <p className="text-white text-sm">+63 999 999 9999</p>
                             </div>
                             <div>
                                 <p className="text-xs font-semibold mb-1">EMAIL</p>
@@ -730,7 +724,7 @@ export default function LandingPage() {
 
                     {/* Copyright */}
                     <div className="text-center mt-6 pt-4 border-t border-white/20">
-                        <p className="text-xs text-white/80">© Copyright 2025. All rights reserved. KitaMo by Techtonix.</p>
+                        <p className="text-xs text-white/80">© Copyright 2025. All rights reserved.<br/>KitaMo by Techtonix.</p>
                     </div>
                 </div>
             </footer>

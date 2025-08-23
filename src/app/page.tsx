@@ -607,25 +607,25 @@ export default function LandingPage() {
                 {/* Get Started Card - Responsive for mobile and desktop */}
                 {/* Desktop/Web: show get_started.png at intersection */}
                 <div className="hidden md:block absolute left-1/2 transform -translate-x-1/2 z-30" style={{top: 'calc(-120px + 0.5 * 120px)'}}>
-                    <div className="relative hover:scale-105 transition-transform duration-300" style={{height: '140px', width: '360px', top: '-70px'}}>
+                    <div className="relative hover:scale-105 transition-transform duration-300 flex items-center" style={{height: '140px', width: '360px', top: '-30px'}}>
                         <Image
                             src="/get_started.png"
                             alt="Get started with Kitamo"
-                            width={480}
-                            height={180}
-                            className="drop-shadow-2xl shadow-2xl"
+                            width={520}
+                            height={110}
+                            className="drop-shadow-2xl shadow-2xl w-full h-full object-cover rounded-xl"
                         />
-                        {/* Top Center Text */}
-                        <div className="absolute top-6 left-1/2 transform -translate-x-1/2 text-center w-full">
-                            <h3 className="text-3xl font-bold text-gray-800" style={{marginBottom: '2px'}}>Get started with</h3>
-                            <h3 className="text-3xl font-bold bg-gradient-to-r from-red-800 to-yellow-400 bg-clip-text text-transparent" style={{marginTop: '-6px'}}>KitaMo</h3>
+                        {/* Left side: Text */}
+                        <div className="absolute left-8 top-1/2 transform -translate-y-1/2 text-left">
+                            <h3 className="text-2xl font-bold text-gray-800 mb-0 leading-tight">Get started with</h3>
+                            <h3 className="text-2xl font-bold bg-gradient-to-r from-red-800 to-yellow-400 bg-clip-text text-transparent mt-0 leading-tight">KitaMo</h3>
                         </div>
-                        {/* Bottom Center Arrow - moved lower */}
+                        {/* Right side: Arrow */}
                         <Link 
                             href="/signup" 
-                            className="absolute bottom-[-18px] left-1/2 transform -translate-x-1/2 bg-white text-red-800 p-4 rounded-full hover:scale-110 transition-all duration-300 shadow-lg hover:shadow-xl border border-red-800"
+                            className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white text-red-800 p-2 rounded-full hover:scale-110 transition-all duration-300 shadow-lg hover:shadow-xl border border-red-800"
                         >
-                            <ArrowRight className="w-7 h-7" stroke="currentColor" />
+                            <ArrowRight className="w-5 h-5" stroke="currentColor" />
                         </Link>
                     </div>
                 </div>

@@ -197,7 +197,7 @@ export default function LandingPage() {
 
                                 <div className="pt-2">
                                     <Button asChild size="default" className="bg-gradient-to-r from-primary to-yellow-400 text-primary-foreground shadow-xl transition-all duration-300 hover:scale-105 hover:shadow-2xl w-full max-w-xs">
-                                        <Link href="/login" className="text-center">
+                                        <Link href="/signup" className="text-center">
                                             Start Your Financial Journey
                                             <ArrowRight className="ml-2 h-4 w-4" />
                                         </Link>

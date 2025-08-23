@@ -463,7 +463,10 @@ export default function LandingPage() {
                         {/* Benefits Cards with Red Gradient Background */}
                         <div className="relative py-8">
                             {/* Red gradient background - extended to show below cards */}
-                            <div className="absolute left-1/2 transform -translate-x-1/2 top-1/3 bottom-0 w-full max-w-none bg-gradient-to-br from-red-800 to-red-600 rounded-3xl shadow-2xl" style={{width: 'calc(100vw - 18rem)'}}></div>
+                            {/* Desktop: original maroon background */}
+                            <div className="hidden md:block absolute left-1/2 transform -translate-x-1/2 top-1/3 bottom-0 w-full max-w-none bg-gradient-to-br from-red-800 to-red-600 rounded-[2rem] shadow-2xl" style={{width: 'calc(100vw - 18rem)'}}></div>
+                            {/* Mobile: maroon background covers 75% of card from bottom, 25% pops out from top, sides reach edge */}
+                            <div className="md:hidden absolute left-0 right-0 bottom-0 bg-gradient-to-br from-red-800 to-red-600 rounded-[2rem] shadow-2xl" style={{height: '75%', zIndex: 1}}></div>
                             
                             {/* Desktop Cards positioned over red gradient */}
                             <div className="hidden md:block relative">

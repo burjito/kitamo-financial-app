@@ -599,7 +599,7 @@ export default function LandingPage() {
                         </div>
                     </div>
                 </section>
-                <div className="w-full h-16 md:h-24"></div>
+                <div className="w-full h-4 md:h-12"></div>
             </main>
 
             <footer className="bg-gradient-to-r from-red-800 to-red-700 text-white relative overflow-visible" style={{minHeight: '8px', paddingTop: '0px'}}>

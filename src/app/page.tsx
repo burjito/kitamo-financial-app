@@ -598,33 +598,60 @@ export default function LandingPage() {
                         </div>
                     </div>
                 </section>
+
+                {/* Add extra space before the Get Started card above the footer */}
+                <div className="w-full h-16 md:h-24"></div>
             </main>
 
-            <footer className="bg-gradient-to-r from-red-800 to-red-700 text-white relative overflow-visible">
-                {/* Get Started Card - Using existing image with text and arrow overlay */}
-                <div className="absolute -top-20 left-1/2 transform -translate-x-1/2 z-30">
-                    <div className="relative hover:scale-105 transition-transform duration-300">
-                        {/* Background Card Image */}
+            <footer className="bg-gradient-to-r from-red-800 to-red-700 text-white relative overflow-visible" style={{minHeight: '180px', paddingTop: '60px'}}>
+                {/* Get Started Card - Responsive for mobile and desktop */}
+                {/* Desktop/Web: show get_started.png at intersection */}
+                <div className="hidden md:block absolute left-1/2 transform -translate-x-1/2 z-30" style={{top: 'calc(-120px + 0.5 * 120px)'}}>
+                    <div className="relative hover:scale-105 transition-transform duration-300" style={{height: '140px', width: '360px', top: '-70px'}}>
                         <Image
                             src="/get_started.png"
                             alt="Get started with Kitamo"
-                            width={500}
-                            height={120}
+                            width={480}
+                            height={180}
                             className="drop-shadow-2xl shadow-2xl"
                         />
-                        
-                        {/* Text Overlay - Left Side */}
-                        <div className="absolute left-8 top-1/2 transform -translate-y-1/2">
-                            <h3 className="text-2xl font-bold text-gray-800">Get started with</h3>
-                            <h3 className="text-2xl font-bold bg-gradient-to-r from-red-800 to-yellow-400 bg-clip-text text-transparent">KitaMo</h3>
+                        {/* Top Center Text */}
+                        <div className="absolute top-6 left-1/2 transform -translate-x-1/2 text-center w-full">
+                            <h3 className="text-3xl font-bold text-gray-800" style={{marginBottom: '2px'}}>Get started with</h3>
+                            <h3 className="text-3xl font-bold bg-gradient-to-r from-red-800 to-yellow-400 bg-clip-text text-transparent" style={{marginTop: '-6px'}}>KitaMo</h3>
                         </div>
-                        
-                        {/* Arrow Button - Right Side */}
+                        {/* Bottom Center Arrow - moved lower */}
                         <Link 
                             href="/signup" 
-                            className="absolute right-8 top-1/2 transform -translate-y-1/2 bg-gradient-to-r from-red-800 to-yellow-400 text-white p-3 rounded-full hover:scale-110 transition-all duration-300 shadow-lg hover:shadow-xl"
+                            className="absolute bottom-[-18px] left-1/2 transform -translate-x-1/2 bg-white text-red-800 p-4 rounded-full hover:scale-110 transition-all duration-300 shadow-lg hover:shadow-xl border border-red-800"
                         >
-                            <ArrowRight className="w-5 h-5" />
+                            <ArrowRight className="w-7 h-7" stroke="currentColor" />
+                        </Link>
+                    </div>
+                </div>
+
+                {/* Mobile: show mobile_card.png at intersection */}
+                <div className="md:hidden absolute left-1/2 transform -translate-x-1/2 z-30 w-full flex justify-center" style={{top: 'calc(-120px + 0.5 * 120px)'}}>
+                    <div className="relative w-full max-w-[300px] hover:scale-105 transition-transform duration-300" style={{height: '160px', top: '-50px'}}>
+                        <Image
+                            src="/mobile_card.png"
+                            alt="Get started with Kitamo (Mobile)"
+                            width={340}
+                            height={180}
+                            className="drop-shadow-2xl shadow-2xl rounded-xl"
+                            priority
+                        />
+                        {/* Top Center Text */}
+                        <div className="absolute top-6 left-1/2 transform -translate-x-1/2 text-center w-full">
+                            <h3 className="text-2xl font-bold text-gray-800" style={{marginBottom: '2px'}}>Get started with</h3>
+                            <h3 className="text-2xl font-bold bg-gradient-to-r from-red-800 to-yellow-400 bg-clip-text text-transparent" style={{marginTop: '-6px'}}>KitaMo</h3>
+                        </div>
+                        {/* Bottom Center Arrow - moved lower */}
+                        <Link 
+                            href="/signup" 
+                            className="absolute bottom-[-14px] left-1/2 transform -translate-x-1/2 bg-white text-red-800 p-3 rounded-full hover:scale-110 transition-all duration-300 shadow-lg hover:shadow-xl border border-red-800"
+                        >
+                            <ArrowRight className="w-6 h-6" stroke="currentColor" />
                         </Link>
                     </div>
                 </div>

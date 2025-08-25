@@ -40,37 +40,40 @@ export default function LandingPage() {
     const [currentBenefitIndex, setCurrentBenefitIndex] = useState(0);
     
     const features = [
-        { 
+        {
             icon: <Bot className="w-6 h-6" />,
-            title: "Kitabot", 
+            title: "Kitabot",
             desc: "Chat with your finance companion. Get instant answers, personalized guidance, and tips based on your financial data.",
-            mockup: "/phone.png"
+            gif: "/KitaBot.gif"
         },
-        { 
+        {
             icon: <FlaskConical className="w-6 h-6" />,
-            title: "What-If Simulator", 
+            title: "What-If Simulator",
             desc: "Experiment with scenarios. See how changes in income, expenses, or timelines affect your goals.",
-            mockup: "/phone.png"
+            gif: "/What-if Simulator.gif"
         },
-        { 
+        {
             icon: <ShoppingBag className="w-6 h-6" />,
-            title: "BPI Product Recommender", 
+            title: "BPI Product Recommender",
             desc: "View BPI products tailored to your simulated goals to help you achieve them faster.",
-            mockup: "/phone.png"
+            gif: "/BPI Product Recommender.gif"
         },
-        { 
+        {
             icon: <Target className="w-6 h-6" />,
-            title: "Goal Tracker", 
+            title: "Goal Tracker",
             desc: "Create, manage, and prioritize your financial goals. Visualize your progress and get AI-powered insights to stay on track.",
-            mockup: "/phone.png"
+            gif: "/KitaMo Goal Tracker.gif"
         },
-        { 
+        {
             icon: <TrendingUp className="w-6 h-6" />,
-            title: "AI-Powered Insights", 
+            title: "AI-Powered Insights",
             desc: "Get personalized tips and recommendations to reach financial freedom faster.",
-            mockup: "/phone.png"
+            gif: "/AI-Powered Insights.gif"
         }
     ];
+
+    // For web view GIF selection
+    const [selectedFeatureIndex, setSelectedFeatureIndex] = useState<null | number>(null);
 
     const benefits = [
         {
@@ -118,6 +121,24 @@ export default function LandingPage() {
     const handlePrevBenefit = () => {
         if (currentBenefitIndex > 0) {
             setCurrentBenefitIndex(currentBenefitIndex - 1);
+        }
+    };
+
+    // Helper function to get feature GIF by index
+    const getFeatureGif = (index: number) => {
+        switch (index) {
+            case 0:
+                return "/KitaBot.gif";
+            case 1:
+                return "/What-if Simulator.gif";
+            case 2:
+                return "/BPI Product Recommender.gif";
+            case 3:
+                return "/KitaMo Goal Tracker.gif";
+            case 4:
+                return "/AI-Powered Insights.gif";
+            default:
+                return "/phone.png";
         }
     };
 
@@ -222,36 +243,49 @@ export default function LandingPage() {
                 {/* Features Section - Reduced spacing between screens */}
                 <section id="features" className="relative -mt-8 py-2 md:py-24 pb-16 md:pb-24 bg-white">
                     <div className="container max-w-7xl mx-auto px-4 relative z-10">
-                        {/* Desktop View - Keep Unchanged */}
+                        {/* Desktop View - Interactive GIF and Features */}
                         <div className="hidden lg:grid lg:grid-cols-2 gap-8 lg:gap-16 items-center">
-                            {/* Left Side - Phone Mockup with Title */}
-                            <div className="relative">
-                                <Image
-                                    src="/phone.png"
-                                    alt="KitaMo Financial App Phone Mockup"
-                                    width={1700}
-                                    height={2000}
-                                    className="w-full h-auto max-w-2xl mx-auto lg:max-w-none lg:w-[120%] lg:-ml-[10%]"
-                                    priority
-                                />
+                            {/* Left Side - GIF Mockup */}
+                            <div className="relative flex flex-col items-center justify-center">
+                                <div className="relative w-full h-[600px] max-w-2xl mx-auto flex items-center justify-center">
+                                    {selectedFeatureIndex === null ? (
+                                        <Image
+                                            src="/phone.png"
+                                            alt="KitaMo Financial App Phone Mockup"
+                                            fill
+                                            className="object-contain object-center"
+                                            priority
+                                        />
+                                    ) : (
+                                        <Image
+                                            src={features[selectedFeatureIndex].gif}
+                                            alt={features[selectedFeatureIndex].title + " GIF"}
+                                            fill
+                                            className="object-contain object-center"
+                                            priority
+                                        />
+                                    )}
+                                </div>
                                 {/* Upper Right Text */}
-                                <div className="absolute top-12 lg:top-18 right-0 lg:right-[-16%] z-10">
-                                    <h2 className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-extrabold tracking-tighter leading-tight text-right">
-                                        <span className="text-foreground">Kita mo</span><br />
-                                        <span className="text-foreground">ang </span>
-                                        <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">bukas.</span><br />
-                                    </h2>
-                                </div>
-                                
-                                {/* Bottom Left Text */}
-                                <div className="absolute bottom-8 lg:bottom-12 left-0 lg:left-[-1%] z-10">
-                                    <h2 className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-extrabold tracking-tighter leading-tight text-left">
-                                        <span className="text-foreground">Mula</span><br />
-                                        <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">ngayon.</span>
-                                    </h2>
-                                </div>
+                                {selectedFeatureIndex === null && (
+                                    <>
+                                        <div className="absolute top-12 lg:top-18 right-0 lg:right-[-16%] z-10">
+                                            <h2 className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-extrabold tracking-tighter leading-tight text-right">
+                                                <span className="text-foreground">Kita mo</span><br />
+                                                <span className="text-foreground">ang </span>
+                                                <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">bukas.</span><br />
+                                            </h2>
+                                        </div>
+                                        {/* Bottom Left Text */}
+                                        <div className="absolute bottom-8 lg:bottom-12 left-0 lg:left-[-1%] z-10">
+                                            <h2 className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-extrabold tracking-tighter leading-tight text-left">
+                                                <span className="text-foreground">Mula</span><br />
+                                                <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">ngayon.</span>
+                                            </h2>
+                                        </div>
+                                    </>
+                                )}
                             </div>
-                            
                             {/* Right Side - Features Card */}
                             <div className="relative lg:-ml-[5%]">
                                 <div className="bg-gradient-to-br from-red-800 to-yellow-400 rounded-2xl p-0.5 max-w-lg ml-auto">
@@ -260,73 +294,40 @@ export default function LandingPage() {
                                         <div className="mb-4 -m-6 mb-6 p-4 px-6 bg-gradient-to-r from-primary to-yellow-400 rounded-t-2xl">
                                             <h3 className="text-xl font-bold text-white tracking-tight">KitaMo Features</h3>
                                         </div>
-                                        
                                         <div className="space-y-3">
-                                            {/* Kitabot Feature */}
-                                        <div className="flex items-start gap-3 p-3 rounded-xl cursor-pointer transition-all duration-300 hover:bg-gradient-to-r hover:from-red-50 hover:to-yellow-50 hover:shadow-lg group">
-                                            <div className="bg-red-100 text-red-700 w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 mt-1 transition-all duration-300 group-hover:scale-110 group-hover:shadow-md group-hover:bg-red-200">
-                                                <Bot className="w-4 h-4 transition-transform duration-300 group-hover:scale-110" />
-                                            </div>
-                                            <div>
-                                                <h3 className="text-lg font-bold text-foreground mb-1 transition-colors duration-300 group-hover:text-red-800">Kitabot</h3>
-                                                <p className="text-xs text-muted-foreground leading-relaxed">
-                                                    Chat with your finance companion. Get instant answers, personalized guidance, and tips based on your financial data.
-                                                </p>
-                                            </div>
+                                            {features.map((feature, idx) => (
+                                                <div
+                                                    key={feature.title}
+                                                    className={
+                                                        `flex items-start gap-3 p-3 rounded-xl cursor-pointer transition-all duration-300 group ` +
+                                                        (selectedFeatureIndex === idx
+                                                            ? 'bg-gradient-to-r from-red-50 to-yellow-50 shadow-lg'
+                                                            : 'hover:bg-gradient-to-r hover:from-red-50 hover:to-yellow-50 hover:shadow-lg')
+                                                    }
+                                                    onClick={() => setSelectedFeatureIndex(idx)}
+                                                >
+                                                    <div className={
+                                                        `w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 mt-1 transition-all duration-300 ` +
+                                                        (selectedFeatureIndex === idx
+                                                            ? 'bg-red-200 text-red-700 scale-110 shadow-md'
+                                                            : 'bg-red-100 text-red-700 group-hover:scale-110 group-hover:shadow-md group-hover:bg-red-200')
+                                                    }>
+                                                        {feature.icon}
+                                                    </div>
+                                                    <div>
+                                                        <h3 className={
+                                                            `text-lg font-bold mb-1 transition-colors duration-300 ` +
+                                                            (selectedFeatureIndex === idx
+                                                                ? 'text-red-800'
+                                                                : 'text-foreground group-hover:text-red-800')
+                                                        }>{feature.title}</h3>
+                                                        <p className="text-xs text-muted-foreground leading-relaxed">
+                                                            {feature.desc}
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            ))}
                                         </div>
-                                        
-                                        {/* What-If Simulator Feature */}
-                                        <div className="flex items-start gap-3 p-3 rounded-xl cursor-pointer transition-all duration-300 hover:bg-gradient-to-r hover:from-red-50 hover:to-yellow-50 hover:shadow-lg group">
-                                            <div className="bg-red-100 text-red-700 w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 mt-1 transition-all duration-300 group-hover:scale-110 group-hover:shadow-md group-hover:bg-red-200">
-                                                <FlaskConical className="w-4 h-4 transition-transform duration-300 group-hover:scale-110" />
-                                            </div>
-                                            <div>
-                                                <h3 className="text-lg font-bold text-foreground mb-1 transition-colors duration-300 group-hover:text-red-800">What-If Simulator</h3>
-                                                <p className="text-xs text-muted-foreground leading-relaxed">
-                                                    Experiment with scenarios. See how changes in income, expenses, or timelines affect your goals.
-                                                </p>
-                                            </div>
-                                        </div>
-                                        
-                                        {/* BPI Product Recommender Feature */}
-                                        <div className="flex items-start gap-3 p-3 rounded-xl cursor-pointer transition-all duration-300 hover:bg-gradient-to-r hover:from-red-50 hover:to-yellow-50 hover:shadow-lg group">
-                                            <div className="bg-red-100 text-red-700 w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 mt-1 transition-all duration-300 group-hover:scale-110 group-hover:shadow-md group-hover:bg-red-200">
-                                                <ShoppingBag className="w-4 h-4 transition-transform duration-300 group-hover:scale-110" />
-                                            </div>
-                                            <div>
-                                                <h3 className="text-lg font-bold text-foreground mb-1 transition-colors duration-300 group-hover:text-red-800">BPI Product Recommender</h3>
-                                                <p className="text-xs text-muted-foreground leading-relaxed">
-                                                    View BPI products tailored to your simulated goals to help you achieve them faster.
-                                                </p>
-                                            </div>
-                                        </div>
-                                        
-                                        {/* Goal Tracker Feature */}
-                                        <div className="flex items-start gap-3 p-3 rounded-xl cursor-pointer transition-all duration-300 hover:bg-gradient-to-r hover:from-red-50 hover:to-yellow-50 hover:shadow-lg group">
-                                            <div className="bg-red-100 text-red-700 w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 mt-1 transition-all duration-300 group-hover:scale-110 group-hover:shadow-md group-hover:bg-red-200">
-                                                <Target className="w-4 h-4 transition-transform duration-300 group-hover:scale-110" />
-                                            </div>
-                                            <div>
-                                                <h3 className="text-lg font-bold text-foreground mb-1 transition-colors duration-300 group-hover:text-red-800">Goal Tracker</h3>
-                                                <p className="text-xs text-muted-foreground leading-relaxed">
-                                                    Create, manage, and prioritize your financial goals. Visualize your progress and get AI-powered insights to stay on track.
-                                                </p>
-                                            </div>
-                                        </div>
-                                        
-                                        {/* AI-Powered Insights Feature */}
-                                        <div className="flex items-start gap-3 p-3 rounded-xl cursor-pointer transition-all duration-300 hover:bg-gradient-to-r hover:from-red-50 hover:to-yellow-50 hover:shadow-lg group">
-                                            <div className="bg-red-100 text-red-700 w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 mt-1 transition-all duration-300 group-hover:scale-110 group-hover:shadow-md group-hover:bg-red-200">
-                                                <TrendingUp className="w-4 h-4 transition-transform duration-300 group-hover:scale-110" />
-                                            </div>
-                                            <div>
-                                                <h3 className="text-lg font-bold text-foreground mb-1 transition-colors duration-300 group-hover:text-red-800">AI-Powered Insights</h3>
-                                                <p className="text-xs text-muted-foreground leading-relaxed">
-                                                    Get personalized tips and recommendations to reach financial freedom faster.
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
                                     </div>
                                 </div>
                             </div>
@@ -339,11 +340,11 @@ export default function LandingPage() {
                                 <div className="flex justify-center">
                                     <div className="relative">
                                         <Image
-                                            src={currentFeatureIndex >= 0 ? features[currentFeatureIndex].mockup : "/phone.png"}
+                                            src={currentFeatureIndex >= 0 ? getFeatureGif(currentFeatureIndex) : "/phone.png"}
                                             alt="KitaMo App Preview"
                                             width={300}
                                             height={600}
-                                            className="w-full max-w-xs mx-auto drop-shadow-2xl relative z-10"
+                                            className="w-full max-w-xs mx-auto drop-shadow-2xl relative z-10 object-contain"
                                             priority
                                         />
                                     </div>

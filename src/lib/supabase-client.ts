@@ -1,10 +1,6 @@
 
 import { createBrowserClient } from '@supabase/ssr'
 
-/**
- * Clean Supabase client configuration
- * Optimized for PKCE flow and better error handling
- */
 function createSupabaseClient() {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL?.trim();
   const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY?.trim();
@@ -29,8 +25,6 @@ function createSupabaseClient() {
         autoRefreshToken: true,
         persistSession: true,
         detectSessionInUrl: true, // Enable for email verification
-        // Remove explicit flowType to let Supabase choose the best method
-        // This allows fallback to implicit flow when PKCE fails
       }
     });
   } catch (error) {
@@ -39,9 +33,6 @@ function createSupabaseClient() {
   }
 }
 
-/**
- * Creates a mock client for development/error scenarios
- */
 function createMockClient(reason: string) {
   const mockError = new Error(`Supabase not available: ${reason}`);
   

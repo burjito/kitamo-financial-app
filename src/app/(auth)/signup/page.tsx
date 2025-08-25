@@ -73,7 +73,7 @@ const Signup = () => {
       if (typeof window !== 'undefined') {
         return window.location.origin;
       }
-      return 'http://localhost:3000'; // fallback for build time
+      return 'http://localhost:3000'; // Fallback for build time
     };
 
     try {

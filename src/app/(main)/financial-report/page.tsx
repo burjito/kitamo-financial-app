@@ -53,7 +53,6 @@ export default function FinancialReportPage() {
 
     return (
         <>
-            {/* Enhanced Print Styles */}
             <style jsx global>{`
             @media print {
                 /* Remove browser UI elements */
@@ -308,7 +307,7 @@ export default function FinancialReportPage() {
                     </Button>
                 </div>
 
-                {/* Print Header with KitaMo Branding - Logo, Line, Title */}
+                {/* Print Header with KitaMo Branding*/}
                 <div className="print:block print-header hidden">
                     <div className="print-logo-section">
                         <PrintLogo />

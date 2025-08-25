@@ -448,9 +448,8 @@ export default function KitaMoBotPage() {
             </div>
           )}
           
-          {/* Bottom Section - Fixed Height */}
+          {/* Bottom Section */}
           <div className="border-t pt-4 flex-shrink-0">
-            {/* Predefined Questions Section - More Compact */}
             {showPredefinedQuestions && (
               <div className="mb-3 animate-in fade-in-0 duration-300">
                 <Card className="bg-muted/50">
@@ -511,7 +510,7 @@ export default function KitaMoBotPage() {
                         Not sure where to start? Try these:
                     </p>
                     <div className="flex flex-wrap gap-1">
-                        {/* Show only 2 prompts on mobile, all on desktop */}
+                        {/* Show only 2 prompts on mobile */}
                         <div className="md:hidden">
                           {mobileSuggestionPrompts.map(prompt => (
                               <Button key={prompt} variant="outline" size="sm" className="text-xs mb-1" onClick={() => handleSendMessage(null, prompt)}>
@@ -530,7 +529,7 @@ export default function KitaMoBotPage() {
                 </div>
             )}
 
-            {/* Action Buttons - Always Visible */}
+            {/* Action Buttons */}
             <div className="flex items-center gap-1 md:gap-2 mb-2 md:mb-3 flex-wrap">
               <Button
                 variant="secondary"

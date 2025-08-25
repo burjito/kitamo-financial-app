@@ -90,7 +90,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
         console.log('Fetched profile data:', profileData);
         setProfile(profileData);
         
-        // Goals table uses camelCase with quotes (based on your schema)
+        // Goals table uses camelCase
         const { data: goalsData, error: goalsError } = await supabase
             .from('goals')
             .select('id, user_id, title, target, current, status, priority, "monthlyTarget"')
@@ -103,7 +103,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
         console.log('Goals fetched:', goalsData);
         setGoals(goalsData || []);
 
-        // Scenarios table uses camelCase with quotes (based on your schema)
+        // Scenarios table uses camelCase
         const { data: scenariosData, error: scenariosError } = await supabase
             .from('scenarios')
             .select('id, user_id, name, "monthlyIncome", "monthlyExpenses", "savingsGoal", timeframe, "goalType"')
@@ -198,7 +198,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     
     console.log('Adding goal:', goal);
     
-    // Goals table uses camelCase with quotes for monthlyTarget
+    // Goals table uses camelCase
     const goalToAdd = { 
         user_id: user.id,
         title: goal.title,
@@ -274,7 +274,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     
     console.log('Saving scenario:', scenario);
      
-    // Scenarios table uses camelCase with quotes
+    // Scenarios table uses camelCase
     const scenarioToSave = {
         user_id: user.id,
         name: scenario.name,

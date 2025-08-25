@@ -148,7 +148,7 @@ export default function LandingPage() {
             <main className="flex-1">
                 {/* Hero Section */}
                 <section className="relative w-full min-h-[120vh] flex items-start pt-36">
-                    {/* Desktop View - Unchanged */}
+                    {/* Desktop View */}
                     <div className="hidden md:block absolute inset-0 w-full h-full">
                         <Image
                             src="/final_cover.png"
@@ -203,9 +203,9 @@ export default function LandingPage() {
                        </div>
                     </div>
 
-                    {/* Mobile View - Fixed image positioning */}
+                    {/* Mobile View */}
                     <div className="md:hidden w-full bg-white flex flex-col pb-2">
-                        {/* Mobile Content - Minimal padding */}
+                        {/* Mobile Content */}
                         <div className="px-4 pt-0 pb-4 -mt-2">
                             <div className="text-center space-y-4">
                                 <h1 className="text-[2.70rem] font-extrabold tracking-tighter leading-tight text-foreground">
@@ -227,7 +227,7 @@ export default function LandingPage() {
                             </div>
                         </div>
 
-                        {/* Mobile Image - Moved lower, removed negative margin */}
+                        {/* Mobile Image */}
                         <div className="relative h-80 w-full overflow-hidden mt-2">
                             <Image
                                 src="/mobile_cover.png"
@@ -240,10 +240,10 @@ export default function LandingPage() {
                     </div>
                 </section>
 
-                {/* Features Section - Reduced spacing between screens */}
+                {/* Features Section */}
                 <section id="features" className="relative -mt-8 py-2 md:py-24 pb-16 md:pb-24 bg-white">
                     <div className="container max-w-7xl mx-auto px-4 relative z-10">
-                        {/* Desktop View - Interactive GIF and Features */}
+                        {/* Desktop View */}
                         <div className="hidden lg:grid lg:grid-cols-2 gap-8 lg:gap-16 items-center">
                             {/* Left Side - GIF Mockup */}
                             <div className="relative flex flex-col items-center justify-center">
@@ -258,7 +258,6 @@ export default function LandingPage() {
                                         />
                                     ) : (
                                         <>
-                                            {/* Moderate background behind GIF */}
                                             <Image
                                                 src="/gif_background.png"
                                                 alt="GIF Background"
@@ -266,7 +265,6 @@ export default function LandingPage() {
                                                 className="object-cover object-center absolute scale-[1.1] opacity-100"
                                                 priority
                                             />
-                                            {/* Foreground GIF */}
                                             <Image
                                                 src={features[selectedFeatureIndex].gif}
                                                 alt={features[selectedFeatureIndex].title + " GIF"}
@@ -355,9 +353,9 @@ export default function LandingPage() {
                             </div>
                         </div>
 
-                        {/* Mobile Layout - Interactive Feature Showcase */}
+                        {/* Mobile Layout */}
                         <div className="lg:hidden">
-                            {/* Phone Mockup - Reduced margin */}
+                            {/* Phone Mockup */}
                             <div className="relative mb-6">
                                 <div className="flex justify-center">
                                     <div className="relative">
@@ -388,7 +386,6 @@ export default function LandingPage() {
                                             className="w-full h-full object-cover rounded-2xl"
                                             priority
                                         />
-                                        {/* Text overlay at top center, visually balanced and tight line spacing */}
                                         <div className="absolute top-8 left-0 right-0 text-center px-6">
                                             <div className="text-lg font-semibold text-foreground mb-1" style={{ lineHeight: "1.05" }}>
                                                 Explore the Features<br />
@@ -397,7 +394,6 @@ export default function LandingPage() {
                                                 </span>
                                             </div>
                                         </div>
-                                        {/* Arrow button at bottom center, inside the card */}
                                         <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2">
                                             <button className="bg-white rounded-full p-4 shadow-lg shadow-black/10 transition-all duration-200 hover:scale-105 flex items-center justify-center">
                                                 <svg className="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -409,7 +405,7 @@ export default function LandingPage() {
                                 </div>
                             )}
 
-                            {/* Feature Cards - Shown one by one with OPTIMIZED HEIGHT and breathing space */}
+                            {/* Feature Cards */}
                             {currentFeatureIndex >= 0 && (
                                 <div className="px-4">
                                     <div className="bg-white rounded-2xl shadow-lg shadow-black/10 border border-gray-100 overflow-hidden max-w-sm mx-auto h-64">
@@ -430,7 +426,7 @@ export default function LandingPage() {
                                             </div>
                                         </div>
                                         
-                                        {/* Navigation area - FIXED HEIGHT */}
+                                        {/* Navigation area */}
                                         <div className="flex justify-between items-center px-6 py-4 bg-gray-50 h-16">
                                             <button 
                                                 onClick={handlePrevFeature}
@@ -476,7 +472,7 @@ export default function LandingPage() {
                 {/* Third Screen - Why use KitaMo? */}
                 <section className="pt-0 md:pt-0 pb-20 md:pb-32 bg-white">
                     <div className="container max-w-6xl mx-auto px-4">
-                        {/* Title - Size similar to "Mula ngayon" */}
+                        {/* Title */}
                         <div className="text-center mb-4">
                             <h2 className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-extrabold tracking-tighter leading-tight text-foreground">
                                 Why use <span className="bg-gradient-to-r from-red-800 to-yellow-400 bg-clip-text text-transparent">KitaMo</span>?
@@ -485,9 +481,9 @@ export default function LandingPage() {
 
                         {/* Benefits Cards with Red Gradient Background */}
                         <div className="relative py-8">
-                            {/* Desktop: original maroon background */}
+                            {/* Desktop: maroon background */}
                             <div className="hidden md:block absolute left-1/2 transform -translate-x-1/2 top-1/3 bottom-0 w-full max-w-none bg-gradient-to-br from-red-800 to-red-600 rounded-[2rem] shadow-2xl" style={{width: 'calc(100vw - 18rem)'}}></div>
-                            {/* Mobile: maroon background covers 75% of card from bottom, 25% pops out from top, sides reach edge */}
+                            {/* Mobile: maroon background */}
                             <div className="md:hidden absolute left-0 right-0 bottom-0 bg-gradient-to-br from-red-800 to-red-600 rounded-[2rem] shadow-2xl" style={{height: '75%', zIndex: 1}}></div>
                             
                             <div className="hidden md:block relative">
@@ -666,7 +662,7 @@ export default function LandingPage() {
                             <h3 className="text-2xl font-bold text-gray-800" style={{marginBottom: '2px'}}>Get started with</h3>
                             <h3 className="text-2xl font-bold bg-gradient-to-r from-red-800 to-yellow-400 bg-clip-text text-transparent" style={{marginTop: '-6px'}}>KitaMo</h3>
                         </div>
-                        {/* Bottom Center Arrow - moved lower */}
+                        {/* Bottom Center Arrow */}
                         <Link 
                             href="/signup" 
                             className="absolute bottom-[-14px] left-1/2 transform -translate-x-1/2 bg-white text-red-800 p-3 rounded-full hover:scale-110 transition-all duration-300 shadow-lg hover:shadow-xl border border-red-800"

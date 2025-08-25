@@ -76,7 +76,6 @@ const SettingsNav = ({ activeTab, setActiveTab }: { activeTab: string, setActive
         <DollarSign className="mr-2 h-4 w-4" />
         Financials
       </Button>
-    {/* Security tab removed as requested */}
       <Button variant="ghost" className="justify-start text-destructive hover:text-destructive" onClick={handleLogout}>
         <LogOut className="mr-2 h-4 w-4" />
         Log Out
@@ -288,9 +287,6 @@ const FinancialSettings = () => {
         </div>
     )
 }
-
-// SecuritySettings component removed as requested
-
 
 export default function ProfilePage() {
     const [activeTab, setActiveTab] = useState('account');

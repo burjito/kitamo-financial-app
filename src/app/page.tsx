@@ -303,7 +303,18 @@ export default function LandingPage() {
                                     <div className="bg-white rounded-2xl p-6 lg:p-6 h-full">
                                         {/* Features Header */}
                                         <div className="mb-4 -m-6 mb-6 p-4 px-6 bg-gradient-to-r from-primary to-yellow-400 rounded-t-2xl">
-                                            <h3 className="text-xl font-bold text-white tracking-tight">KitaMo Features</h3>
+                                            <div className="flex items-center justify-between">
+                                                <h3 className="text-xl font-bold text-white tracking-tight">KitaMo Features</h3>
+                                                {selectedFeatureIndex !== null && (
+                                                    <button
+                                                        className="ml-4 p-2 rounded-lg bg-white text-primary shadow hover:bg-yellow-100 transition-colors duration-200 flex items-center justify-center"
+                                                        onClick={() => setSelectedFeatureIndex(null)}
+                                                        aria-label="Back"
+                                                    >
+                                                        <ChevronLeft className="w-5 h-5" />
+                                                    </button>
+                                                )}
+                                            </div>
                                         </div>
                                         <div className="space-y-3">
                                             {features.map((feature, idx) => (

@@ -257,13 +257,24 @@ export default function LandingPage() {
                                             priority
                                         />
                                     ) : (
-                                        <Image
-                                            src={features[selectedFeatureIndex].gif}
-                                            alt={features[selectedFeatureIndex].title + " GIF"}
-                                            fill
-                                            className="object-contain object-center"
-                                            priority
-                                        />
+                                        <>
+                                            {/* Moderate background behind GIF */}
+                                            <Image
+                                                src="/gif_background.png"
+                                                alt="GIF Background"
+                                                fill
+                                                className="object-cover object-center absolute scale-[1.1] opacity-100"
+                                                priority
+                                            />
+                                            {/* Foreground GIF */}
+                                            <Image
+                                                src={features[selectedFeatureIndex].gif}
+                                                alt={features[selectedFeatureIndex].title + " GIF"}
+                                                fill
+                                                className="object-contain object-center relative z-10"
+                                                priority
+                                            />
+                                        </>
                                     )}
                                 </div>
                                 {/* Upper Right Text */}

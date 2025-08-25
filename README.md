@@ -1,7 +1,7 @@
 # Kitamo-Financial-App
 
 ## Project Overview
-Kitamo-Financial-App is an AI-powered financial planning platform designed to help Filipinos make smarter decisions about their finances. The app provides personalized insights, goal tracking, product recommendations, and interactive tools to simplify financial management and planning.
+KitaMo is an AI-powered financial planning platform designed to help Filipinos make smarter decisions about their finances. The app provides personalized insights, goal tracking, product recommendations, and interactive tools to simplify financial management and planning.
 
 ## Features
 - **AI-Powered Insights:** Get actionable financial advice tailored to your profile and goals.
